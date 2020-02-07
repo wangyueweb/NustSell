@@ -1,0 +1,351 @@
+<!-- orderCenter -->
+<template>
+  <div>
+    <div class="main-wrapper">
+      <el-row :gutter="10">
+        <el-col :span="8">
+          <div class="grid-content">
+            <CardTitle name="确认订单信息">
+              <div slot="tool">
+                <nuxt-link :to="{name: 'pay-shopCar'}" class="returnShopCar">返回购物车修改</nuxt-link>
+              </div>
+            </CardTitle>
+
+            <div class="total">5件商品在购物篮中</div>
+
+            <div class="list-wrapper">
+              <div class="list">
+                <div v-for="(item, index) in 5" :key="index" class="item">
+                  <el-row type="flex">
+                    <el-col :span="8">
+                      <img src="https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg" alt="" width="94" height="94">
+                    </el-col>
+                    <el-col :span="16">
+                      <div class="describe">
+                        蚕豆-里香168g烤肉味…这里有很多文案介绍。
+                      </div>
+                      <div>
+                        <span>
+                          2
+                        </span>
+                        <span class="price">500P</span>
+                      </div>
+                    </el-col>
+                  </el-row>
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="16">
+          <div class="grid-content right">
+
+            <div class="title">收货信息</div>
+            <div class="tips">您还没有收货信息</div>
+            <el-button type="primary" size="mini" class="add-btn">+添加收获地址</el-button>
+
+            <div class="line"></div>
+
+            <div class="title">收货时间</div>
+
+            <el-date-picker
+              v-model="value1"
+              type="date"
+              placeholder="选择日期">
+            </el-date-picker>
+
+            <el-time-picker
+              arrow-control
+              v-model="value2"
+              :picker-options="{
+                selectableRange: '18:30:00 - 20:30:00'
+              }"
+              placeholder="任意时间点">
+            </el-time-picker>
+
+            <div class="line"></div>
+            <div class="title">请选择您的付款方式 <span class="discount">（满500P免运费）</span></div>
+
+            <el-radio-group v-model="fromData.pay_method">
+              <el-radio :label="0" border>货到付款</el-radio>
+              <el-radio :label="1" border>微信</el-radio>
+              <el-radio :label="2" border>支付宝</el-radio>
+            </el-radio-group>
+            <div class="line"></div>
+
+            <div class="line"></div>
+
+            <div class="title">给我们留言<span class="tips">（非必填项）</span></div>
+
+            <el-input
+              type="textarea"
+              :autosize="{ minRows: 4, maxRows: 6}"
+              placeholder="亲，如果您有什么特别嘱咐，请备注给我们哟～～"
+              v-model="textarea2">
+            </el-input>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <el-footer height="80px" class="footer">
+      <div class="content">
+        <el-row>
+          <el-col :span="10">&nbsp;</el-col>
+          <el-col :span="14">
+            <el-row type="flex" align="middle" style="height:80px">
+              <el-col>
+                <div>商品金额</div>
+                <div>P880</div>
+              </el-col>
+              <el-col>
+                <div>商品优惠</div>
+                <div>20P</div>
+              </el-col>
+              <el-col>
+                <div>运费</div>
+                <div>0.00</div>
+              </el-col>
+              <el-col>
+                <div>还需支付</div>
+                <div class="count">P888.00</div>
+              </el-col>
+              <el-col>
+                <div>
+                  <el-button type="danger" class="large-btn" @click="$router.push({name: 'pay-success1'})">提交订单</el-button>
+                </div>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+      </div>
+    </el-footer>
+
+    <el-dialog
+      title="由于您未登录下单，填入以下信息将会自动注册账号"
+      :visible.sync="no_login">
+
+      <el-form :model="registerForm" :rules="registerRules" ref="registerForm" class="registerForm">
+        <el-form-item prop="mobile" label="+63" label-width="50px">
+          <el-input v-model="registerForm.mobile" placeholder="请输入在菲手机号"></el-input>
+        </el-form-item>
+
+        <el-form-item prop="code" label-width="0">
+          <el-row :gutter="10">
+            <el-col :span="16">
+              <el-input v-model="registerForm.code" autocomplete="off" placeholder="请输入短信验证码" maxlength="6"></el-input>
+            </el-col>
+            <el-col :span="8">
+              <el-button type="primary" class="large-btn" @click="sendMsg" :disabled="statusMsg ? true : false" v-text="statusMsg ? statusMsg : '获取验证码'"></el-button>
+            </el-col>
+          </el-row>
+        </el-form-item>
+
+        <el-form-item prop="password" label-width="0">
+          <el-input type="password" v-model="registerForm.password" autocomplete="off" placeholder="请输入密码"></el-input>
+        </el-form-item>
+
+        <el-form-item label-width="0">
+          <el-button class="large-btn" type="danger" @click="doVerify">确认</el-button>
+        </el-form-item>
+      </el-form>
+
+      <el-checkbox-group v-model="agree" style="display: inline-block;">
+        <el-checkbox label="注册即同意" name="agree" class="agree"></el-checkbox>
+      </el-checkbox-group>
+      <a href="" class="userAgreement">《用户协议》</a>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary">保 存</el-button>
+        <el-button @click="no_login = false">取 消</el-button>
+      </span>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import CardTitle from "@/components/public/cardTitle";
+export default {
+  name: "OrderCenter",
+  layout: function(context){
+    return 'payment'
+  },
+  data () {
+    return {
+      value1: '',
+      value2: new Date(2016, 9, 10, 18, 40),
+      textarea2: "",
+      fromData: {
+        pay_method: ""
+      },
+      no_login: this.$store.state.app.token ? false : true,
+
+      registerRules:{
+        mobile: [{
+          required: true, type: 'string', message: '请输入在菲手机号', trigger: ['blur', 'change']
+        }],
+        password: [{
+          required: true, type: 'string', message: '请输入密码', trigger: ['blur', 'change']
+        }],
+        code: [{
+          required: true, type: 'string', message: '请输入短信验证码', trigger: ['blur', 'change']
+        }]
+      },
+      registerForm: {
+        mobile: '',
+        password: '',
+        code: '',
+      },
+      agree:[],
+      statusMsg: '',
+    };
+  },
+
+  components: {
+    CardTitle
+  },
+
+  computed: {},
+
+  created(){},
+
+  mounted(){},
+
+  methods: {
+    // 拼图验证
+    doVerify: function () {
+      this.$refs['registerForm'].validate((valid) => {
+        console.log(valid);
+        if(valid){
+          this.stepActive = 'verify'
+        }
+      })
+    },
+    // 发送短信验证码
+    sendMsg: function () {
+      console.log('sendMsg');
+      const self = this;
+      let mobilePass;
+
+      if ( this.timerid ){
+        return false;
+      }
+
+      this.$refs['registerForm'].validateField('mobile', (valid) => {
+        mobilePass = valid;
+      })
+
+      this.statusMsg = '';
+
+      if(mobilePass){
+        return false;
+      }
+
+      if (!mobilePass) {
+        let data = {
+          mobile: this.registerForm.mobile,
+          code: 'reg',
+          method: 'user.sms'
+        }
+        mainRequest(data)
+          .then(({ status, data }) => {
+            console.log(status,data);
+            if(status === 200){
+              if(data.status){
+                let count = 60;
+                this.statusMsg = `${count --}秒`;
+                this.timerid = setInterval(function(){
+                  self.statusMsg = `${count --}秒`;
+                  if(count === 0){
+                    clearInterval(self.timerid);
+                    self.timerid = null;
+                    self.statusMsg = '';
+                  }
+                },1000)
+              }
+              this.$message({
+                message: data.msg,
+                type: data.status ? 'success' : 'danger'
+              });
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+    },
+  }
+}
+</script>
+
+<style lang='less' scoped>
+@import "../../assets/css/theme.less";
+.footer{
+  background: @theme-white;
+  .content{
+    width: 1200px;
+    height: 100%;
+    margin: auto;
+    .count{
+      color: @theme-red;
+      font-weight: 700;
+    }
+  }
+}
+.main-wrapper{
+  margin-bottom: 150px;
+}
+.grid-content{
+  background: @theme-white;
+  padding: 20px;
+  .returnShopCar{
+    color: @theme-lightgray;
+  }
+  .total{
+    margin-top: 25px;
+    font-weight: 700;
+  }
+  .list-wrapper{
+    margin-top: 6px;
+    border-top: 1px solid @theme-silvergray;
+    padding: 8px 0;
+  }
+  .list{
+    height: 392px;
+    overflow-y: scroll;
+    .item{
+      height: 114px;
+      @centered();
+      border-bottom: 1px solid @theme-silvergray;
+      .describe{
+        line-height: 19px;
+        margin-bottom: 20px;
+      }
+      .price{
+        margin-left: 30px;
+      }
+    }
+  }
+}
+.right{
+  background: @theme-white;
+  padding: 30px 34px;
+  .title{
+    margin-bottom: 9px;
+    .discount{
+      color: @theme-gray;
+      font-size: 14px;
+    }
+  }
+  .tips{
+    color: @theme-lightgray;
+  }
+  .add-btn{
+    margin-top: 9px;
+  }
+  .line{
+    height: 1px;
+    background: @theme-silvergray;
+    margin: 20px 0;
+  }
+}
+</style>
