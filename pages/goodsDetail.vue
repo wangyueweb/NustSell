@@ -73,7 +73,7 @@
 
       <div v-if="selected === 0">
         <div class="swiper">
-          <Swiper :imgs="banners" :options="swiperOption">
+          <!-- <Swiper :imgs="banners" :options="swiperOption">
             <div slot="detail">
               <div class="describe">金枕头泰国风味榴莲</div>
               <div class="price">P 47.00</div>
@@ -81,7 +81,8 @@
                 加入购物车
               </div>
             </div>
-          </Swiper>
+          </Swiper> -->
+          <GoodsScroll :list="otherList" imgKey="url" :options="goodsScrollOption" :customArrow="false"></GoodsScroll>
         </div>
       </div>
 
@@ -102,6 +103,7 @@
 
 <script>
 import Swiper from "~/components/public/swiper";
+import GoodsScroll from "~/components/public/GoodsScroll";
 import { getCategories } from "@/services/api";
 export default {
   name: "goodDetail",
@@ -115,7 +117,7 @@ export default {
         "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
         "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg"
       ],
-      swiperOption: {
+      goodsScrollOption: {
         slidesPerView: 4,
         centeredSlidesBounds: true,
         spaceBetween: 30,
@@ -125,11 +127,13 @@ export default {
         }
       },
       goodDetail: {},
-      show_image: ''
+      show_image: '',
+      otherList: []
     };
   },
   components: {
-    Swiper
+    Swiper,
+    GoodsScroll
   },
   computed: {
     tableData: function() {
@@ -160,6 +164,7 @@ export default {
         let {status, data} = await getCategories(formData);
         if(status === 200 && data && data.data){
           this.goodDetail = data.data;
+          this.otherList = data.other;
           this.show_image = data.data.album[0];
         }
         console.log(data);

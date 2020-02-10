@@ -4,7 +4,8 @@ import { getCookie } from "@/utils/utils"
 import Cookie from 'js-cookie'
 const state = () => ({
   allCategories: [],
-  carNumber: 0
+  carNumber: 0,
+  collectList: []
 })
 
 const mutations = {
@@ -13,7 +14,10 @@ const mutations = {
   },
   SET_CARNUMBER: (state, payload) => {
     state.carNumber = payload;
-  }
+  },
+  SET_COLLECTLIST: (state, payload) => {
+    state.collectList = payload;
+  },
 }
 
 const actions = {
@@ -59,12 +63,25 @@ const actions = {
     return new Promise((resolve, reject) => {
       mainRequest(Qs.stringify(formData))
         .then(res => {
+          console.log(res)
           resolve(res);
         })
         .catch(err => {
           reject(err);
         })
     })
+  },
+
+  // 获取收藏列表
+  getCollectList({commit}, formData) {
+    mainRequest(formData)
+      .then(res => {
+        console.log(res);
+        let {data, status} = res;
+        if(status === 200 && data){
+          commit('SET_COLLECTLIST', data.data);
+        }
+      })
   },
 
   // 加入购物车
