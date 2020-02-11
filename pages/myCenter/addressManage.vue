@@ -168,19 +168,27 @@ export default {
         token: this.$store.state.app.token,
         id:item.id
       }
-      mainRequest(formData)
-        .then(({status, data}) => {
-          console.log(data);
-          this.$message({
-            message: data.msg,
-            type: data.status ? 'success' : 'warning'
-          });
-          this.getPageData();
+      this.$confirm('删除地址, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         })
-        .catch(err => {
-          console.log(err);
-          this.$message.error(`删除地址${err}`);
+        .then(() => {
+          mainRequest(formData)
+            .then(({status, data}) => {
+              console.log(data);
+              this.$message({
+                message: data.msg,
+                type: data.status ? 'success' : 'warning'
+              });
+              this.getPageData();
+            })
+            .catch(err => {
+              console.log(err);
+              this.$message.error(`删除地址${err}`);
+            })
         })
+        .catch(err => {})
     }
   }
 };

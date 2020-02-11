@@ -1,115 +1,112 @@
 <template>
-  <div>
-    <div class="main-wrapper">
-      <el-row :gutter="10">
-        <el-col :span="19">
-          <div class="grid-content">
-            <el-table
-              ref="multipleTable"
-              :data="tableData"
-              tooltip-effect="dark"
-              style="width: 100%"
-              @selection-change="handleSelectionChange">
-              <el-table-column
-                type="selection"
-                width="55">
-              </el-table-column>
-              <el-table-column
-                prop="img"
-                label="全选">
-                <template slot-scope="scope">
-                  <el-image :src="scope.row.img" fit="fill"></el-image>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="商品名称">
-              </el-table-column>
-              <el-table-column
-                prop="price"
-                label="单价">
-                <template slot-scope="scope">
-                  {{scope.row.price}} P
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="num"
-                label="数量"
-                width="220">
-                <template slot-scope="scope">
-                  <el-input-number v-model="scope.row.num" @change="handleChange(scope.row, scope.row.num)"></el-input-number>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="count"
-                label="小计">
-                <template slot-scope="scope">
-                  {{scope.row.price * scope.row.num}} P
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="address"
-                label="操作">
-                <template slot-scope="scope">
-                  <div>移入收藏夹</div>
-                  <div>删除</div>
-                </template>
-              </el-table-column>
-            </el-table>
-            <div style="margin-top: 20px">
-              <el-checkbox v-model="checked" @change="handleCheckAllChange">全选</el-checkbox>
-              移入收藏夹
-              删除
+  <div class="main-wrapper">
+    <el-row :gutter="10">
+      <el-col :span="19">
+        <div class="grid-content">
+          <el-table
+            ref="multipleTable"
+            :data="tableData"
+            tooltip-effect="dark"
+            style="width: 100%"
+            @selection-change="handleSelectionChange">
+            <el-table-column
+              type="selection"
+              width="55">
+            </el-table-column>
+            <el-table-column
+              label="全选">
+              <template slot-scope="scope">
+                <el-image :src="scope.row.products.image_path" fit="fill"></el-image>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="商品名称">
+            </el-table-column>
+            <el-table-column
+              prop="price"
+              label="单价">
+              <template slot-scope="scope">
+                {{scope.row.products.price}} P
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="num"
+              label="数量"
+              width="220">
+              <template slot-scope="scope">
+                <el-input-number :value="scope.row.nums" @change="handleChange(scope.row, scope.row.nums)"></el-input-number>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="count"
+              label="小计">
+              <template slot-scope="scope">
+                {{scope.row.products.price * scope.row.nums}} P
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="address"
+              label="操作">
+              <template slot-scope="scope">
+                <div>移入收藏夹</div>
+                <div>删除</div>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div style="margin-top: 20px">
+            <el-checkbox v-model="checked" @change="handleCheckAllChange">全选</el-checkbox>
+            移入收藏夹
+            删除
+          </div>
+          <div style="padding: 60px 0;">
+            <span class="continue">继续购物</span> <span class="clear">清空购物车</span>
+          </div>
+        </div>
+        <div class="grid-content" style="margin-top: 10px;padding-bottom:100px;">
+          <Swiper :imgs="banners" :options="swiperOption">
+            <div slot="detail">
+              <div class="describe">金枕头泰国风味榴莲</div>
+              <div class="price">P 47.00</div>
+              <div class="buy-btn">
+                加入购物车
+              </div>
             </div>
-            <div style="padding: 60px 0;">
-              <span class="continue">继续购物</span> <span class="clear">清空购物车</span>
+          </Swiper>
+        </div>
+      </el-col>
+      <el-col :span="5">
+        <div class="grid-content">
+          <CardTitle name="总计" :titleLine="true"/>
+          <div class="calculate-wrapper">
+            <div class="calculate">
+              <span>小计</span>
+              <span>600P</span>
+            </div>
+            <div class="calculate">
+              <span>首单优惠</span>
+              <span>60P</span>
+            </div>
+            <div class="calculate">
+              <span>运费</span>
+              <span>0P</span>
             </div>
           </div>
-          <div class="grid-content" style="margin-top: 10px;padding-bottom:100px;">
-            <Swiper :imgs="banners" :options="swiperOption">
-              <div slot="detail">
-                <div class="describe">金枕头泰国风味榴莲</div>
-                <div class="price">P 47.00</div>
-                <div class="buy-btn">
-                  加入购物车
-                </div>
-              </div>
-            </Swiper>
-          </div>
-        </el-col>
-        <el-col :span="5">
-          <div class="grid-content">
-            <CardTitle name="总计" :titleLine="true"/>
-            <div class="calculate-wrapper">
-              <div class="calculate">
-                <span>小计</span>
-                <span>600P</span>
-              </div>
-              <div class="calculate">
-                <span>首单优惠</span>
-                <span>60P</span>
-              </div>
-              <div class="calculate">
-                <span>运费</span>
-                <span>0P</span>
-              </div>
+          <div class="total">
+            <div class="calculate">
+              <span>订单总额</span>
+              <span class="hot">540P</span>
             </div>
-            <div class="total">
-              <div class="calculate">
-                <span>订单总额</span>
-                <span class="hot">540P</span>
-              </div>
-            </div>
-            <nuxt-link :to="{name: 'pay-orderCenter'}"><el-button type="danger" class="large-btn" style="margin-top:20px;">前往结账</el-button></nuxt-link>
           </div>
-        </el-col>
-      </el-row>
-    </div>
+          <nuxt-link :to="{name: 'pay-orderCenter'}"><el-button type="danger" class="large-btn" style="margin-top:20px;">前往结账</el-button></nuxt-link>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-
+import { mapState } from "vuex";
 import Swiper from "@/components/public/swiper"
 import CardTitle from "@/components/public/cardTitle"
 export default {
@@ -123,20 +120,6 @@ export default {
   },
   data(){
     return {
-      
-      tableData: [{
-          img: 'https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg',
-          name: '王小虎',
-          price: '500',
-          num: '1',
-          count: '',
-        },{
-          img: 'https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg',
-          name: '王小虎',
-          price: '500',
-          num: '1',
-          count: '',
-        }],
       result: [],
       checked: false,
       banners: [
@@ -157,6 +140,10 @@ export default {
     }
   },
   methods: {
+    getPageData: async function () {
+      await this.$store.dispatch('goods/getShopCarList', {method:'cart.getlist', token: this.$store.state.app.token})
+    },
+
     handleCheckAllChange(val){
       console.log(val);
       if(val){
@@ -174,8 +161,17 @@ export default {
       this.result = val;
     },
     handleChange(item,value) {
-      item.count = item.price * item.num;
+      console.log(item, value);
+      // item.count = item.price * item.num;
     }
+  },
+  created(){
+    this.getPageData();
+  },
+  computed: {
+    ...mapState({
+      tableData: state => state.goods.shopCarList.list,
+    })
   }
 }
 </script>

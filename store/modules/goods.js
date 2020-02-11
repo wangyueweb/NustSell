@@ -5,7 +5,8 @@ import Cookie from 'js-cookie'
 const state = () => ({
   allCategories: [],
   carNumber: 0,
-  collectList: []
+  collectList: [],
+  shopCarList: []
 })
 
 const mutations = {
@@ -18,6 +19,9 @@ const mutations = {
   SET_COLLECTLIST: (state, payload) => {
     state.collectList = payload;
   },
+  SET_SHOPCARLIST: (state, payload) => {
+    state.shopCarList = payload;
+  }
 }
 
 const actions = {
@@ -95,6 +99,18 @@ const actions = {
           reject(err);
         })
     })
+  },
+
+  // 获取购物车列表
+  getShopCarList ({commit}, formData) {
+    mainRequest(formData)
+      .then(res => {
+        console.log(res);
+        let {data, status} = res;
+        if(status === 200 && data){
+          commit('SET_SHOPCARLIST', data.data);
+        }
+      })
   }
 }
 export default { namespaced: true, state, mutations, actions }

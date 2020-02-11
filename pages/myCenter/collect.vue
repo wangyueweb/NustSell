@@ -2,7 +2,7 @@
 <template>
   <div class="order">
     <div class="tool">
-      <span class="title">我收藏的商品： 3</span>
+      <span class="title">我收藏的商品： {{count}}</span>
     </div>
 
     <div class="table">
@@ -10,12 +10,13 @@
         ref="table"
         :data="tableData"
         style="width: 100%"
-        @selection-change="toId">
+        @selection-change="handleSelectionChange">
           <el-table-column
             type="selection">
           </el-table-column>
 
-          <el-table-column>
+          <el-table-column
+            width="100">
             <template slot-scope="scope">
               <img :src="tableData[scope.$index].goods.image_url" style="width:80px;height:80px;"/>
             </template>
@@ -34,6 +35,7 @@
             label="价格"
             align="center">
           </el-table-column>
+
           <el-table-column
             label="操作"
             align="center">
@@ -44,18 +46,20 @@
           </el-table-column>
         </el-table>
     </div>
-    <div style="margin-top: 20px">
+    <div style="margin-top: 20px; display:flex; justify-content: space-between;">
+      <div>
+        <span @click="cancelAllCollect(selectList)">取消收藏</span>
+        <el-button size="mini">共享收藏</el-button>
+      </div>
+
       <el-pagination
         @current-change="paginationChange"
-        :page-count="goodsOptions.total_page"
-        :current-page="value"
+        :page-count="page"
+        :current-page="currentPage"
         background
         layout="prev, pager, next"
       >
       </el-pagination>
-
-      <span @click="cancelCollect(idList)">取消收藏</span>
-      <el-button size="mini">共享收藏</el-button>
     </div>
   </div>
 </template>
@@ -69,15 +73,8 @@ export default {
   },
   data() {
     return {
-      goodsOptions: {},
-      value: null,
-      formData: {
-        page: 1,
-        limit: 10,
-        method: "user.goodscollectionlist",
-        token: this.$store.state.app.token
-      },
-      idList: [45, 46]
+      currentPage: 1,
+      selectList: []
     }
   },
 
@@ -85,7 +82,10 @@ export default {
 
   computed: {
     ...mapState({
-      tableData: state => state.goods.collectList.list
+      tableData: state => state.goods.collectList.list,
+      page: state => state.goods.collectList.page,
+      limit: state => state.goods.collectList.limit,
+      count: state => state.goods.collectList.count
     })
   },
 
@@ -95,44 +95,80 @@ export default {
 
   mounted() {},
   methods: {
-    async getCollectList(){
-      this.$store.dispatch('goods/getCollectList', this.formData);
-    },
-
-    // 取消收藏
-    cancelCollect: function(id) {
-      console.log(id);
-      this.$store.dispatch('goods/addCollect', {method:'user.goodscollectionall', id: id, token: this.$store.state.app.token})
-        .then(res => {
-          console.log(res);
-          let {status, data} = res;
-          this.$message({
-            message: data.msg,
-          });
-          this.getCollectList();
-        })
-        .catch(err => {
-          console.log(err);
-          this.$message.error(`取消收藏${err}`);
-        });
-    },
-
-    toId: function (rows) {
-      console.log(rows)
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.table.toggleRowSelection(row);
-        });
-      } else {
-        this.$refs.table.clearSelection();
+    getCollectList(){
+      let data = {
+        page: this.currentPage,
+        limit: this.limit,
+        method: "user.goodscollectionlist",
+        token: this.$store.state.app.token
       }
-
-      console.log(rows);
+      this.$store.dispatch('goods/getCollectList', data);
     },
+
+    // 取消单个收藏
+    cancelCollect: function(id) {
+      this.$confirm('取消收藏, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('goods/addCollect', {method:'user.goodscollection', id: id, token: this.$store.state.app.token})
+          .then(res => {
+            console.log(res);
+            let {status, data} = res;
+            this.$message({
+              message: data.msg,
+            });
+            this.getCollectList();
+          })
+          .catch(err => {
+            console.log(err);
+            this.$message.error(`取消收藏${err}`);
+          });
+      })
+      console.log(id);
+    },
+
+    // 取消多条收藏
+    cancelAllCollect: function(list) {
+      if (list.length === 0) {
+        this.$message.error('请勾选至少一条');
+        return;
+      }else{
+        this.$confirm('取消收藏, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        .then(() => {
+          const idList = list.map(item => item.id);
+          console.log(idList);
+          this.$store.dispatch('goods/addCollect', {method:'user.goodscollectionall', id: idList, token: this.$store.state.app.token})
+            .then(res => {
+              console.log(res);
+              let {status, data} = res;
+              this.$message({
+                message: data.msg,
+              });
+              this.getCollectList();
+            })
+            .catch(err => {
+              console.log(err);
+              this.$message.error(`取消收藏${err}`);
+            });
+        })
+        .catch(err => {})
+      }
+    },
+
+    // 表格勾选
+    handleSelectionChange(val) {
+      this.selectList = val;
+    },
+
     // 分页变化
     paginationChange: function (e) {
-      console.log(e);
-      this.formData.page = e;
+      this.currentPage = e;
       this.getCollectList();
     }
   }

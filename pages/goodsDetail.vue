@@ -190,7 +190,7 @@ export default {
     },
     // 加入购物车
     addShopCar: function() {
-      this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: this.goodDetail.id, nums:this.num, token: this.$store.state.app.token})
+      this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: this.goodDetail.product.id, nums:this.num, token: this.$store.state.app.token})
         .then(res => {
           let {status, data} = res;
           console.log(res);
