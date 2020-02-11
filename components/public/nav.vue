@@ -399,18 +399,12 @@
         this.$set(this.loginForm, "password", "");
       },
       // 获取登录用户信息
-      getUserInfo: function(){
+      getUserInfo: async function () {
         let data = {
           token:this.$store.state.app.token,
           method:'user.info'
         }
-        this.$store.dispatch("app/getUserInfo", data)
-          .then(res => {
-            console.log(res);
-          })
-          .catch(err => {
-            this.$message.error(err);
-          })
+        await this.$store.dispatch("app/getUserInfo", data);
       },
       // 登出
       lagout: function(){

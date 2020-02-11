@@ -5,7 +5,7 @@
         <div class="grid-content">
           <el-table
             ref="multipleTable"
-            :data="tableData"
+            :data="list"
             tooltip-effect="dark"
             style="width: 100%"
             @selection-change="handleSelectionChange">
@@ -14,53 +14,59 @@
               width="55">
             </el-table-column>
             <el-table-column
+              align="center"
               label="全选">
               <template slot-scope="scope">
                 <el-image :src="scope.row.products.image_path" fit="fill"></el-image>
               </template>
             </el-table-column>
             <el-table-column
-              prop="name"
+              align="center"
               label="商品名称">
+              <template slot-scope="scope">
+                {{scope.row.products.name}}
+              </template>
             </el-table-column>
             <el-table-column
-              prop="price"
+              align="center"
               label="单价">
               <template slot-scope="scope">
                 {{scope.row.products.price}} P
               </template>
             </el-table-column>
             <el-table-column
-              prop="num"
+              align="center"
               label="数量"
               width="220">
               <template slot-scope="scope">
-                <el-input-number :value="scope.row.nums" @change="handleChange(scope.row, scope.row.nums)"></el-input-number>
+                <el-input-number v-model="scope.row.nums" @change="numberChange(scope.row, scope.row.nums)"></el-input-number>
               </template>
             </el-table-column>
             <el-table-column
-              prop="count"
+              align="center"
               label="小计">
               <template slot-scope="scope">
-                {{scope.row.products.price * scope.row.nums}} P
+                {{scope.row.products.amount}}
               </template>
             </el-table-column>
             <el-table-column
-              prop="address"
+              align="center"
               label="操作">
               <template slot-scope="scope">
-                <div>移入收藏夹</div>
-                <div>删除</div>
+                <div @click="addCollect(scope.row.products.goods_id)">移入收藏夹</div>
+                <div @click="delShopCar(scope.row.id)">删除</div>
               </template>
             </el-table-column>
           </el-table>
           <div style="margin-top: 20px">
-            <el-checkbox v-model="checked" @change="handleCheckAllChange">全选</el-checkbox>
-            移入收藏夹
-            删除
+            <!-- <el-checkbox v-model="checked" @change="handleCheckAllChange">全选</el-checkbox> -->
+            <!-- 移入收藏夹 -->
+            <div @click="delShopCar(list.map(item => item.id).join(','))">
+              删除
+            </div>
           </div>
           <div style="padding: 60px 0;">
-            <span class="continue">继续购物</span> <span class="clear">清空购物车</span>
+            <span class="continue" @click="$router.push({name: 'index'})">继续购物</span> <span class="clear" @click="delShopCar(list.map(item => item.id).join(','))">清空购物车</span>
           </div>
         </div>
         <div class="grid-content" style="margin-top: 10px;padding-bottom:100px;">
@@ -118,10 +124,10 @@ export default {
     Swiper,
     CardTitle
   },
-  data(){
+  data () {
     return {
-      result: [],
-      checked: false,
+      list: [],
+      selectList: [],
       banners: [
         "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
         "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
@@ -140,39 +146,80 @@ export default {
     }
   },
   methods: {
-    getPageData: async function () {
+    async getPageData () {
       await this.$store.dispatch('goods/getShopCarList', {method:'cart.getlist', token: this.$store.state.app.token})
+        .then(res => {
+          this.list = JSON.parse(JSON.stringify(this.$store.state.goods.shopCarList.list));
+        })
+        .catch(err => {
+          this.$message.error(err);
+        })
     },
 
-    handleCheckAllChange(val){
-      console.log(val);
-      if(val){
-        this.$refs.multipleTable.toggleAllSelection();
-      }else{
-        this.$refs.multipleTable.clearSelection();
-      }
+    async numberChange(item, nums) {
+      console.log(item, nums);
+      await this.$store.dispatch('goods/handleShopCarNumber', {method:'cart.setnums', token: this.$store.state.app.token, id: item.id, nums: nums})
+        .then(() => {
+          this.getPageData();
+        })
+        .catch(err => {
+          this.$message.error(err);
+        })
     },
-    handleSelectionChange(val) {
-      if(val.length === this.tableData.length){
-        this.checked = true;
-      }else{
-        this.checked = false;
-      }
-      this.result = val;
+
+    // handleCheckAllChange (val) {
+    //   console.log(val);
+    //   if (val) {
+    //     this.$refs.multipleTable.toggleAllSelection();
+    //   } else {
+    //     this.$refs.multipleTable.clearSelection();
+    //   }
+    // },
+    handleSelectionChange (val) {
+      this.selectList = val;
     },
-    handleChange(item,value) {
-      console.log(item, value);
-      // item.count = item.price * item.num;
-    }
+    // 添加收藏
+    addCollect: function (id) {
+      console.log(id);
+      this.$store.dispatch('goods/addCollect', {method:'user.goodscollection', goods_id: id, token: this.$store.state.app.token})
+        .then(({status, data}) => {
+          this.$message({
+            message: data.msg,
+          });
+          this.getPageData();
+        })
+        .catch(err => {
+          console.log(err);
+          this.$message.error(`添加收藏${err}`);
+        });
+    },
+    delShopCar: function (id) {
+      console.log(id);
+      this.$confirm('删除购物车, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+      .then(async () => {
+        await this.$store.dispatch('goods/delShopCar', {method:'cart.del', ids: id, token: this.$store.state.app.token})
+          .then(res => {
+            this.$message({
+              type: "success",
+              message: res,
+            });
+            this.getPageData();
+          })
+          .catch(err => {
+            console.log(err);
+            this.$message.error(`添加收藏${err}`);
+          });
+      })
+    },
   },
   created(){
     this.getPageData();
   },
-  computed: {
-    ...mapState({
-      tableData: state => state.goods.shopCarList.list,
-    })
-  }
+  computed: {},
 }
 </script>
 

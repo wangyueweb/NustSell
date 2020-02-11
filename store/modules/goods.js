@@ -103,14 +103,60 @@ const actions = {
 
   // 获取购物车列表
   getShopCarList ({commit}, formData) {
-    mainRequest(formData)
-      .then(res => {
-        console.log(res);
-        let {data, status} = res;
-        if(status === 200 && data){
-          commit('SET_SHOPCARLIST', data.data);
-        }
-      })
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          console.log(res);
+          let {data, status} = res;
+          if(status === 200 && data){
+            commit('SET_SHOPCARLIST', data.data);
+            resolve();
+          }else{
+            reject(data.msg);
+          }
+        })
+        .catch(err => {
+          reject(data.err);
+        })
+    })
+  },
+
+  // 购物车数量+-
+  handleShopCarNumber ({commit}, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          console.log(res);
+          let {data, status} = res;
+          if(status === 200 && data){
+            resolve();
+          }else{
+            reject(data.msg);
+          }
+        })
+        .catch(err => {
+          reject(data.err);
+        })
+    })
+  },
+
+  // 删除购物车+-
+  delShopCar ({commit}, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          console.log(res);
+          let {data, status} = res;
+          if(status === 200 && data){
+            resolve(data.msg);
+          }else{
+            reject(data.msg);
+          }
+        })
+        .catch(err => {
+          reject(data.err);
+        })
+    })
   }
 }
 export default { namespaced: true, state, mutations, actions }

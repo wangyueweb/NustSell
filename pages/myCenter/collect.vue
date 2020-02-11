@@ -95,7 +95,7 @@ export default {
 
   mounted() {},
   methods: {
-    getCollectList(){
+    getCollectList () {
       let data = {
         page: this.currentPage,
         limit: this.limit,
@@ -106,7 +106,7 @@ export default {
     },
 
     // 取消单个收藏
-    cancelCollect: function(id) {
+    cancelCollect (id) {
       this.$confirm('取消收藏, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -126,7 +126,6 @@ export default {
             this.$message.error(`取消收藏${err}`);
           });
       })
-      console.log(id);
     },
 
     // 取消多条收藏
