@@ -1,6 +1,6 @@
 <!-- help -->
 <template>
-  <div class="main-wrapper">
+  <div class="help">
     帮助中心
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
 
 <style lang='less' scoped>
 @import "../../assets/css/theme.less";
-.main-wrapper{
+.help{
   padding: 20px 40px;
   background: @theme-white;
 }
