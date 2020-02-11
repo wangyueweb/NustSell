@@ -15,17 +15,17 @@
               <el-popover
                 placement="bottom"
                 trigger="hover"
-                :visible-arrow="false"
-                popper-class="menu-popover">
-                <div class="content">
-                  <el-row type="flex" justify="center" align="middle">
-                    <el-col v-for="(itemJ, indexJ) in item.child" :key="indexJ" :span="2" type="flex" justify="center" align="middle">
+                :visible-arrow="true"
+                >
+ 
+                  <div class="second" type="flex" justify="center" align="middle">
+                    <div class="secondList" v-for="(itemJ, indexJ) in item.child" :key="indexJ" type="flex" justify="center" align="middle">
                       <div class="link" @click="$router.push({name: 'categorylist', query: itemJ})" style="font-size:18px">
                         {{itemJ.name}}
                       </div>
-                    </el-col>
-                  </el-row>
-                </div>
+                    </div>
+                  </div>
+
                 <div slot="reference">{{item.name}}</div>
               </el-popover>
             </el-col>
@@ -191,6 +191,9 @@ export default {
 
 <style lang="less" scoped>
   @import "../../assets/css/theme.less";
+  .second{background: #fff;}
+  .secondList{width: 100%;}
+  .link:hover{background: #F65151;color: #fff;}
   .menu{
     @1200-min();
     background: @theme-white;

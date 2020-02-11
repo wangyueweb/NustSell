@@ -100,7 +100,8 @@ a {
   padding: 0;
 }
 .menu-popover {
-  width: 100%;
+  width: 200px;
+  display: inline-block;
   left: 0!important;
   border-radius: 0!important;
   box-shadow: none!important;
