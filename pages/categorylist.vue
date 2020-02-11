@@ -25,7 +25,10 @@
           </div>
           <div class="grid-content">
             <CardTitle name="最近浏览商品" :textLine="true" :titleLine="true">
-              <div slot="tool">123</div>
+              <div slot="tool">
+                  <img src="../assets/img/arrow-left1.png" alt="" class="tool-img" />
+                  <img src="../assets/img/arrow-right1.png" alt="" class="tool-img" />
+              </div>
             </CardTitle>
             <div class="content">
               <el-row :gutter="10">
@@ -280,6 +283,7 @@ export default {
 @import '../assets/css/theme.less';
 .categoryList{
   @1200();
+   .tool-img{width: 15px;height: auto;}
   .breadcrumb{
     margin-top: 20px
   }
@@ -305,6 +309,7 @@ export default {
           }
         }
         .other{
+          text-decoration:underline;
           line-height: 20px;
           color: @theme-gray;
           margin-right: 12px;

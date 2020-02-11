@@ -48,13 +48,13 @@
         <div class="calculate">
           <el-input-number v-model="num" size="small" :min="1" :max="10" label="描述文字"></el-input-number>
         </div>
+        
+        <div class="buy-btn" @click="addShopCar">加入购物车</div>
 
         <div class="collect" @click="addCollect">
           <i class="iconfont icon-shoucang"></i>
           {{(goodDetail.isfav === 'true') ? '已收藏' : '收藏'}}
         </div>
-
-        <div class="buy-btn" @click="addShopCar">加入购物车</div>
       </el-col>
     </el-row>
     <!-- 详情 -->

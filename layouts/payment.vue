@@ -5,9 +5,10 @@
       <div id="menu-fixed">
         <el-row class="content" type="flex" align="middle">
           <el-col :span="12" class="left">
-            <nuxt-link to="/"><i class="iconfont icon-Logo_deisgn logo"></i></nuxt-link>
-            <span class="logo-text">王子易购</span>
-            <span class="logo-slogan">实惠商品，送货上门！</span>
+            <nuxt-link to="/">
+              <img src="../assets/img/logo2.png" alt="" class="nuxt-logo" />
+              <img src="../assets/img/logo_slogan.png" alt="" class="nuxt-img" />
+            </nuxt-link>
           </el-col>
           <el-col :span="12" class="right">
             <TriangleTab :tabs="alias" :selected="$route.name === 'pay-shopCar' ? 0 : $route.name === 'pay-orderCenter' ? 1 : $route.name === 'pay-success1' ? 2 : 0" />
@@ -50,6 +51,8 @@ export default {
 
 <style lang="less" scoped>
 @import "../assets/css/theme.less";
+.nuxt-logo{vertical-align: middle;}
+.nuxt-img{vertical-align: middle;margin: 10px 0 0 10px;}
 .menu{
   background:@theme-white;
   margin-bottom: 10px;

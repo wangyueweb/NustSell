@@ -94,7 +94,7 @@ export default {
 }
 // 后三角
 .triangle-back {
-  border-width: 10px;
+  border-width: 13px;
   border-color: @theme-light;
   border-right-width: 0;
   border-style: dashed;

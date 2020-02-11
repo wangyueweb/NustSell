@@ -61,14 +61,14 @@ export default {
 }
 .swiper-button-prev.swiper-button-disabled{
   background-image: url('../../assets/img/arrow-left2.png')!important;
-  background-size: 40px 34px;
+  background-size: 35px 35px;
   background: #000000;
   background-position: center;
   background-repeat: no-repeat;
 }
 .swiper-button-prev{
   background-image: url('../../assets/img/arrow-left2.png')!important;
-  background-size: 40px 34px!important;
+  background-size: 35px 35px!important;
   background: #000000;
   background-position: center;
   background-repeat: no-repeat;
@@ -76,14 +76,14 @@ export default {
 
 .swiper-button-next.swiper-button-disabled{
   background-image: url('../../assets/img/arrow-right2.png')!important;
-  background-size: 40px 34px;
+  background-size: 35px 35px;
   background: #000000;
   background-position: center;
   background-repeat: no-repeat;
 }
 .swiper-button-next{
   background-image: url('../../assets/img/arrow-right2.png')!important;
-  background-size: 40px 34px!important;
+  background-size: 35px 35px!important;
   background: #000000;
   background-position: center;
   background-repeat: no-repeat;

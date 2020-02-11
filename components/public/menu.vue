@@ -5,11 +5,11 @@
         <el-col :span="isFixed ? 3 : 24">
           <div class="logo">
             <nuxt-link :to="{path: '/'}">
-              <el-image :src="require('@/assets/img/logo.png')" style="width:108px;"></el-image>
+              <el-image :src="require('@/assets/img/logo.png')" style="width:65px;"></el-image>
             </nuxt-link>
           </div>
         </el-col>
-        <el-col :span="16">
+        <el-col :span="15">
           <el-row>
             <el-col :span="4" v-for="(item, index) in allCategories" :key="index" class="menu-type">
               <el-popover
@@ -200,7 +200,7 @@ export default {
     .content{
       @1200();
       .logo{
-        height: 140px;
+        height: 90px;
         @centered();
         img{
           width: 58px;
@@ -209,7 +209,7 @@ export default {
       }
       .menu-type{
         @cursor-pointer();
-        font-size: 22px;
+        font-size: 18px;
         color: @theme-black;
         // line-height: 140px;
         height: 80px;

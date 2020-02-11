@@ -51,8 +51,11 @@
             <el-date-picker
               v-model="value1"
               type="date"
-              placeholder="选择日期">
+              placeholder="选择日期"
+              :picker-options="expireTimeOption">
             </el-date-picker>
+
+
 
             <el-time-picker
               arrow-control
@@ -66,12 +69,19 @@
             <div class="line"></div>
             <div class="title">请选择您的付款方式 <span class="discount">（满500P免运费）</span></div>
 
-            <el-radio-group v-model="fromData.pay_method">
+            <el-radio-group v-model="fromData.pay_method" @change="histTypeUpdate">
               <el-radio :label="0" border>货到付款</el-radio>
               <el-radio :label="1" border>微信</el-radio>
               <el-radio :label="2" border>支付宝</el-radio>
+              <el-radio :label="3" border>余额付款</el-radio>
             </el-radio-group>
             <div class="line"></div>
+            
+            <div class="current" v-if="currentShow">
+                <span class="current-span1">您目前的帐号余额：</span>
+                <span class="current-span2">P728.00</span>
+                <span class="current-span3">立即充值</span>
+            </div>
 
             <div class="line"></div>
 
@@ -171,8 +181,14 @@ export default {
   },
   data () {
     return {
+        expireTimeOption: {
+            disabledDate(date) {
+                    return date.getTime() <= Date.now();
+            }
+        },
       value1: '',
       value2: new Date(2016, 9, 10, 18, 40),
+      currentShow: false,
       textarea2: "",
       fromData: {
         pay_method: ""
@@ -273,12 +289,22 @@ export default {
           })
       }
     },
+    histTypeUpdate: function(histType) {
+        if(histType == 3){
+            this.currentShow = true
+        }else{
+            this.currentShow = false
+        }
+    }
   }
 }
 </script>
 
 <style lang='less' scoped>
 @import "../../assets/css/theme.less";
+.current{margin: 0 0 0 0;font-size: 15px;color: #000;}
+.current .current-span2{font-weight: 600;}
+.current .current-span3{display: inline-block;color: #fff;background: #000;font-size: 16px;width: 120px;height: 33px;line-height: 33px;margin: 0 0 0 20px;text-align: center;}
 .footer{
   background: @theme-white;
   .content{

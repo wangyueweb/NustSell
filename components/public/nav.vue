@@ -703,6 +703,8 @@
           border:1px solid #DEDEDE;
           position:absolute;
           left: -150px;
+          z-index: 9999;
+          background: #fff;
           .notice-list-item{
             color: #404040;
             border-bottom: 1px solid #DEDEDE;

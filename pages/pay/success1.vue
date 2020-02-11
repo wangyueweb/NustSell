@@ -8,7 +8,12 @@
       <div class="content-wrapper">
         <div class="describe">微信扫码二维码付款</div>
         <div class="time">支付剩余时间：29分42秒</div>
-        <div class="number">订单号：20184878851</div>
+        <div class="number">
+            <span id="key">订单号：20184878851</span>
+            <span title="复制" type="copy" class="copy"  data-clipboard-target="#key" @click="copy" >
+                <img src="../../assets/img/fz.png" alt="" class="copeimg">
+            </span>
+        </div>
         <div class="btn-wrapper">
           <el-button @click="$router.push({name: 'index'})">返回首页</el-button>
           <el-button @click="success = 2">联系客服</el-button>
@@ -33,6 +38,8 @@
 </template>
 
 <script>
+  import Clipboard from 'clipboard'
+  
 export default {
   name: 'Success1',
   layout: context => 'payment',
@@ -51,12 +58,26 @@ export default {
 
   mounted () {},
 
-  methods: {}
+  methods: {
+      copy(){
+            const clipboard = new Clipboard('.copy')
+            clipboard.on('success', e => {
+              alert("复制成功")
+              e.clearSelection()
+              clipboard.destroy()
+            })
+            clipboard.on('error', e => {
+              alert("复制失败")
+              clipboard.destroy()
+            })
+          },
+  }
 }
 </script>
 
 <style lang='less' scoped>
 @import "../../assets/css/theme.less";
+.copeimg{width: 18px;height: auto;vertical-align: middle;margin: -2px 0 0 5px;}
 .main-wrapper{
   padding: 90px 0;
   background: @theme-white;
