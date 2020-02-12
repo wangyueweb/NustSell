@@ -49,7 +49,7 @@
           <el-input-number v-model="num" size="small" :min="1" :max="10" label="描述文字"></el-input-number>
         </div>
         
-        <div class="buy-btn" @click="addShopCar">加入购物车</div>
+        <div class="buy-btn" @click="addShopCar(goodDetail.product.id, num)">加入购物车</div>
 
         <div class="collect" @click="addCollect">
           <i class="iconfont icon-shoucang"></i>
@@ -73,15 +73,6 @@
 
       <div v-if="selected === 0">
         <div class="swiper">
-          <!-- <Swiper :imgs="banners" :options="swiperOption">
-            <div slot="detail">
-              <div class="describe">金枕头泰国风味榴莲</div>
-              <div class="price">P 47.00</div>
-              <div class="buy-btn">
-                加入购物车
-              </div>
-            </div>
-          </Swiper> -->
           <GoodsScroll :list="otherList" imgKey="url" :options="goodsScrollOption" :customArrow="false"></GoodsScroll>
         </div>
       </div>
@@ -139,12 +130,12 @@ export default {
     tableData: function() {
       return [
         {
-          name: this.goodDetail.brand_name,
-          address: this.goodDetail.storageMode
+          name: `品牌: ${this.goodDetail.brand_name || '无'}`,
+          address: `储存方式: ${this.goodDetail.storageMode || '无'}`
         },
         {
-          name: this.goodDetail.shelfLife,
-          address: this.goodDetail.producer
+          name: `保质期: ${this.goodDetail.shelfLife || '无'}`,
+          address: `生产地: ${this.goodDetail.producer || '无'}`
         }
       ]
     }
@@ -189,19 +180,9 @@ export default {
         });
     },
     // 加入购物车
-    addShopCar: function() {
-      this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: this.goodDetail.product.id, nums:this.num, token: this.$store.state.app.token})
-        .then(res => {
-          let {status, data} = res;
-          console.log(res);
-          this.$message({
-            message: data.msg,
-          });
-        })
-        .catch(err => {
-          console.log(err);
-          this.$message.error(`加入购物车${err}`);
-        });
+    async addShopCar(id, num) {
+      await this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: id, nums:num, token: this.$store.state.app.token})
+      this.$store.dispatch('goods/getCarnumber', { method: 'cart.getnumber', token: this.$store.state.app.token });
     }
   }
 };

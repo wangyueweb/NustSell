@@ -6,7 +6,8 @@ const state = () => ({
   allCategories: [],
   carNumber: 0,
   collectList: [],
-  shopCarList: []
+  shopCar: [],
+  browsingList: []
 })
 
 const mutations = {
@@ -19,8 +20,11 @@ const mutations = {
   SET_COLLECTLIST: (state, payload) => {
     state.collectList = payload;
   },
-  SET_SHOPCARLIST: (state, payload) => {
-    state.shopCarList = payload;
+  SET_SHOPCAR: (state, payload) => {
+    state.shopCar = payload;
+  },
+  SET_BROWSINGLIST: (state, payload) => {
+    state.browsingList = payload;
   }
 }
 
@@ -90,26 +94,37 @@ const actions = {
 
   // 加入购物车
   addShopCar({}, formData) {
-    return new Promise((resolve, reject) => {
-      mainRequest(Qs.stringify(formData))
-        .then(res => {
-          resolve(res);
-        })
-        .catch(err => {
-          reject(err);
-        })
-    })
+    mainRequest(Qs.stringify(formData))
+      .then(res => {
+        let {status, data} = res;
+        console.log(res);
+        if(status === 200 && data){
+          this._vm.$message({
+            type: data.status ? "success" : "error",
+            message: data.msg,
+          });
+        }else{
+          this._vm.$message({
+            type: "error",
+            message: '网络连接失败',
+          });
+        }
+        resolve(res);
+      })
+      .catch(err => {
+        console.log(err);
+      })
   },
 
   // 获取购物车列表
-  getShopCarList ({commit}, formData) {
+  getShopCar ({commit}, formData) {
     return new Promise((resolve, reject) => {
       mainRequest(formData)
         .then(res => {
           console.log(res);
           let {data, status} = res;
           if(status === 200 && data){
-            commit('SET_SHOPCARLIST', data.data);
+            commit('SET_SHOPCAR', data.data);
             resolve();
           }else{
             reject(data.msg);
@@ -122,7 +137,7 @@ const actions = {
   },
 
   // 购物车数量+-
-  handleShopCarNumber ({commit}, formData) {
+  handleShopCarNumber ({}, formData) {
     return new Promise((resolve, reject) => {
       mainRequest(formData)
         .then(res => {
@@ -141,7 +156,7 @@ const actions = {
   },
 
   // 删除购物车+-
-  delShopCar ({commit}, formData) {
+  delShopCar ({}, formData) {
     return new Promise((resolve, reject) => {
       mainRequest(formData)
         .then(res => {
@@ -154,9 +169,25 @@ const actions = {
           }
         })
         .catch(err => {
-          reject(data.err);
+          console.log(err);
+          reject(err);
         })
     })
+  },
+
+  // 最近浏览商品
+  getBrowsingList({commit}, formData) {
+    mainRequest(formData)
+      .then(res => {
+        console.log(res);
+        let {data, status} = res;
+        if(status === 200 && data){
+          commit('SET_BROWSINGLIST', data.data);
+        }
+      })
+      .catch(err => {
+        reject(data.err);
+      })
   }
 }
 export default { namespaced: true, state, mutations, actions }

@@ -12,7 +12,7 @@
           <div class="detail">
             <div class="describe">{{item.name}}</div>
             <div class="price">P {{item.price}}</div>
-            <div class="buy-btn" @click.stop="addShopCar(item)">
+            <div class="buy-btn" @click.stop="addShopCar(item.product.id, 1)">
               加入购物车
             </div>
           </div>
@@ -65,8 +65,10 @@ export default {
   mounted(){},
 
   methods: {
-    addShopCar: function (item) {
-      console.log(item);
+    // 加入购物车
+    async addShopCar(id, num) {
+      await this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: id, nums:num, token: this.$store.state.app.token})
+      this.$store.dispatch('goods/getCarnumber', { method: 'cart.getnumber', token: this.$store.state.app.token });
     }
   }
 }

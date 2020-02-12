@@ -54,7 +54,7 @@
                     v-model="visible"
                   >
                     <div class="content" style="width:382px;height: 100%;padding:11px 25px 25px;box-sizing:border-box;">
-                      <div v-if="shopCarList.length > 0">
+                      <div v-if="carNumber > 0">
                         <div @click="visible = !visible" style="text-align:right;">
                           <i class="iconfont icon-guanbi" style="font-size:20px;"></i>
                         </div>
@@ -62,41 +62,42 @@
                           <div>
                             商品数量
                             <br>
-                            01
+                            {{carNumber}}
                           </div>
                           <div>
                             购物车小计
                             <br>
-                            P 500
+                            P {{amount}}
                           </div>
                         </div>
                         <el-button type="danger" class="large-btn" @click="$router.push({name : 'pay-shopCar'})">
                           前往结账
                         </el-button>
                         <div class="scroll">
-                          <div v-for="(item, index) in shopCarList" :key="index" class="item">
-                            <div class="img-box">
-                              <el-image style="width:94px; height:94px" src="http://shop.shuwuya.cn/static/uploads/images/2019/12/07/15756535985dea90de94e0b.png"></el-image>
+                          <div v-for="(item, index) in list" :key="index" class="item">
+                            <div class="img-box" @click="$router.push({name: 'goodsDetail', query: {id: item.id}})">
+                              <el-image style="width:94px; height:94px" :src="item.products.image_path"></el-image>
                             </div>
                             <div class="content-box">
                               <div class="name">
-                                蚕豆-里香168g烤肉味...
+                                {{item.products.name}}
                               </div>
                               <div class="price">
-                                P 200
+                                P {{item.products.price}}
                               </div>
                               <div class="tools">
                                 <div>
-                                  <el-input-number v-model="num" size="small" label="描述文字"></el-input-number>
+                                  <el-input-number v-model="item.nums" size="small" label="描述文字" @change="numberChange(item, item.nums)"></el-input-number>
                                 </div>
-                                <div class="delete">
+
+                                <div class="delete" @click.stop="delShopCar(item.id)">
                                   <i class="iconfont icon-lajitong"></i>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                        <div class="footer-btn">
+                        <div class="footer-btn" @click="$router.push({name : 'pay-shopCar'})">
                           查看购物车
                         </div>
                       </div>
@@ -137,21 +138,16 @@ export default {
     return {
       offsetTop: 0,
       value: '',
-      show: false,
-      child: [],
       visible: false,
-      num: 0,
-      shopCarList: [
-        {num: 1},
-        {num: 1},
-      ]
+      list: [],
     }
   },
   computed:{
     ...mapState({
       isFixed: state => state.app.isFixed,
       allCategories: state => state.goods.allCategories,
-      carNumber: state => state.goods.carNumber
+      carNumber: state => state.goods.carNumber,
+      amount: state => state.goods.shopCar.goods_amount
     })
   },
   mounted () {
@@ -178,9 +174,54 @@ export default {
     getPageData () {
       // 获取所有分类
       this.$store.dispatch('goods/getAllCategories', { method: 'categories.getallcat' });
+      this.getShopCar();
+    },
+    // 获取购物车
+    async getShopCar () {
       // 获取购物车数量
       this.$store.dispatch('goods/getCarnumber', { method: 'cart.getnumber', token: this.$store.state.app.token });
-    }
+      await this.$store.dispatch('goods/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token})
+        .then(res => {
+          this.list = JSON.parse(JSON.stringify(this.$store.state.goods.shopCar.list));
+        })
+        .catch(err => {
+          this.$message.error(err);
+        })
+    },
+    // 购物车数量+-
+    async numberChange(item, nums) {
+      console.log(item, nums);
+      await this.$store.dispatch('goods/handleShopCarNumber', {method:'cart.setnums', token: this.$store.state.app.token, id: item.id, nums: nums})
+        .then(() => {
+          this.getPageData();
+        })
+        .catch(err => {
+          this.$message.error(err);
+        })   
+    },
+    // 删除购物车
+    delShopCar: function (id) {
+      console.log(id);
+      this.$confirm('删除购物车, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+      .then(async () => {
+        await this.$store.dispatch('goods/delShopCar', {method:'cart.del', ids: id, token: this.$store.state.app.token})
+          .then(res => {
+            this.$message({
+              type: "success",
+              message: res,
+            });
+            this.getPageData();
+          })
+          .catch(err => {
+            console.log(err);
+            this.$message.error(`添加收藏${err}`);
+          });
+      })
+    },
   },
   destroyed () {
     // 离开页面 关闭监听 不然会报错
