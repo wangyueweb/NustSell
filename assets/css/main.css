@@ -8,12 +8,17 @@ html {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
 }
+input:focus{
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+    -webkit-user-modify:read-write-plaintext-only;
+}
 *,
 *:before,
 *:after {
   box-sizing: border-box;
   margin: 0;
 }
+*:focus {outline: none;}
 body {
   background: #f2f2f2;
 }

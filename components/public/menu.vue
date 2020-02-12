@@ -2,10 +2,17 @@
 	<div class="menu" id="menu">
     <div :class="{menu_fixed : isFixed}" v-if="allCategories.length > 0">
       <el-row class="content" style="display: flex;align-items: center;flex-wrap: wrap;">
-        <el-col :span="isFixed ? 3 : 24">
+        <el-col :span="3" v-if="isFixed">
           <div class="logo">
             <nuxt-link :to="{path: '/'}">
-              <el-image :src="require('@/assets/img/logo.png')" style="width:65px;"></el-image>
+              <el-image :src="require('@/assets/img/logo3.png')" style="width:65px;"></el-image>
+            </nuxt-link>
+          </div>
+        </el-col>
+        <el-col :span="24" v-if="!isFixed">
+          <div class="logo">
+            <nuxt-link :to="{path: '/'}">
+              <el-image :src="require('@/assets/img/logo.png')" style="width:90px;margin: 20px 0 -5px 0;"></el-image>
             </nuxt-link>
           </div>
         </el-col>
