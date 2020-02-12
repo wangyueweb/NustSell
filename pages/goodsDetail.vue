@@ -49,8 +49,8 @@
           <el-input-number v-model="num" size="small" :min="1" :max="10" label="描述文字"></el-input-number>
         </div>
         
-        <div class="buy-btn" @click="addShopCar(goodDetail.product.id, num)">加入购物车</div>
-
+        <div class="buy-btn" @click="addShopCar">加入购物车</div>
+        
         <div class="collect" @click="addCollect">
           <i class="iconfont icon-shoucang"></i>
           {{(goodDetail.isfav === 'true') ? '已收藏' : '收藏'}}
@@ -73,7 +73,15 @@
 
       <div v-if="selected === 0">
         <div class="swiper">
-          <GoodsScroll :list="otherList" imgKey="url" :options="goodsScrollOption" :customArrow="false"></GoodsScroll>
+          <Swiper :imgs="banners" :options="swiperOption">
+            <div slot="detail">
+              <div class="describe">金枕头泰国风味榴莲</div>
+              <div class="price">P 47.00</div>
+              <div class="buy-btn">
+                加入购物车
+              </div>
+            </div>
+          </Swiper>
         </div>
       </div>
 
@@ -94,7 +102,6 @@
 
 <script>
 import Swiper from "~/components/public/swiper";
-import GoodsScroll from "~/components/public/GoodsScroll";
 import { getCategories } from "@/services/api";
 export default {
   name: "goodDetail",
@@ -108,7 +115,7 @@ export default {
         "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
         "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg"
       ],
-      goodsScrollOption: {
+      swiperOption: {
         slidesPerView: 4,
         centeredSlidesBounds: true,
         spaceBetween: 30,
@@ -118,24 +125,22 @@ export default {
         }
       },
       goodDetail: {},
-      show_image: '',
-      otherList: []
+      show_image: ''
     };
   },
   components: {
-    Swiper,
-    GoodsScroll
+    Swiper
   },
   computed: {
     tableData: function() {
       return [
         {
-          name: `品牌: ${this.goodDetail.brand_name || '无'}`,
-          address: `储存方式: ${this.goodDetail.storageMode || '无'}`
+          name: this.goodDetail.brand_name,
+          address: this.goodDetail.storageMode
         },
         {
-          name: `保质期: ${this.goodDetail.shelfLife || '无'}`,
-          address: `生产地: ${this.goodDetail.producer || '无'}`
+          name: this.goodDetail.shelfLife,
+          address: this.goodDetail.producer
         }
       ]
     }
@@ -155,7 +160,6 @@ export default {
         let {status, data} = await getCategories(formData);
         if(status === 200 && data && data.data){
           this.goodDetail = data.data;
-          this.otherList = data.other;
           this.show_image = data.data.album[0];
         }
         console.log(data);
@@ -180,9 +184,19 @@ export default {
         });
     },
     // 加入购物车
-    async addShopCar(id, num) {
-      await this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: id, nums:num, token: this.$store.state.app.token})
-      this.$store.dispatch('goods/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token});
+    addShopCar: function() {
+      this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: this.goodDetail.id, nums:this.num, token: this.$store.state.app.token})
+        .then(res => {
+          let {status, data} = res;
+          console.log(res);
+          this.$message({
+            message: data.msg,
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          this.$message.error(`加入购物车${err}`);
+        });
     }
   }
 };
@@ -190,6 +204,7 @@ export default {
 
 <style lang="less" scoped>
 @import "../assets/css/theme.less";
+
 .goodDetail {
   @1200();
   .breadcrumb{
@@ -227,18 +242,20 @@ export default {
     }
 
     .buy-btn {
-      height: 34px;
-      line-height: 34px;
+      width: 400px;
+      height: 50px;
+      line-height: 50px;
       text-align: center;
       background: @theme-black;
       color: @theme-white;
-      margin-top: 30px;
+      margin-top: 35px;
       @cursor-pointer();
     }
     .collect {
-      margin-top: 15px;
-      height: 34px;
-      line-height: 34px;
+      width: 400px;
+      margin-top: 16px;
+      height: 50px;
+      line-height: 50px;
       text-align: center;
       border: @border;
       @cursor-pointer();

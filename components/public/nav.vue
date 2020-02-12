@@ -427,6 +427,7 @@
 
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../assets/css/theme.less";
+  .dialog{}
   .nav {
     height: @nav-height;
     line-height: @nav-height;
@@ -487,7 +488,6 @@
 
       .nav-right {
         position: relative;
-
         span {
           cursor: pointer;
           display: inline-block;

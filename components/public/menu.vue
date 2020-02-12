@@ -271,6 +271,7 @@ export default {
       }
       .menu-type{
         @cursor-pointer();
+        font-weight: 600;
         font-size: 18px;
         color: @theme-black;
         // line-height: 140px;

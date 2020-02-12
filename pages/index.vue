@@ -129,6 +129,9 @@ export default {
 
 <style lang="less" scoped>
 @import '../assets/css/theme.less';
+.swiper-button-prev{width: 32px;height: 55px;background-image: url(../assets/img/arrow-left3.png) !important;background-size: 40px 40px !important;opacity: 0.7 !important;}
+.swiper-button-next{width: 32px;height: 55px;background-image: url(../assets/img/arrow-right3.png) !important;background-size: 40px 40px !important;opacity: 0.7 !important;}
+
 .banner{
   width: 100%;
 }
@@ -153,6 +156,7 @@ export default {
       width: 100%;
     }
   }
+  
 }
 .title{
   font-size: 28px;
