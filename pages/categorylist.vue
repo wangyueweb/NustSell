@@ -61,9 +61,12 @@
                   <span class="count">
                     排列条件
                   </span>
-                  <el-select v-model="value" placeholder="销量">
+                  <el-select v-model="sort">
                     <el-option
-                      value="1">
+                      value="销量">
+                    </el-option>
+                    <el-option
+                      value="价格">
                     </el-option>
                   </el-select>
                   <el-col class="rankBtn">
@@ -156,13 +159,6 @@ export default {
   name: 'categoryList',
   data(){
     return {
-      // categoryList: [{name: '膨化.零嘴（20）'}, {name: '饼干糕点'}, {name: '坚果.果干'}, {name: '肉干.肉铺'}, {name: '槟榔'}],
-      common: [
-        "饼干.糕点",
-        "坚果.果干",
-        "肉干.肉铺",
-        "槟榔",
-      ],
       other: [
         "卫龙",
         "好丽友",
@@ -179,7 +175,8 @@ export default {
         "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg"
       ],
       small: true,
-      value: null,
+      value: 1,
+      sort: "",
 
       formData: {},
       goodsOptions: {},
@@ -204,28 +201,12 @@ export default {
       set: function (val) {}
     }
   },
-  // async asyncData (ctx) {
-  //   console.log(ctx);
-  //   try{
-  //     // 商品子分类
-  //     const { data: { data }, status } = await getCategories({parent_id: ctx.query.id, method: 'categories.getchildcat'});
-  //     return {
-  //       categoryList: (status === 200) ? data : [],
-  //     }
-  //   }catch(e){
-  //     return {
-  //       categoryList: [],
-  //     }
-  //   }
-  // },
   created(){
     this.getPageData();
     this.getBrowsingList();
   },
   methods:{
     async getPageData(){
-      // const { data: { data }, status } = await getCategories({parent_id: this.$route.query.id, method: 'categories.getchildcat'});
-      // this.categoryList = (status === 200) ? data : []
       this.formData = {
         page: 1,
         limit: this.small ? 10 : 3,
@@ -235,6 +216,7 @@ export default {
       }
       this.getGoodsList();
     },
+    // 获取最近浏览商品
     getBrowsingList(){
       this.$store.dispatch('goods/getBrowsingList', {method: "user.goodsbrowsing", limit: 3, page: 1, token: this.$store.state.app.token})
     },
@@ -269,12 +251,12 @@ export default {
     // 加入购物车
     async addShopCar(id, num) {
       await this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: id, nums:num, token: this.$store.state.app.token})
-      this.$store.dispatch('goods/getCarnumber', { method: 'cart.getnumber', token: this.$store.state.app.token });
+      this.$store.dispatch('goods/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token});
     },
     // 分页变化
     paginationChange: function (e) {
       console.log(e);
-      this.formData.page = e;
+      this.$set(this.formData, 'page', e);
       this.getGoodsList();
     }
   },
@@ -282,6 +264,33 @@ export default {
     $route(to,from){
       console.log('route改变')
       return this.getPageData();
+    },
+    sort: function(){
+      console.log(this.sort);
+      
+      if(this.sort === '销量'){
+        this.formData = {
+          page: 1,
+          limit: this.small ? 10 : 3,
+          order: "buy_count desc",
+          where: `{"cat_id": ${this.$route.query.id}}`,
+          method: "goods.getlist",
+          token: this.$store.state.app.token
+        }
+        this.getGoodsList();
+      }
+
+      if(this.sort === '价格'){
+        this.formData = {
+          page: 1,
+          limit: this.small ? 10 : 3,
+          order: "price asc",
+          where: `{"cat_id": ${this.$route.query.id}}`,
+          method: "goods.getlist",
+          token: this.$store.state.app.token
+        }
+        this.getGoodsList();
+      }
     }
   }
 }
