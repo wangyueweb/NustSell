@@ -31,7 +31,7 @@
               align="center"
               label="单价">
               <template slot-scope="scope">
-                {{scope.row.products.price}} P
+                {{scope.row.products.price}} P测试
               </template>
             </el-table-column>
             <el-table-column
