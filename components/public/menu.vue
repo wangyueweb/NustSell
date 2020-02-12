@@ -147,8 +147,22 @@ export default {
       isFixed: state => state.app.isFixed,
       allCategories: state => state.goods.allCategories,
       carNumber: state => state.goods.carNumber,
-      amount: state => state.goods.shopCar.goods_amount
+      amount: state => state.goods.shopCar.goods_amount,
+      shopCarList: state => state.goods.shopCar.list
     })
+  },
+  watch: {
+    shopCarList: {
+      handler(newVal, oldVal) {
+        console.log(newVal);
+        if(newVal && JSON.stringify(newVal) != JSON.stringify(oldVal)){
+          this.$nextTick(() => {
+            this.getShopCar();
+          })
+        }
+      },
+      immediate: true
+    }
   },
   mounted () {
     // 设置bar浮动阈值为 #fixedBar 至页面顶部的距离
@@ -180,9 +194,9 @@ export default {
     async getShopCar () {
       // 获取购物车数量
       this.$store.dispatch('goods/getCarnumber', { method: 'cart.getnumber', token: this.$store.state.app.token });
-      await this.$store.dispatch('goods/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token})
+      this.$store.dispatch('goods/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token})
         .then(res => {
-          this.list = JSON.parse(JSON.stringify(this.$store.state.goods.shopCar.list));
+          this.list = JSON.parse(JSON.stringify(this.$store.state.goods.shopCar.list))
         })
         .catch(err => {
           this.$message.error(err);
