@@ -31,7 +31,7 @@
 import Category from "~/components/public/category"
 import Swiper from "~/components/public/swiper"
 import GoodsScroll from "~/components/public/GoodsScroll"
-import {getCategories, mainRequest} from "~/services/api"
+import {getCategories, mainRequest, getSellInfo} from "~/services/api"
 import { mapState } from "vuex"
 export default {
   layout: function(context){
@@ -60,6 +60,15 @@ export default {
       newList: []
     };
   },
+  head () {
+    return {
+      title: this.basicInfo.shop_name,
+      meta: [
+        { name: 'description', content: this.basicInfo.recommend_keys},
+        { name: 'keywords', content: this.basicInfo.shop_desc }
+      ]
+    }
+  },
   components: {
     Category,
     Swiper,
@@ -67,17 +76,22 @@ export default {
   },
   computed:{
     ...mapState({
-      isFixed: state => state.app.isFixed
+      isFixed: state => state.app.isFixed,
     })
   },
   async asyncData () {
     try{
+      // 获取商城基本信息
+      const basicInfo = await getSellInfo();
+
       const headerCat = await mainRequest({method:'categories.getheadercat'});
       // 轮播
       const adverlistData = await getCategories({ method: 'advert.getAdvertList', code: 'tpl1_slider'});
+      
       return {
         headerCatList: headerCat.data.data || [],
-        adverlist: adverlistData.data.data.list || []
+        adverlist: adverlistData.data.data.list || [],
+        basicInfo: basicInfo.data
       }
     }catch(e){
       return {

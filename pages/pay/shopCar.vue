@@ -31,7 +31,7 @@
               align="center"
               label="单价">
               <template slot-scope="scope">
-                {{scope.row.products.price}} P测试
+                {{scope.row.products.price}} P
               </template>
             </el-table-column>
             <el-table-column
@@ -147,9 +147,9 @@ export default {
   },
   methods: {
     async getPageData () {
-      await this.$store.dispatch('goods/getShopCarList', {method:'cart.getlist', token: this.$store.state.app.token})
+      await this.$store.dispatch('goods/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token})
         .then(res => {
-          this.list = JSON.parse(JSON.stringify(this.$store.state.goods.shopCarList.list));
+          this.list = JSON.parse(JSON.stringify(this.$store.state.goods.shopCar.list));
         })
         .catch(err => {
           this.$message.error(err);
@@ -193,6 +193,7 @@ export default {
           this.$message.error(`添加收藏${err}`);
         });
     },
+    // 删除购物车
     delShopCar: function (id) {
       console.log(id);
       this.$confirm('删除购物车, 是否继续?', '提示', {

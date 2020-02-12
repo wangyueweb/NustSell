@@ -103,7 +103,7 @@
                       </div>
                     </el-col>
                     <el-col>
-                      <div class="buy-btn">加入购物车</div>
+                      <div class="buy-btn" @click.stop="addShopCar(item.product.id, 1)">加入购物车</div>
                     </el-col>
                   </el-row>
                 </div>
@@ -220,6 +220,7 @@ export default {
   // },
   created(){
     this.getPageData();
+    this.getBrowsingList();
   },
   methods:{
     async getPageData(){
@@ -234,9 +235,11 @@ export default {
       }
       this.getGoodsList();
     },
+    getBrowsingList(){
+      this.$store.dispatch('goods/getBrowsingList', {method: "user.goodsbrowsing", limit: 3, page: 1, token: this.$store.state.app.token})
+    },
     // 获取商品列表
     getGoodsList: async function () {
-      console.log(this.formData);
       await this.$store.dispatch('goods/getGoodsList', this.formData)
         .then(({status, data}) => {
           console.log(data);
@@ -262,6 +265,11 @@ export default {
           console.log(err);
           this.$message.error(`添加收藏${err}`);
         });
+    },
+    // 加入购物车
+    async addShopCar(id, num) {
+      await this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: id, nums:num, token: this.$store.state.app.token})
+      this.$store.dispatch('goods/getCarnumber', { method: 'cart.getnumber', token: this.$store.state.app.token });
     },
     // 分页变化
     paginationChange: function (e) {

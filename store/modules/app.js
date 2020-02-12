@@ -1,4 +1,4 @@
-import { mainRequest } from "@/services/api"
+import { mainRequest, getSellInfo } from "@/services/api"
 import { getCookie } from "@/utils/utils"
 import Cookie from 'js-cookie'
 const state = () => ({
