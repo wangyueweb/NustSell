@@ -7,7 +7,8 @@ const state = () => ({
   carNumber: 0,
   collectList: [],
   shopCar: [],
-  browsingList: []
+  browsingList: [],
+  goodsDetail: {}
 })
 
 const mutations = {
@@ -25,6 +26,9 @@ const mutations = {
   },
   SET_BROWSINGLIST: (state, payload) => {
     state.browsingList = payload;
+  },
+  SET_GOODSDETAIL: (state, payload) => {
+    state.goodsDetail = payload;
   }
 }
 
@@ -179,7 +183,7 @@ const actions = {
   getBrowsingList({commit}, formData) {
     mainRequest(formData)
       .then(res => {
-        console.log(res);
+        console.log('最近浏览商品',res);
         let {data, status} = res;
         if(status === 200 && data){
           commit('SET_BROWSINGLIST', data.data);
@@ -188,6 +192,6 @@ const actions = {
       .catch(err => {
         reject(data.err);
       })
-  }
+  },
 }
 export default { namespaced: true, state, mutations, actions }
