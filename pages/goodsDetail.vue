@@ -1,10 +1,10 @@
 <template>
-  <div class="goodDetail">
+  <div class="goodsDetail">
     <!-- 面包屑 -->
     <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item :to="{ name: 'categorylist' }">零食</el-breadcrumb-item>
-      <el-breadcrumb-item>{{goodDetail.name || ''}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{goodsDetail.name || ''}}</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 内容 -->
     <el-row class="main">
@@ -14,7 +14,7 @@
             <div>
               <el-image
                 class="small-img"
-                v-for="(item, index) in goodDetail.album"
+                v-for="(item, index) in goodsDetail.album"
                 :key="index"
                 :src="item"
                 fit="fill"
@@ -33,27 +33,27 @@
       </el-col>
       <el-col :span="9">
         <div class="describe">
-          {{goodDetail.brief || ''}}
+          {{goodsDetail.brief || ''}}
         </div>
-        <div class="hot" v-if="goodDetail.is_recommend === 2">
-          {{goodDetail.is_recommend === 2 ? '热销' : ''}}
+        <div class="hot" v-if="goodsDetail.is_recommend === 2">
+          {{goodsDetail.is_recommend === 2 ? '热销' : ''}}
         </div>
-        <div class="hot" v-if="goodDetail.stock < 1">
-          {{goodDetail.stock < 1 ? '缺货' : ''}}
+        <div class="hot" v-if="goodsDetail.stock < 1">
+          {{goodsDetail.stock < 1 ? '缺货' : ''}}
         </div>
         <div class="price">
-          P {{goodDetail.price}}
+          P {{goodsDetail.price}}
         </div>
 
         <div class="calculate">
           <el-input-number v-model="num" size="small" :min="1" :max="10" label="描述文字"></el-input-number>
         </div>
         
-        <div class="buy-btn" @click="addShopCar(goodDetail.product.id, num)">加入购物车</div>
+        <div class="buy-btn" @click="addShopCar(goodsDetail.product.id, num)">加入购物车</div>
 
         <div class="collect" @click="addCollect">
           <i class="iconfont icon-shoucang"></i>
-          {{(goodDetail.isfav === 'true') ? '已收藏' : '收藏'}}
+          {{(goodsDetail.isfav === 'true') ? '已收藏' : '收藏'}}
         </div>
       </el-col>
     </el-row>
@@ -79,13 +79,13 @@
 
       <div v-if="selected === 1">
         <div class="table">
-          <div class="table-title">{{goodDetail.name || ''}}</div>
+          <div class="table-title">{{goodsDetail.name || ''}}</div>
           <el-table :show-header="false" :data="tableData" border>
             <el-table-column prop="name"></el-table-column>
             <el-table-column prop="address"></el-table-column>
           </el-table>
         </div>
-        <div class="img-list" v-html="goodDetail.intro">
+        <div class="img-list" v-html="goodsDetail.intro">
         </div>
       </div>
     </div>
@@ -95,19 +95,14 @@
 <script>
 import Swiper from "~/components/public/swiper";
 import GoodsScroll from "~/components/public/GoodsScroll";
-import { getCategories } from "@/services/api";
+import { getCategories, mainRequest } from "@/services/api";
+import { mapState } from "vuex";
 export default {
-  name: "goodDetail",
+  name: "goodsDetail",
   data() {
     return {
       num: 1,
       selected: 0,
-      banners: [
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg"
-      ],
       goodsScrollOption: {
         slidesPerView: 4,
         centeredSlidesBounds: true,
@@ -117,9 +112,9 @@ export default {
           prevEl: '.swiper-button-prev',
         }
       },
-      goodDetail: {},
-      show_image: '',
-      otherList: []
+      goodsDetail: {},
+      otherList: [],
+      show_image: ""
     };
   },
   components: {
@@ -127,15 +122,17 @@ export default {
     GoodsScroll
   },
   computed: {
+    ...mapState({
+    }),
     tableData: function() {
       return [
         {
-          name: `品牌: ${this.goodDetail.brand_name || '无'}`,
-          address: `储存方式: ${this.goodDetail.storageMode || '无'}`
+          name: `品牌: ${this.goodsDetail.brand_name || '无'}`,
+          address: `储存方式: ${this.goodsDetail.storageMode || '无'}`
         },
         {
-          name: `保质期: ${this.goodDetail.shelfLife || '无'}`,
-          address: `生产地: ${this.goodDetail.producer || '无'}`
+          name: `保质期: ${this.goodsDetail.shelfLife || '无'}`,
+          address: `生产地: ${this.goodsDetail.producer || '无'}`
         }
       ]
     }
@@ -145,29 +142,29 @@ export default {
   },
   methods: {
     getPageData: async function () {
-      try{
-        let formData;
-        if(this.$store.state.app.token){
-          formData = {method: 'goods.getdetial', id: this.$route.query.id, token: this.$store.state.app.token};
-        }else{
-          formData = {method: 'goods.getdetial', id: this.$route.query.id};
-        }
-        let {status, data} = await getCategories(formData);
-        if(status === 200 && data && data.data){
-          this.goodDetail = data.data;
-          this.otherList = data.other;
-          this.show_image = data.data.album[0];
-        }
-        console.log(data);
+      let formData = {
+        method: 'goods.getdetial',
+        id: this.$route.query.id,
+        token: this.$store.state.app.token
       }
-      catch(err){
-        console.log(err);
-        this.$message.error(`获取商品详情错误${err}` );
+      let {status, data} = await getCategories(formData);
+      if(status === 200 && data && data.data){
+        this.goodsDetail = data.data;
+        this.otherList = data.other;
+        this.show_image = data.data.album[0];
       }
+
+      // 添加最近浏览商品
+      mainRequest({goods_id: this.goodsDetail.id, token: this.$store.state.app.token, method: 'user.addgoodsbrowsing'})
+        .then(res => {
+          console.log('添加最近浏览商品',res);
+        })
+        .catch(err => {
+        })
     },
     // 添加收藏
     addCollect: function() {
-      this.$store.dispatch('goods/addCollect', {method:'user.goodscollection', goods_id: this.goodDetail.id, token: this.$store.state.app.token})
+      this.$store.dispatch('goods/addCollect', {method:'user.goodscollection', goods_id: this.goodsDetail.id, token: this.$store.state.app.token})
         .then(({status, data}) => {
           this.$message({
             message: data.msg,
@@ -190,7 +187,7 @@ export default {
 
 <style lang="less" scoped>
 @import "../assets/css/theme.less";
-.goodDetail {
+.goodsDetail {
   @1200();
   .breadcrumb{
     margin: @bianju 0;
