@@ -49,13 +49,8 @@
           <el-input-number v-model="num" size="small" :min="1" :max="10" label="描述文字"></el-input-number>
         </div>
         
-<<<<<<< HEAD
-        <div class="buy-btn" @click="addShopCar">加入购物车</div>
-        
-=======
         <div class="buy-btn" @click="addShopCar(goodsDetail.product.id, num)">加入购物车</div>
 
->>>>>>> b4a521db649f93d50bc38aca0f3da5597f924d4e
         <div class="collect" @click="addCollect">
           <i class="iconfont icon-shoucang"></i>
           {{(goodsDetail.isfav === 'true') ? '已收藏' : '收藏'}}
@@ -107,20 +102,17 @@
 
 <script>
 import Swiper from "~/components/public/swiper";
-<<<<<<< HEAD
 import { getCategories } from "@/services/api";
-=======
 import GoodsScroll from "~/components/public/GoodsScroll";
-import { getCategories, mainRequest } from "@/services/api";
+import { mainRequest } from "@/services/api";
 import { mapState } from "vuex";
->>>>>>> b4a521db649f93d50bc38aca0f3da5597f924d4e
+
 export default {
   name: "goodsDetail",
   data() {
     return {
       num: 1,
       selected: 0,
-<<<<<<< HEAD
       banners: [
         "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
         "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
@@ -128,9 +120,6 @@ export default {
         "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg"
       ],
       swiperOption: {
-=======
-      goodsScrollOption: {
->>>>>>> b4a521db649f93d50bc38aca0f3da5597f924d4e
         slidesPerView: 4,
         centeredSlidesBounds: true,
         spaceBetween: 30,
@@ -139,14 +128,9 @@ export default {
           prevEl: '.swiper-button-prev',
         }
       },
-<<<<<<< HEAD
-      goodDetail: {},
-      show_image: ''
-=======
       goodsDetail: {},
       otherList: [],
       show_image: ""
->>>>>>> b4a521db649f93d50bc38aca0f3da5597f924d4e
     };
   },
   components: {
@@ -158,21 +142,12 @@ export default {
     tableData: function() {
       return [
         {
-<<<<<<< HEAD
-          name: this.goodDetail.brand_name,
-          address: this.goodDetail.storageMode
-        },
-        {
-          name: this.goodDetail.shelfLife,
-          address: this.goodDetail.producer
-=======
           name: `品牌: ${this.goodsDetail.brand_name || '无'}`,
           address: `储存方式: ${this.goodsDetail.storageMode || '无'}`
         },
         {
           name: `保质期: ${this.goodsDetail.shelfLife || '无'}`,
           address: `生产地: ${this.goodsDetail.producer || '无'}`
->>>>>>> b4a521db649f93d50bc38aca0f3da5597f924d4e
         }
       ]
     }
@@ -182,26 +157,10 @@ export default {
   },
   methods: {
     getPageData: async function () {
-<<<<<<< HEAD
-      try{
-        let formData;
-        if(this.$store.state.app.token){
-          formData = {method: 'goods.getdetial', id: this.$route.query.id, token: this.$store.state.app.token};
-        }else{
-          formData = {method: 'goods.getdetial', id: this.$route.query.id};
-        }
-        let {status, data} = await getCategories(formData);
-        if(status === 200 && data && data.data){
-          this.goodDetail = data.data;
-          this.show_image = data.data.album[0];
-        }
-        console.log(data);
-=======
       let formData = {
         method: 'goods.getdetial',
         id: this.$route.query.id,
         token: this.$store.state.app.token
->>>>>>> b4a521db649f93d50bc38aca0f3da5597f924d4e
       }
       let {status, data} = await getCategories(formData);
       if(status === 200 && data && data.data){
@@ -253,12 +212,7 @@ export default {
 
 <style lang="less" scoped>
 @import "../assets/css/theme.less";
-<<<<<<< HEAD
-
-.goodDetail {
-=======
 .goodsDetail {
->>>>>>> b4a521db649f93d50bc38aca0f3da5597f924d4e
   @1200();
   .breadcrumb{
     margin: @bianju 0;
