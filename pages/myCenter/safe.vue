@@ -29,7 +29,37 @@
           <div class="content">安全性高的密码可以使账号更安全。建议您定期更换密码，且设置一个包含数字和字母，并长度超过6位以上的密码。</div>
         </el-col>
         <el-col :span="6">
-          <div class="handle"><el-button size="mini" type="primary" @click="dialogVisible = !dialogVisible">修改密码</el-button></div>
+          <div class="handle">
+            <el-button size="mini" type="primary" @click="dialogVisible = !dialogVisible">修改密码</el-button>
+            <div class="amend" v-if="dialogVisible">
+                <div class="close" @click="dialogVisible = !dialogVisible">X</div>
+              <div class="amend-name">修改密码</div>
+                <div style="width: 400px;margin: auto;">
+                  <div class="item">
+                    <div class="alias">原 密 码</div> 
+                    <div class="address">
+                      <el-input v-model="formData.oldPassword" style="width: 200px;"></el-input>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="alias">新 密 码</div> 
+                    <div class="address">
+                      <el-input v-model="formData.newPassword" style="width: 200px;"></el-input>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="alias">确认密码</div> 
+                    <div class="address">
+                      <el-input v-model="formData.newPassword" style="width: 200px;"></el-input>
+                    </div>
+                  </div>
+                  <span slot="footer" class="dialog-footer item">
+                    <el-button type="primary" style="width:200px;">修改密码</el-button>
+                    <el-button @click="dialogVisible = false" style="width:200px;"> 取 消 </el-button>
+                  </span>
+                </div>
+            </div>
+          </div>
         </el-col>
       </el-row>
 
@@ -91,40 +121,6 @@
       Q 安全设置完成之后可以修改吗？<br/>
       A 您可以点击“修改”按钮进行修改。
     </div>
-
-
-
-    <el-dialog
-      title="修改密码"
-      :visible.sync="dialogVisible">
-      <div style="width: 400px;margin: auto;">
-        <div class="item">
-          <div class="alias">原 密 码</div> 
-          <div class="address">
-            <el-input v-model="formData.oldPassword" style="width: 200px;"></el-input>
-          </div>
-        </div>
-        <div class="item">
-          <div class="alias">新 密 码</div> 
-          <div class="address">
-            <el-input v-model="formData.newPassword" style="width: 200px;"></el-input>
-          </div>
-        </div>
-        <div class="item">
-          <div class="alias"></div> 
-          <div class="address">
-            <el-input v-model="formData.newPassword" style="width: 200px;"></el-input>
-          </div>
-        </div>
-        <span slot="footer" class="dialog-footer item">
-          <el-button type="primary" style="width:200px;">修改密码</el-button>
-          <el-button @click="dialogVisible = false" style="width:200px;"> 取 消 </el-button>
-        </span>
-      </div>
-
-
-      
-    </el-dialog>
   </div>
 </template>
 
@@ -136,6 +132,7 @@ export default {
   },
   data() {
     return {
+      amendShow: false,
       dialogVisible: false,
       formData: {
         oldPassword: "",
@@ -232,6 +229,7 @@ export default {
         padding-left: 32px;
         display: flex;
         align-items: center;
+        position: relative;
       }
     }
     
@@ -247,8 +245,8 @@ export default {
     margin: 10px 0;
     .alias{
       width: 7em;
-      display: flex;
-      align-items: center;
+      margin: 0 10px 0 0;
+      text-align: right;
     }
     .discount{
       font-size: 14px;
@@ -272,4 +270,11 @@ export default {
     @centered()
   }
 }
+
+.amend{position: absolute;width: 875px;border: 1px solid #000;top: 35px;left: -644px;background: #fff;z-index: 100;}
+.amend .amend-name{font-size: 16px;padding: 10px 0 10px 28px;}
+.amend .dialog-footer{margin: 35px 0 45px 0 !important;}
+.amend .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
+
+
 </style>

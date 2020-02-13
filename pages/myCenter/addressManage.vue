@@ -1,9 +1,49 @@
 <!-- 账户信息 -->
 <template>
   <div class="addressManage">
-    <CardTitle :textLine='true' :titleLine='true' name='我的收货地址'>
-      <el-button type="primary" slot="tool" style="margin-bottom:10px;" size="mini" @click="dialogVisible = !dialogVisible">+新增收货地址</el-button>
-    </CardTitle>
+    <div class="newaddress">
+      <CardTitle :textLine='true' :titleLine='true' name='我的收货地址'>
+        <el-button type="primary" slot="tool" style="margin-bottom:10px;" size="mini" @click="dialogVisible = !dialogVisible">+新增收货地址</el-button>
+      </CardTitle>
+      
+      <div class="newbox" v-if="dialogVisible">
+        <div class="close" @click="dialogVisible = !dialogVisible">X</div>
+        <div class="newbox-name">修改密码</div>
+        <div>
+          <div class="item">
+            <div class="alias">所 在 地 区</div> 
+            <el-radio-group v-model="addData.area_id" @change="radioChange">
+              <el-radio :label="1" border>Makati</el-radio>
+              <el-radio :label="2" border>BGC</el-radio>
+              <el-radio :label="3" border>Mandaluyon</el-radio>
+            </el-radio-group>
+          </div>
+          <div class="item">
+            <div class="alias">详 细 地 址</div> 
+            <div class="address">
+              <el-input v-model="addData.address" placeholder="请输入详细地址"></el-input>
+            </div>
+          </div>
+          <div class="item">
+            <div class="alias">收货人姓名</div> 
+            <div class="name"><el-input v-model="addData.name" placeholder="请输入收货人姓名"></el-input></div>
+          </div>
+          <div class="item">
+            <div class="alias">收货人手机</div> 
+            <div class="mobile">
+              <el-input v-model="addData.mobile" placeholder="+63    |"></el-input>
+            </div>
+          </div>
+          <el-checkbox label="设置为默认收货地址" v-model="auto"></el-checkbox>
+        </div>
+      
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="add">保 存</el-button>
+          <el-button @click="dialogVisible = false">取 消</el-button>
+        </span>
+      </div>
+      
+    </div>
 
     <div class="table">
       <el-table
@@ -42,44 +82,6 @@
       </el-table>
     </div>
 
-    <el-dialog
-      title="新增收货地址"
-      :visible.sync="dialogVisible">
-      <div>
-        <div class="item">
-          <div class="alias">所 在 地 区</div> 
-          <el-radio-group v-model="addData.area_id" @change="radioChange">
-            <el-radio :label="1" border>Makati</el-radio>
-            <el-radio :label="2" border>BGC</el-radio>
-            <el-radio :label="3" border>Mandaluyon</el-radio>
-          </el-radio-group>
-        </div>
-        <div class="item">
-          <div class="alias">详 细 地 址</div> 
-          <div class="address">
-            <el-input v-model="addData.address" placeholder="请输入详细地址"></el-input>
-          </div>
-        </div>
-        <div class="item">
-          <div class="alias">收货人姓名</div> 
-          <div class="name"><el-input v-model="addData.name" placeholder="请输入收货人姓名"></el-input></div>
-        </div>
-        <div class="item">
-          <div class="alias">收货人手机</div> 
-          <div class="mobile">
-            <el-input v-model="addData.mobile" placeholder="+63    |"></el-input>
-          </div>
-        </div>
-
-        <el-checkbox label="设置为默认收货地址" v-model="auto"></el-checkbox>
-      </div>
-
-
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="add">保 存</el-button>
-        <el-button @click="dialogVisible = false">取 消</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -199,6 +201,7 @@ export default {
 .addressManage{
   padding: 20px 36px;
   background: @theme-white;
+  position: relative;
   .table{
     margin-top: 19px;
     border-top: solid 1px @theme-silvergray;
@@ -213,9 +216,9 @@ export default {
   display: flex;
   margin: 10px 0;
   .alias{
-    width: 7em;
-    display: flex;
-    align-items: center;
+    width: 8em;
+    text-align: right;
+    margin: 9px 10px 0 0;
   }
   .address{
     width: 570px;
@@ -231,4 +234,13 @@ export default {
 .dialog-footer{
   @centered()
 }
+
+
+.newbox{position: absolute;width: 947px;border: 1px solid #000;top: 48px;left: 0;background: #fff;z-index: 100;}
+.newbox .newbox-name{font-size: 16px;padding: 10px 0 10px 28px;}
+.newbox .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
+.newbox .el-radio{margin: 0;min-width: 120px;}
+.newbox .el-checkbox{margin: 0 0 0 138px;}
+.dialog-footer{margin: 25px 0 30px 0;}
+
 </style>

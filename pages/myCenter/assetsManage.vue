@@ -10,6 +10,41 @@
       <div class="tips">
         立即充值，获取积分，享受10%的购物优惠。
         <el-button type="primary" size="mini" @click="pay">立即充值</el-button>
+        <div class="recharge" v-if="dialogVisible">
+            <div class="close" @click="pay">X</div>
+            <div class="recharge-name">账户充值</div>
+          <div>
+            <div class="item">
+              <div class="alias">充 值 金 额</div> 
+              <el-select v-model="payData.value" placeholder="请选择">
+                <el-option
+                  v-for="(item,index) in 100"
+                  :key="index"
+                  :label="item"
+                  :value="item">
+                </el-option>
+              </el-select>
+              <div class="discount">( ￥ 21.79 )</div>
+            </div>
+            <div class="item">
+              <div class="alias">支 付 方 式</div> 
+              <el-radio-group v-model="payData.pay_method" @change="radioChange">
+                <el-radio :label="1" border>微信</el-radio>
+                <el-radio :label="2" border>支付宝</el-radio>
+              </el-radio-group>
+            </div>
+            <div class="item">
+              <div class="alias"> 备 注</div> 
+              <div class="address">
+                <el-input v-model="payData.remark" placeholder="亲，如果您有什么特别嘱咐，请备注给我们哟～～" type="textarea" :rows="3"></el-input>
+              </div>
+            </div>
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary">保 存</el-button>
+            <el-button @click="dialogVisible = false">取 消</el-button>
+          </span>
+        </div>
       </div>
     </div>
 
@@ -42,43 +77,6 @@
       </el-table>
     </div>
 
-    <el-dialog
-      title="账户充值"
-      :visible.sync="dialogVisible">
-      <div>
-        <div class="item">
-          <div class="alias">充 值 金 额</div> 
-          <el-select v-model="payData.value" placeholder="请选择">
-            <el-option
-              v-for="(item,index) in 100"
-              :key="index"
-              :label="item"
-              :value="item">
-            </el-option>
-          </el-select>
-          <div class="discount">( ￥ 21.79 )</div>
-        </div>
-        <div class="item">
-          <div class="alias">支 付 方 式</div> 
-          <el-radio-group v-model="payData.pay_method" @change="radioChange">
-            <el-radio :label="1" border>微信</el-radio>
-            <el-radio :label="2" border>支付宝</el-radio>
-          </el-radio-group>
-        </div>
-        <div class="item">
-          <div class="alias"> 备 注</div> 
-          <div class="address">
-            <el-input v-model="payData.remark" placeholder="亲，如果您有什么特别嘱咐，请备注给我们哟～～" type="textarea" :rows="2"></el-input>
-          </div>
-        </div>
-      </div>
-
-
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary">保 存</el-button>
-        <el-button @click="dialogVisible = false">取 消</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -165,6 +163,7 @@ export default {
       font-size: 14px;
       color: @theme-gray;
       margin-bottom: 43px;
+      position: relative;
     }
   }
   .table{
@@ -175,11 +174,12 @@ export default {
   }
   .item{
     display: flex;
-    margin: 10px 0;
+    margin: 10px 0 15px 0;
     .alias{
-      width: 7em;
-      display: flex;
-      align-items: center;
+      font-size: 15px;
+      width: 8em;
+      text-align: right;
+      margin: 8px 10px 0 0;
     }
     .discount{
       font-size: 14px;
@@ -203,4 +203,11 @@ export default {
     @centered()
   }
 }
+
+.recharge{position: absolute;width: 881px;border: 1px solid #000;top: 27px;left: -25px;background: #fff;z-index: 100;color: #000;}
+.recharge .recharge-name{font-size: 16px;padding: 10px 0 15px 28px;}
+.recharge .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
+.recharge .el-radio{min-width: 130px;text-align: 0;margin: 0;}
+.dialog-footer{margin: 25px 0 30px 0;}
+
 </style>
