@@ -33,7 +33,7 @@
             <div class="content">
               <el-row :gutter="10">
                 <el-col :span="8" v-for="(item, index) in browsing.list" :key="index" class="img-wrapper">
-                  <img :src="item.goods.image_url" class="img"  @click="$router.push({name: 'goodsDetail', query: {id: item.goods_id}})"/>
+                  <img :src="item.goods.image_url" class="img" @click="$router.push({name: 'goodsDetail', query: {id: item.goods_id}})"/>
                 </el-col>
               </el-row>
             </div>
