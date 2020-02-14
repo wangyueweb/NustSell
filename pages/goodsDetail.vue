@@ -73,15 +73,7 @@
 
       <div v-if="selected === 0">
         <div class="swiper">
-          <Swiper :imgs="banners" :options="swiperOption">
-            <div slot="detail">
-              <div class="describe">金枕头泰国风味榴莲</div>
-              <div class="price">P 47.00</div>
-              <div class="buy-btn">
-                加入购物车
-              </div>
-            </div>
-          </Swiper>
+          <GoodsScroll :list="otherList" imgKey="url" :options="goodsScrollOption" :customArrow="false"></GoodsScroll>
         </div>
       </div>
 
@@ -101,7 +93,6 @@
 </template>
 
 <script>
-import Swiper from "~/components/public/swiper";
 import { getCategories } from "@/services/api";
 import GoodsScroll from "~/components/public/GoodsScroll";
 import { mainRequest } from "@/services/api";
@@ -113,13 +104,7 @@ export default {
     return {
       num: 1,
       selected: 0,
-      banners: [
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg"
-      ],
-      swiperOption: {
+      goodsScrollOption: {
         slidesPerView: 4,
         centeredSlidesBounds: true,
         spaceBetween: 30,
@@ -134,7 +119,7 @@ export default {
     };
   },
   components: {
-    Swiper
+    GoodsScroll
   },
   computed: {
     ...mapState({
@@ -164,6 +149,7 @@ export default {
       }
       let {status, data} = await getCategories(formData);
       if(status === 200 && data && data.data){
+        console.log('goodsDetail', data);
         this.goodsDetail = data.data;
         this.otherList = data.other;
         this.show_image = data.data.album[0];
@@ -192,20 +178,10 @@ export default {
         });
     },
     // 加入购物车
-    addShopCar: function() {
-      this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: this.goodDetail.id, nums:this.num, token: this.$store.state.app.token})
-        .then(res => {
-          let {status, data} = res;
-          console.log(res);
-          this.$message({
-            message: data.msg,
-          });
-        })
-        .catch(err => {
-          console.log(err);
-          this.$message.error(`加入购物车${err}`);
-        });
-    }
+    async addShopCar(id, num) {
+      await this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: id, nums:num, token: this.$store.state.app.token})
+      this.$store.dispatch('goods/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token});
+    },
   }
 };
 </script>
@@ -224,7 +200,7 @@ export default {
     padding: 20px;
     .small-img,
     .big-img {
-      @border-dotted();
+
     }
     .hot {
       color: @theme-red;

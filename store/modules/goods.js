@@ -7,7 +7,7 @@ const state = () => ({
   carNumber: 0,
   collectList: [],
   shopCar: [],
-  browsingList: [],
+  browsing: {},
   goodsDetail: {}
 })
 
@@ -24,8 +24,8 @@ const mutations = {
   SET_SHOPCAR: (state, payload) => {
     state.shopCar = payload;
   },
-  SET_BROWSINGLIST: (state, payload) => {
-    state.browsingList = payload;
+  SET_BROWSING: (state, payload) => {
+    state.browsing = payload;
   },
   SET_GOODSDETAIL: (state, payload) => {
     state.goodsDetail = payload;
@@ -113,7 +113,6 @@ const actions = {
             message: '网络连接失败',
           });
         }
-        resolve(res);
       })
       .catch(err => {
         console.log(err);
@@ -186,11 +185,11 @@ const actions = {
         console.log('最近浏览商品',res);
         let {data, status} = res;
         if(status === 200 && data){
-          commit('SET_BROWSINGLIST', data.data);
+          commit('SET_BROWSING', data.data);
         }
       })
       .catch(err => {
-        reject(data.err);
+        console.log(err);
       })
   },
 }

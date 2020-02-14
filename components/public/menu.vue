@@ -82,7 +82,7 @@
                         </el-button>
                         <div class="scroll">
                           <div v-for="(item, index) in list" :key="index" class="item">
-                            <div class="img-box" @click="$router.push({name: 'goodsDetail', query: {id: item.id}})">
+                            <div class="img-box" @click="$router.push({name: 'goodsDetail', query: {id: item.products.goods_id}})">
                               <el-image style="width:94px; height:94px" :src="item.products.image_path"></el-image>
                             </div>
                             <div class="content-box">
@@ -320,7 +320,6 @@ export default {
       padding: 20px 0;
       border-bottom: 1px solid @theme-silvergray;
       .img-box{
-        @border-dotted();
         margin-right: 15px;
       }
       .content-box{

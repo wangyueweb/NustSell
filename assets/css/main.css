@@ -8,17 +8,12 @@ html {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
 }
-input:focus{
-    -webkit-tap-highlight-color:rgba(0,0,0,0);
-    -webkit-user-modify:read-write-plaintext-only;
-}
 *,
 *:before,
 *:after {
   box-sizing: border-box;
   margin: 0;
 }
-*:focus {outline: none;}
 body {
   background: #f2f2f2;
 }
@@ -105,8 +100,7 @@ a {
   padding: 0;
 }
 .menu-popover {
-  width: 200px;
-  display: inline-block;
+  width: 100%;
   left: 0!important;
   border-radius: 0!important;
   box-shadow: none!important;
@@ -115,11 +109,6 @@ a {
 .el-input-number--small {
   width: 100px;
 }
-
-
-.big-img,.small-img{border: none !important;}
-.swiper-button-prev, .swiper-button-next{width: 35px;height: 35px;background-size: 35px 35px;opacity: 1;}
-.swiper-slide{display: inline-block;padding: 0 0 10px 0;}
-body{overflow-y: auto !important;padding: 0 !important;}
-
-
+.el-button {
+  border-radius: 0;
+}

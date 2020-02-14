@@ -84,7 +84,7 @@ export default {
   @centered();
   .content{
     .img-wrapper{
-      @border-dotted();
+
     }
     .describe, .time, .number{
       text-align: center;
