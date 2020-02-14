@@ -116,9 +116,10 @@ a {
   width: 100px;
 }
 
+
 .big-img,.small-img{border: none !important;}
-.swiper-button-prev, .swiper-button-next{width: 35px !important;height: 35px !important;background-size: 35px 35px !important;opacity: 1 !important;}
+.swiper-button-prev, .swiper-button-next{width: 35px;height: 35px;background-size: 35px 35px;opacity: 1;}
 .swiper-slide{display: inline-block;padding: 0 0 10px 0;}
-body{overflow-y: auto !important;}
+body{overflow-y: auto !important;padding: 0 !important;}
 
 

@@ -39,11 +39,67 @@
         </el-col>
         <el-col :span="16">
           <div class="grid-content right">
-
             <div class="title">收货信息</div>
             <div class="tips">您还没有收货信息</div>
-            <el-button type="primary" size="mini" class="add-btn">+添加收获地址</el-button>
-
+            <div class="primary-box">
+                <el-button type="primary" size="mini" class="add-btn" @click="addsiteTo">+添加收获地址</el-button>
+                <div class="addsite" v-if="addsiteShow">
+                  <div class="close" @click="closeTo">X</div>
+                  <div class="addsite-name">由于您未登录下单，填入以下信息将会自动注册账号</div>
+                  <div>
+                    <div class="item">
+                      <div class="alias d-ib">所 在 地 区</div> 
+                      <el-radio-group v-model="addsite.choice">
+                        <el-radio :label="1" border>Makati</el-radio>
+                        <el-radio :label="2" border>BGC</el-radio>
+                        <el-radio :label="3" border>Mandaluyon</el-radio>
+                      </el-radio-group>
+                    </div>
+                    <div class="item">
+                      <div class="alias d-ib">详 细 地 址</div> 
+                      <div class="address d-ib">
+                        <el-input class="siteinput" v-model="addsite.site" placeholder="请输入详细地址"></el-input>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <div class="alias d-ib">收货人姓名</div> 
+                      <div class="name d-ib">
+                          <el-input v-model="addsite.name" placeholder="请输入收货人姓名"></el-input>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <div class="alias d-ib">收货人手机</div> 
+                      <div class="mobile d-ib">
+                        <el-input v-model="addsite.phone" placeholder="+63    |"></el-input>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <div class="alias d-ib">输入手机验证码</div> 
+                      <div class="name d-ib">
+                          <el-input v-model="addsite.code" placeholder="请输入手机验证码"></el-input>
+                      </div>
+                      <div class="authcode d-ib">获取验证码</div>
+                    </div>
+                    <div class="item">
+                      <div class="alias d-ib">输入登录密码</div> 
+                      <div class="name d-ib">
+                          <el-input v-model="addsite.password" placeholder="请输入登录密码"></el-input>
+                      </div>
+                    </div>
+                  </div>
+                  <div slot="footer" class="dialog-footer">
+                    <el-button type="primary">保 存</el-button>
+                    <el-button>取 消</el-button>
+                  </div>
+                  
+                  <div class="protocol">
+                      <el-checkbox-group v-model="addsite.deal" style="display: inline-block;">
+                        <el-checkbox label="注册即同意" name="agree" class="agree"></el-checkbox>
+                      </el-checkbox-group>
+                      <a href="" class="userAgreement">《用户协议》</a>
+                  </div>
+                </div>
+            </div>  
             <div class="line"></div>
 
             <div class="title">收货时间</div>
@@ -54,8 +110,6 @@
               placeholder="选择日期"
               :picker-options="expireTimeOption">
             </el-date-picker>
-
-
 
             <el-time-picker
               arrow-control
@@ -186,6 +240,7 @@ export default {
                     return date.getTime() <= Date.now();
             }
         },
+      addsiteShow: false,
       value1: '',
       value2: new Date(2016, 9, 10, 18, 40),
       currentShow: false,
@@ -213,6 +268,15 @@ export default {
       },
       agree:[],
       statusMsg: '',
+      addsite: {
+          choice:'',
+          site:'',
+          name:'',
+          phone:'',
+          code:'',
+          password:'',
+          deal:'',
+      }
     };
   },
 
@@ -295,7 +359,13 @@ export default {
         }else{
             this.currentShow = false
         }
-    }
+    },
+    closeTo: function(){
+        this.addsiteShow = false
+    },
+    addsiteTo: function(){
+        this.addsiteShow = true
+    },
   }
 }
 </script>
@@ -374,4 +444,20 @@ export default {
     margin: 20px 0;
   }
 }
+
+.d-ib{display: inline-block;}
+.primary-box{position: relative;}
+.addsite{border: 1px solid #000;position: absolute;top: 36px;left: -34px;width: 797px;background: #fff;z-index: 99;padding: 0 10px;}
+.addsite .addsite-name{padding: 6px 0 20px 5px;}
+.addsite .alias{width: 125px;margin: 0 6px 0 0;text-align: right;}
+.addsite .item{margin: 0 0 10px 0;}
+.addsite .el-radio{min-width: 140px;text-align: center;margin: 0 10px 0 0 !important;}
+.addsite .siteinput{width: 500px;}
+.addsite .authcode{width: 125px;height: 38px;line-height: 38px;margin: 0 0 0 12px;font-size: 16px;background: #404040;color: #fff;text-align: center;}
+.addsite .dialog-footer{margin: 20px 0 0 136px;}
+.addsite .dialog-footer button{min-width: 110px;}
+.addsite .protocol{margin: 10px 0 15px 136px;}
+.addsite .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
+
+
 </style>

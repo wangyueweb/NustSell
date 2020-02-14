@@ -73,7 +73,15 @@
 
       <div v-if="selected === 0">
         <div class="swiper">
-          <GoodsScroll :list="otherList" imgKey="url" :options="goodsScrollOption" :customArrow="false"></GoodsScroll>
+          <Swiper :imgs="banners" :options="swiperOption">
+            <div slot="detail">
+              <div class="describe">金枕头泰国风味榴莲</div>
+              <div class="price">P 47.00</div>
+              <div class="buy-btn">
+                加入购物车
+              </div>
+            </div>
+          </Swiper>
         </div>
       </div>
 
@@ -94,16 +102,24 @@
 
 <script>
 import Swiper from "~/components/public/swiper";
+import { getCategories } from "@/services/api";
 import GoodsScroll from "~/components/public/GoodsScroll";
-import { getCategories, mainRequest } from "@/services/api";
+import { mainRequest } from "@/services/api";
 import { mapState } from "vuex";
+
 export default {
   name: "goodsDetail",
   data() {
     return {
       num: 1,
       selected: 0,
-      goodsScrollOption: {
+      banners: [
+        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
+        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
+        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
+        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg"
+      ],
+      swiperOption: {
         slidesPerView: 4,
         centeredSlidesBounds: true,
         spaceBetween: 30,
@@ -118,8 +134,7 @@ export default {
     };
   },
   components: {
-    Swiper,
-    GoodsScroll
+    Swiper
   },
   computed: {
     ...mapState({
@@ -177,9 +192,19 @@ export default {
         });
     },
     // 加入购物车
-    async addShopCar(id, num) {
-      await this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: id, nums:num, token: this.$store.state.app.token})
-      this.$store.dispatch('goods/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token});
+    addShopCar: function() {
+      this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: this.goodDetail.id, nums:this.num, token: this.$store.state.app.token})
+        .then(res => {
+          let {status, data} = res;
+          console.log(res);
+          this.$message({
+            message: data.msg,
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          this.$message.error(`加入购物车${err}`);
+        });
     }
   }
 };
@@ -224,18 +249,20 @@ export default {
     }
 
     .buy-btn {
-      height: 34px;
-      line-height: 34px;
+      width: 400px;
+      height: 50px;
+      line-height: 50px;
       text-align: center;
       background: @theme-black;
       color: @theme-white;
-      margin-top: 30px;
+      margin-top: 35px;
       @cursor-pointer();
     }
     .collect {
-      margin-top: 15px;
-      height: 34px;
-      line-height: 34px;
+      width: 400px;
+      margin-top: 16px;
+      height: 50px;
+      line-height: 50px;
       text-align: center;
       border: @border;
       @cursor-pointer();

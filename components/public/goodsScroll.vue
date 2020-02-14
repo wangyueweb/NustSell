@@ -96,7 +96,7 @@ export default {
     .price {
       font-size: 20px;
       font-family: Tahoma;
-      margin-top: 5px;
+      margin: 0 0 12px 0;
       line-height: 24px;
     }
     .buy-btn {
@@ -113,20 +113,20 @@ export default {
   }
 }
 .swiper-button-prev.swiper-button-disabled{
-  background-image: url('../../assets/img/arrow-left1.png')!important;
+  background-image: url('../../assets/img/arrow-left1.png');
   background-size: 40px 44px;
 }
 .swiper-button-prev{
-  background-image: url('../../assets/img/arrow-left1.png')!important;
-  background-size: 40px 44px!important;
+  background-image: url('../../assets/img/arrow-left1.png');
+  background-size: 40px 44px;
 }
 
 .swiper-button-next.swiper-button-disabled{
-  background-image: url('../../assets/img/arrow-right1.png')!important;
+  background-image: url('../../assets/img/arrow-right1.png');
   background-size: 40px 44px;
 }
 .swiper-button-next{
-  background-image: url('../../assets/img/arrow-right1.png')!important;
-  background-size: 40px 44px!important;
+  background-image: url('../../assets/img/arrow-right1.png');
+  background-size: 40px 44px;
 }
 </style>
