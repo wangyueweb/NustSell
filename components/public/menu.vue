@@ -23,6 +23,7 @@
                 placement="bottom"
                 trigger="hover"
                 :visible-arrow="true"
+                transition="el-zoom-in-top"
                 >
  
                   <div class="second" type="flex" justify="center" align="middle">
@@ -52,12 +53,11 @@
             </el-col>
             <el-col :span="5">
               <div class="shop-car">
-                <div class="width:300px;position:relative">
+                <div class="contentgj">
                   <el-popover
                     :visible-arrow="false"
-                    placement="bottom"
+                    placement="bottom-end"
                     trigger="focus"
-                    style="padding:0"
                     v-model="visible"
                   >
                     <div class="content" style="width:382px;height: 100%;padding:11px 25px 25px;box-sizing:border-box;">
@@ -69,12 +69,12 @@
                           <div>
                             商品数量
                             <br>
-                            {{carNumber}}
+                            <span>{{carNumber}}</span>
                           </div>
                           <div>
                             购物车小计
                             <br>
-                            P {{amount}}
+                            <span>P {{amount}}</span>
                           </div>
                         </div>
                         <el-button type="danger" class="large-btn" @click="$router.push({name : 'pay-shopCar'})">
@@ -93,7 +93,7 @@
                                 P {{item.products.price}}
                               </div>
                               <div class="tools">
-                                <div>
+                                <div class="toolsboz">
                                   <el-input-number v-model="item.nums" size="small" label="描述文字" @change="numberChange(item, item.nums)"></el-input-number>
                                 </div>
 
@@ -255,7 +255,8 @@ export default {
   @import "../../assets/css/theme.less";
   .second{background: #fff;}
   .secondList{width: 100%;}
-  .link:hover{background: #F65151;color: #fff;}
+  .link:hover{color: #F65151;}
+  .activemi{opacity: 0.5;top: 50px;}
   .menu{
     @1200-min();
     background: @theme-white;
@@ -305,11 +306,14 @@ export default {
     @cursor-pointer();
   }
   .count{
+    margin-bottom: 10px;
+    font-size: 16px;
     display: flex;
     justify-content: space-between;
     text-align: center;
     line-height: 24px;
   }
+  .count span{font-weight: 600;}
   .scroll{
     max-height: 248px;
     overflow-y: scroll;
@@ -352,4 +356,10 @@ export default {
     // display: flex;
     // align-items: center;
   }
+  
+  .toolsboz /deep/ .el-input__inner:focus{border: 1px solid #DCDFE6 !important;}
+  .toolsboz /deep/ .el-input__inner:hover{border: 1px solid #DCDFE6 !important;}
+  .toolsboz /deep/ .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){border: 1px solid #DCDFE6 !important;}
+  .toolsboz /deep/ .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){border: 1px solid #DCDFE6 !important;}
+
 </style>

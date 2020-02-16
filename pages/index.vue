@@ -6,6 +6,7 @@
         <div slot="arrow" class="arrow-wrapper">
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
+          <div class="swiper-pagination" slot="pagination"></div>
         </div>
       </Swiper>
     </div>

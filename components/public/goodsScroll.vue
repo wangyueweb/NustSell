@@ -110,6 +110,9 @@ export default {
       margin: auto;
       @cursor-pointer();
     }
+    .buy-btn:hover{
+      background:#575757;
+    }
   }
 }
 .swiper-button-prev.swiper-button-disabled{

@@ -17,8 +17,10 @@ input:focus{
 *:after {
   box-sizing: border-box;
   margin: 0;
+  outline: none;
 }
 *:focus {outline: none;}
+*:hover {outline: none;}
 body {
   background: #f2f2f2;
 }

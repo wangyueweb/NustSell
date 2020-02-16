@@ -11,7 +11,7 @@
             <div class="box1">
               <div class="name">{{( option.goods[0]['name'])}}</div>
               <div class="describe">{{option.goods[0]['brief']}}</div>
-              <div class="img-wrapper">
+              <div class="img-wrapper" @mouseenter="changeActive($event)" @mouseleave="removeActive($event)">
                 <el-image class="img" fit="fill" :src="option.goods[0]['url']"></el-image>
               </div>
             </div>
@@ -24,7 +24,7 @@
                 <div class="box2">
                   <div class="name">{{( option.goods[1]['name'])}}</div>
                   <div class="describe">{{option.goods[1]['brief']}}</div>
-                  <div class="img-wrapper">
+                  <div class="img-wrapper" @mouseenter="changeActive($event)" @mouseleave="removeActive($event)">
                     <el-image class="img" fit="fill" :src="option.goods[1]['url']"></el-image>
                   </div>
                 </div>
@@ -35,7 +35,7 @@
                 <div class="box3">
                   <div class="name">{{( option.goods[2]['name'])}}</div>
                   <div class="describe">{{option.goods[2]['brief']}}</div>
-                  <div class="img-wrapper">
+                  <div class="img-wrapper" @mouseenter="changeActive($event)" @mouseleave="removeActive($event)">
                     <el-image class="img" fit="fill" :src="option.goods[2]['url']"></el-image>
                   </div>
                 </div>
@@ -52,7 +52,7 @@
                       <div class="describe">{{option.goods[3]['brief']}}</div>
                     </el-col>
                     <el-col :span="10">
-                      <div class="img-wrapper">
+                      <div class="img-wrapper" @mouseenter="changeActive($event)" @mouseleave="removeActive($event)">
                         <el-image class="img" fit="fill" :src="option.goods[3]['url']"></el-image>
                       </div>
                     </el-col>
@@ -68,7 +68,7 @@
               <nuxt-link v-if="option.goods[4]" :to="{name: 'goodsDetail', query: {id: option.goods[4].id}}">
                 <div class="box5">
                   <div class="name">{{( option.goods[4]['name'])}}</div>
-                  <div class="img-wrapper">
+                  <div class="img-wrapper" @mouseenter="changeActive($event)" @mouseleave="removeActive($event)">
                     <el-image class="img" fit="fill" :src="option.goods[4]['url']"></el-image>
                   </div>
                 </div>
@@ -80,7 +80,7 @@
               <nuxt-link v-if="option.goods[5]" :to="{name: 'goodsDetail', query: {id: option.goods[5].id}}">
                 <div class="box6">
                   <div class="name">{{( option.goods[5]['name'])}}</div>
-                  <div class="img-wrapper">
+                  <div class="img-wrapper" @mouseenter="changeActive($event)" @mouseleave="removeActive($event)">
                     <el-image class="img" fit="fill" :src="option.goods[5]['url']"></el-image>
                   </div>
                 </div>
@@ -92,7 +92,7 @@
               <nuxt-link v-if="option.goods[6]" :to="{name: 'goodsDetail', query: {id: option.goods[6].id}}">
                 <div class="box7">
                   <div class="name">{{( option.goods[6]['name'])}}</div>
-                  <div class="img-wrapper">
+                  <div class="img-wrapper" @mouseenter="changeActive($event)" @mouseleave="removeActive($event)">
                     <el-image class="img" fit="fill" :src="option.goods[6]['url']"></el-image>
                   </div>
                 </div>
@@ -124,7 +124,14 @@ export default {
 
   mounted() {},
 
-  methods: {}
+  methods: {
+    changeActive($event) {
+      $event.currentTarget.className = 'img-wrapper activeimg';
+    },
+    removeActive($event) {
+      $event.currentTarget.className = 'img-wrapper';
+    }
+  }
 };
 </script>
 
@@ -155,6 +162,7 @@ export default {
   span{
     width: 60px;
     height: 6px;
+    margin: 5px 0 0 0;
     background: @theme-black;
     display: block;
   }
@@ -215,4 +223,5 @@ export default {
       }
     }
   }
+  .activeimg{position: relative;top: 0;left: -5px;}
 </style>

@@ -258,6 +258,9 @@ export default {
       margin-top: 35px;
       @cursor-pointer();
     }
+    .buy-btn:hover{
+      background:#575757;
+    }
     .collect {
       width: 400px;
       margin-top: 16px;
@@ -266,6 +269,10 @@ export default {
       text-align: center;
       border: @border;
       @cursor-pointer();
+    }
+    .collect:hover{
+      color:#575757;
+      border: 1px solid #575757;
     }
   }
   .detail {
@@ -336,4 +343,6 @@ export default {
     }
   }
 }
+
+.calculate /deep/ .el-input__inner:focus{border: 1px solid #DCDFE6 !important;}
 </style>

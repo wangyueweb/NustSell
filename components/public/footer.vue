@@ -14,7 +14,9 @@
     </div>
     <div class="main">
       <el-row>
-        <el-col :span="4" v-for="(item, index) in alias" :key="index" :push="item.push ? item.push : 0"><div class="grid-content" @click.stop="$router.push({name: 'help'})">{{item.label}}</div></el-col>
+        <el-col :span="4" v-for="(item, index) in alias" :key="index" :push="item.push ? item.push : 0">
+            <div class="grid-content" :class="index<=5?'activef':''" @click.stop="$router.push({name: 'help'})">{{item.label}}</div>
+        </el-col>
       </el-row>
     </div>
     <div class="bottom">
@@ -105,7 +107,7 @@
             value: ""
           },
           {
-            label: "Email: wzeg@gmail.com",
+            label: "Email:wzeg@gmail.com",
             value: ""
           },
           {
@@ -165,7 +167,7 @@
     width: 100%;
     @1200-min();
     .top{
-      border-bottom: @border;
+      border-bottom: 1px solid #707070;
       .content{
         @1200();
         padding: 40px 0 23px 0;
@@ -181,10 +183,10 @@
             line-height: 58px;
             text-align: center;
             @circle();
-            border: @border;
+            border:1px solid #707070;
             display: inline-block;
             i{
-              font-size: 28px;
+              font-size: 32px;
               color: @theme-white;
             }
           }
@@ -193,9 +195,13 @@
     }
     .main{
       @1200();
+      font-size: 14px;
       padding-top: 45px;
       color: @theme-dark;
       .grid-content{
+        height:20px;
+        line-height: 20px;
+        overflow: hidden;
         margin: 0px 0 20px 0;
         @cursor-pointer();
         &:hover{
@@ -223,4 +229,5 @@
       }
     }
   }
+  .activef{color: #fff !important;}
 </style>

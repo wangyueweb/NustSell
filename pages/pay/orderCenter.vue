@@ -137,7 +137,7 @@
                 <span class="current-span3">立即充值</span>
             </div>
 
-            <div class="line"></div>
+            <div class="line" v-if="currentShow"></div>
 
             <div class="title">给我们留言<span class="tips">（非必填项）</span></div>
 

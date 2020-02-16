@@ -69,7 +69,7 @@
             <span class="continue" @click="$router.push({name: 'index'})">继续购物</span> <span class="clear" @click="delShopCar(list.map(item => item.id).join(','))">清空购物车</span>
           </div>
         </div>
-        <div class="grid-content" style="margin-top: 10px;padding-bottom:100px;">
+        <div class="grid-content Swipergj" style="margin-top: 10px;padding-bottom:100px;">
           <Swiper :imgs="banners" :options="swiperOption">
             <div slot="detail">
               <div class="describe">金枕头泰国风味榴莲</div>
@@ -77,6 +77,10 @@
               <div class="buy-btn">
                 加入购物车
               </div>
+            </div>
+            <div slot="arrow" class="arrow-wrapper">
+              <div class="swiper-button-prev"></div>
+              <div class="swiper-button-next"></div>
             </div>
           </Swiper>
         </div>
@@ -226,6 +230,9 @@ export default {
 
 <style lang="less" scoped>
 @import "../../assets/css/theme.less";
+.Swipergj /deep/ .swiper-button-prev{width: 38px;height: 38px;background-image: url(../../assets/img/arrow-left2.png) !important;background-size: 38px 38px !important;opacity: 0.9 !important;}
+.Swipergj /deep/ .swiper-button-next{width: 38px;height: 38px;background-image: url(../../assets/img/arrow-right2.png) !important;background-size: 38px 38px !important;opacity: 0.9 !important;}
+
 .menu{
   @1200();
   .left{

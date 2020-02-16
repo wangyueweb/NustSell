@@ -8,7 +8,7 @@
             关注公众号
           </div>
         </span>
-        <el-divider direction="vertical"></el-divider>
+        <span style="color: #707070">&nbsp; | &nbsp;</span>
         <span>下载APP
           <div>
             <img src="https://js.tuguaishou.com/new-index/vx-code.png" alt="">
@@ -23,16 +23,15 @@
         <span v-if="!hasToken" style="color: #707070">/</span>
         <span class="text" @click="doRegister" v-if="!hasToken"> 注册</span>
 
-        <nuxt-link to="/myCenter" no-prefetch v-if="hasToken">用户中心</nuxt-link>
-        <el-divider direction="vertical" v-if="hasToken"></el-divider>
+        <nuxt-link to="/myCenter" no-prefetch v-if="hasToken">您好, {{authUser.nickname || ''}}</nuxt-link>
 
-        <span class="text" v-if="authUser" @click="lagout">您好, {{authUser.nickname || ''}}  [退出]</span>
-        <el-divider direction="vertical" v-if="authUser"></el-divider>
+        <span class="text" v-if="authUser" @click="lagout">[退出]</span>
+        <span style="color: #707070" v-if="hasToken">&nbsp; | &nbsp;</span>
 
         <nuxt-link to="/myCenter" no-prefetch v-if="hasToken"><i class="el-icon-star-on"></i>收藏</nuxt-link>
-        <el-divider direction="vertical"></el-divider>
+        <span style="color: #707070">&nbsp; | &nbsp;</span>
 
-        <span @click="showNoticeList = !showNoticeList" class="text" style="position:relative">
+        <span @mouseenter="showNoticeList = !showNoticeList" @mouseleave="showNoticeList = !showNoticeList" class="text" style="position:relative">
           公告
           <div class="notice-list" v-if="showNoticeList">
             <div v-for="(item, index) in noticeList" :key="index" class="notice-list-item">
@@ -82,8 +81,9 @@
       <div v-if="stepActive === 'find'" style="margin-top:22px;">
         
         <el-form :model="registerForm" :rules="registerRules" ref="registerForm" class="registerForm">
-          <el-form-item prop="mobile" label-width="0">
-            <el-input v-model="registerForm.mobile" placeholder="+63  |  请输入在菲手机号"></el-input>
+          <el-form-item prop="mobile" label-width="0" class="hintbox">
+            <el-input class="hintinput" v-model="registerForm.mobile" placeholder="请输入在菲手机号"></el-input>
+            <div class="hint">+63  |</div>
           </el-form-item>
 
           <el-form-item prop="code" label-width="0">
@@ -122,8 +122,9 @@
       <div v-if="stepActive === 'register'">
         <div class="tips">首次下单 享受8折</div>
         <el-form :model="registerForm" :rules="registerRules" ref="registerForm" class="registerForm">
-          <el-form-item prop="mobile" label-width="0">
-            <el-input v-model="registerForm.mobile" placeholder="+63  |  请输入在菲手机号"></el-input>
+          <el-form-item prop="mobile" label-width="0" class="hintbox">
+            <el-input class="hintinput" v-model="registerForm.mobile" placeholder="请输入在菲手机号"></el-input>
+            <div class="hint">+63  |</div>
           </el-form-item>
 
           <el-form-item prop="code" label-width="0">
@@ -754,4 +755,7 @@
       padding-left: 800px;
     }
   }
+  .hintbox{position: relative;}
+  .hintinput /deep/ .el-input__inner{padding: 0 0 0 40px;}
+  .hint{position: absolute;top: -1px;left: 5px;font-size: 16px;}
 </style>
