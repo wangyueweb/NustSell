@@ -23,7 +23,7 @@
         <span v-if="!hasToken" style="color: #707070">/</span>
         <span class="text" @click="doRegister" v-if="!hasToken"> 注册</span>
 
-        <nuxt-link to="/myCenter" no-prefetch v-if="hasToken">您好, {{authUser.nickname || ''}}</nuxt-link>
+        <nuxt-link to="/myCenter" no-prefetch v-if="hasToken && authUser">您好, {{authUser.nickname || ''}}</nuxt-link>
 
         <span class="text" v-if="authUser" @click="lagout">[退出]</span>
         <span style="color: #707070" v-if="hasToken">&nbsp; | &nbsp;</span>
