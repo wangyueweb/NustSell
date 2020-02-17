@@ -7,11 +7,16 @@
         <slot name="detail"></slot>
       </div>
     </div>
+    
     <div class="arrow" v-if="!customArrow">
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
     </div>
+    
     <slot name="arrow" v-if="customArrow"></slot>
+
+    <slot name="pagination" v-if="customArrow"></slot>
+
   </div>
 </template>
 

@@ -24,6 +24,18 @@ a {
   text-decoration: none;
   color: inherit;
 }
+.swiper-pagination-bullet {
+  width: 20px!important;
+  height: 8px!important;
+  background: #404040!important;
+  border-radius: 0!important;
+  opacity: 1!important;
+}
+.swiper-pagination-bullet-active {
+  width: 30px!important;
+  background: #ffffff!important;
+  border-radius: 0!important;
+}
 .v-modal {
   background: none;
 }
