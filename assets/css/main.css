@@ -13,10 +13,7 @@ html {
 *:after {
   box-sizing: border-box;
   margin: 0;
-  outline: none;
 }
-*:focus {outline: none;}
-*:hover {outline: none;}
 body {
   background: #f2f2f2;
 }
@@ -26,6 +23,18 @@ p {
 a {
   text-decoration: none;
   color: inherit;
+}
+.swiper-pagination-bullet {
+  width: 20px!important;
+  height: 8px!important;
+  background: #404040 !important;
+  border-radius: 0!important;
+  opacity: 1!important;
+}
+.swiper-pagination-bullet-active {
+  width: 30px!important;
+  background: #ffffff !important;
+  border-radius: 0!important;
 }
 .v-modal {
   background: none;

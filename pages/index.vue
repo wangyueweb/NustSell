@@ -1,13 +1,14 @@
 <template>
   <div class="container">
     <!-- 轮播 -->
+
     <div :class="{nick : isFixed}" class="carousel">
       <Swiper :imgs="adverlist.map(item => item.img)" :options="bannerOption" style="height:500px" :customArrow="true">
         <div slot="arrow" class="arrow-wrapper">
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
-          <div class="swiper-pagination" slot="pagination"></div>
         </div>
+        <div class="swiper-pagination" slot="pagination"></div>
       </Swiper>
     </div>
     
@@ -43,6 +44,9 @@ export default {
       bannerOption: {
         slidesPerView: 1,
         centeredSlidesBounds: true,
+        pagination: {
+          el: '.swiper-pagination',
+        },
         // spaceBetween: 30,
         navigation: {
           nextEl: '.swiper-button-next',
