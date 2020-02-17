@@ -23,17 +23,17 @@
               </div>
             </div>
           </div>
-          <div class="grid-content">
+          <div class="grid-content" v-if="browsing">
             <CardTitle name="最近浏览商品" :textLine="true" :titleLine="true">
               <div slot="tool">
-                  <img src="../assets/img/arrow-left1.png" alt="" class="tool-img" />
-                  <img src="../assets/img/arrow-right1.png" alt="" class="tool-img" />
+                  <img src="../assets/img/arrow-left1.png" alt="" class="tool-img"  @click="currentPage --;" v-if="currentPage > 1"/>
+                  <img src="../assets/img/arrow-right1.png" alt="" class="tool-img" v-if="browsing.count > currentPage * 3" @click="currentPage ++;"/>
               </div>
             </CardTitle>
             <div class="content">
               <el-row :gutter="10">
-                <el-col :span="8" v-for="(itemK, indexK) in imgs" :key="indexK" class="img-wrapper">
-                  <img :src="itemK" alt="" class="img" />
+                <el-col :span="8" v-for="(item, index) in browsing.list" :key="index" class="img-wrapper">
+                  <img :src="item.goods.image_url" class="img" @click="$router.push({name: 'goodsDetail', query: {id: item.goods_id}})"/>
                 </el-col>
               </el-row>
             </div>
@@ -155,6 +155,7 @@
 <script>
 import CardTitle from '~/components/public/cardTitle';
 import {getCategories} from "~/services/api";
+import { mapState } from "vuex";
 export default {
   name: 'categoryList',
   data(){
@@ -169,23 +170,24 @@ export default {
         "农夫山泉",
         "自然派",
       ],
-      imgs: [
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg"
-      ],
       small: true,
-      value: 1,
-      sort: "",
+      value: 1, 
+      sort: "", // 排序
 
       formData: {},
       goodsOptions: {},
+
+      currentPage: 1,
+
     }
   },
   components: {
     CardTitle
   },
   computed: {
+    ...mapState({
+      browsing: state => state.goods.browsing
+    }),
     categoryList: {
       get: function () {
         let arr = [];
@@ -203,7 +205,7 @@ export default {
   },
   created(){
     this.getPageData();
-    this.getBrowsingList();
+    this.getBrowsingList(this.currentPage);
   },
   methods:{
     async getPageData(){
@@ -217,8 +219,8 @@ export default {
       this.getGoodsList();
     },
     // 获取最近浏览商品
-    getBrowsingList(){
-      this.$store.dispatch('goods/getBrowsingList', {method: "user.goodsbrowsing", limit: 3, page: 1, token: this.$store.state.app.token})
+    getBrowsingList(page){
+      this.$store.dispatch('goods/getBrowsingList', {method: "user.goodsbrowsing", limit: 3, page: page, token: this.$store.state.app.token})
     },
     // 获取商品列表
     getGoodsList: async function () {
@@ -263,7 +265,8 @@ export default {
   watch:{
     $route(to,from){
       console.log('route改变')
-      return this.getPageData();
+      this.getPageData();
+      this.getBrowsingList(1);
     },
     sort: function(){
       console.log(this.sort);
@@ -291,6 +294,9 @@ export default {
         }
         this.getGoodsList();
       }
+    },
+    currentPage: function(){
+      this.getBrowsingList(this.currentPage);
     }
   }
 }
