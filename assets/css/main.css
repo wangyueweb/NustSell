@@ -15,11 +15,8 @@ html {
   margin: 0;
   outline: none;
 }
-<<<<<<< HEAD
 *:focus {outline: none;}
 *:hover {outline: none;}
-=======
->>>>>>> 128c5333672518c000774c2465d92827282aaddb
 body {
   background: #f2f2f2;
 }
