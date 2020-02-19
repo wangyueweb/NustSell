@@ -109,14 +109,13 @@
 
       <div v-if="stepActive === 'verify'">
         <slide-verify :l="42"
-            :r="10"
-            :w="300"
-            :h="155"
-            slider-text="向右滑动"
-            @success="verifyHandle('success')"
-            @fail="verifyHandle('error')"
-            ></slide-verify>
-        <!-- <Verify @success="verifyHandle('success')" @error="verifyHandle('error')" :type="4" :imgSize="{width:'100%',height:'200px'}" :barSize="{width:'100%',height:'40px'}" :showButton="false"></Verify> -->
+          :r="10"
+          :w="300"
+          :h="155"
+          slider-text="向右滑动"
+          @success="verifyHandle('success')"
+          @fail="verifyHandle('error')"
+        />
       </div>
 
       <div v-if="stepActive === 'register'">
@@ -144,7 +143,7 @@
           </el-form-item>
 
           <el-form-item label-width="0">
-            <el-button class="large-btn" type="danger" @click="doVerify">确认</el-button>
+            <el-button class="large-btn" type="danger" @click="validateBeforeSubmit">确认</el-button>
           </el-form-item>
         </el-form>
 
@@ -245,7 +244,7 @@
       // 发送短信验证码
       sendMsg: function () {
         console.log('sendMsg');
-        const self = this;
+        
         let mobilePass;
 
         if ( this.timerid ){
@@ -253,47 +252,17 @@
         }
 
         this.$refs['registerForm'].validateField('mobile', (valid) => {
+          console.log(valid);
           mobilePass = valid;
         })
 
         this.statusMsg = '';
-
+        console.log(mobilePass);
         if(mobilePass){
           return false;
         }
 
-        if (!mobilePass) {
-          let data = {
-            mobile: this.registerForm.mobile,
-            code: 'reg',
-            method: 'user.sms'
-          }
-          mainRequest(data)
-            .then(({ status, data }) => {
-              console.log(status,data);
-              if(status === 200){
-                if(data.status){
-                  let count = 60;
-                  this.statusMsg = `${count --}秒`;
-                  this.timerid = setInterval(function(){
-                    self.statusMsg = `${count --}秒`;
-                    if(count === 0){
-                      clearInterval(self.timerid);
-                      self.timerid = null;
-                      self.statusMsg = '';
-                    }
-                  },1000)
-                }
-                this.$message({
-                  message: data.msg,
-                  type: data.status ? 'success' : 'danger'
-                });
-              }
-            })
-            .catch(err => {
-              console.log(err)
-            })
-        }
+        this.stepActive = 'verify'; // 拼图验证
       },
       // 注册弹框
       doRegister: function() {
@@ -301,25 +270,60 @@
         this.dialogFormVisible = true;
         this.stepActive = 'register';
       },
-      // 拼图验证
-      doVerify: function () {
+      // 注册提交前表单验证
+      validateBeforeSubmit: function () {
         if(this.agree.length > 0){
           this.$refs['registerForm'].validate((valid) => {
             console.log(valid);
             if(valid){
-              this.stepActive = 'verify';
+              this.register();
             }
           })
         }else{
           this.$message.error('请勾选并同意用户协议');
         }
       },
-      // 验证回调
+      // 拼图验证回调
       verifyHandle(text) {
         console.log(text);
         if(text === 'success'){
-          this.register();
+          this.getVerifyCode();
+          this.stepActive = 'register';
         }
+      },
+      // 获取验证码
+      getVerifyCode: function () {
+        const self = this;
+        let data = {
+          mobile: this.registerForm.mobile,
+          code: 'reg',
+          method: 'user.sms'
+        }
+        mainRequest(data)
+          .then(({ status, data }) => {
+            console.log(status,data);
+            if(status === 200){
+              if(data.status){
+                let count = 60;
+                this.statusMsg = `${count --}秒`;
+                this.timerid = setInterval(function(){
+                  self.statusMsg = `${count --}秒`;
+                  if(count === 0){
+                    clearInterval(self.timerid);
+                    self.timerid = null;
+                    self.statusMsg = '';
+                  }
+                },1000)
+              }
+              this.$message({
+                message: data.msg,
+                type: data.status ? 'success' : 'danger'
+              });
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
       },
       // 注册
       register: function () {
