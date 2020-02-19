@@ -8,7 +8,8 @@ const state = () => ({
   collectList: [],
   shopCar: [],
   browsing: {},
-  goodsDetail: {}
+  goodsDetail: {},
+  article: {}
 })
 
 const mutations = {
@@ -29,6 +30,9 @@ const mutations = {
   },
   SET_GOODSDETAIL: (state, payload) => {
     state.goodsDetail = payload;
+  },
+  SET_ARTICLE: (state, payload) => {
+    state.article = payload;
   }
 }
 
@@ -192,5 +196,20 @@ const actions = {
         console.log(err);
       })
   },
+
+  // 帮助中心左侧列表分类
+  getArticleList({commit}, formData){
+    mainRequest(formData)
+      .then(res => {
+        console.log('帮助中心左侧列表分类',res);
+        let {data, status} = res;
+        if(status === 200 && data){
+          commit('SET_ARTICLE', data.data);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
 }
 export default { namespaced: true, state, mutations, actions }

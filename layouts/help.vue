@@ -18,14 +18,26 @@
       <el-row :gutter="15">
         <el-col :span="5">
           <div class="title">帮助中心</div>
+          
           <div class="alias">
-            <!-- <nuxt-link :to="item.path" no-prefetch :class="{currentPage : $route.path === item.path || $route.name === 'myCenter-id' && index === 1}" class="alias-item" v-for="(item, index) in alias" :key="index">
-              {{item.label}}
-            </nuxt-link> -->
-            
-            <nuxt-link :to="item.label" v-for="(item, index) in alias" :key="index" class="alias-item">
-              <div :class="item.className">{{item.label}}</div>
-            </nuxt-link>
+            <div
+              v-for="(item, index) in articleList"
+              :key="index"
+              class="alias-wrapper"
+            >
+              <div class="bold">
+                {{item.type_name}}
+              </div>
+              
+              <nuxt-link
+                :to="{path: '/help/' + itemJ.id, query: {name: itemJ.type_name}}"
+                v-for="(itemJ, indexJ) in item.child"
+                :key="indexJ"
+                class="alias-item"
+              >
+                {{itemJ.type_name}}
+              </nuxt-link>
+            </div>
           </div>
         </el-col>
         <el-col :span="19">
@@ -157,7 +169,8 @@ export default {
   },
   computed: {
     ...mapState({
-      isFixed: state => state.app.isFixed
+      isFixed: state => state.app.isFixed,
+      articleList: state => state.goods.article.list
     }),
     thirdPage: {
       get: function(){
@@ -176,6 +189,9 @@ export default {
   },
   watch: {
     thirdPage: function(){}
+  },
+  created(){
+    this.$store.dispatch("goods/getArticleList", {method: 'articles.getArticleType'});
   },
   methods:{},
 }
@@ -199,24 +215,24 @@ export default {
 .alias{
   padding: 30px 20px;
   background: @theme-white;
-  
-  .alias-item{
-    font-size: 16px;
-    padding: 10px 0;
-    display: block;
+  .alias-wrapper{
     .bold{
+      padding: 10px 0;
       font-weight: 700;
     }
-    &:hover{
-      color: @theme-red;
+    .alias-item{
+      font-weight: normal;
+      font-size: 16px;
+      padding: 10px 0;
+      display: block;
+      &:hover{
+        color: @theme-red;
+      }
+      .iconfont{
+        font-size: 20px;
+        margin-right: 10px;
+      }
     }
-    .iconfont{
-      font-size: 20px;
-      margin-right: 10px;
-    }
-  }
-  .currentPage{
-    color: @theme-red;
   }
 }
 </style>

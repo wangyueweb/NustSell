@@ -1,7 +1,7 @@
 <!-- help -->
 <template>
   <div class="help">
-    帮助中心
+    {{$route.query.name}}
   </div>
 </template>
 
