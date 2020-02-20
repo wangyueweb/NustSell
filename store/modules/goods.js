@@ -5,7 +5,7 @@ import Cookie from 'js-cookie'
 const state = () => ({
   allCategories: [],
   carNumber: 0,
-  collectList: [],
+  collect: {},
   shopCar: [],
   browsing: {},
   goodsDetail: {},
@@ -19,8 +19,8 @@ const mutations = {
   SET_CARNUMBER: (state, payload) => {
     state.carNumber = payload;
   },
-  SET_COLLECTLIST: (state, payload) => {
-    state.collectList = payload;
+  SET_COLLECT: (state, payload) => {
+    state.collect = payload;
   },
   SET_SHOPCAR: (state, payload) => {
     state.shopCar = payload;
@@ -89,13 +89,13 @@ const actions = {
   },
 
   // 获取收藏列表
-  getCollectList({commit}, formData) {
+  getCollect({commit}, formData) {
     mainRequest(formData)
       .then(res => {
-        console.log(res);
+        console.log('获取搜藏列表',res);
         let {data, status} = res;
         if(status === 200 && data){
-          commit('SET_COLLECTLIST', data.data);
+          commit('SET_COLLECT', data.data);
         }
       })
   },
@@ -128,7 +128,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       mainRequest(formData)
         .then(res => {
-          console.log(res);
+          console.log('获取购物车列表',res);
           let {data, status} = res;
           if(status === 200 && data){
             commit('SET_SHOPCAR', data.data);
