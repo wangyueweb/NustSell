@@ -9,7 +9,11 @@ const state = () => ({
   shopCar: [],
   browsing: {},
   goodsDetail: {},
-  article: {}
+  article: {},
+  amount: {},
+  payShopCar: {
+    list: []
+  }
 })
 
 const mutations = {
@@ -33,6 +37,12 @@ const mutations = {
   },
   SET_ARTICLE: (state, payload) => {
     state.article = payload;
+  },
+  SET_AMOUNT: (state, payload) => {
+    state.amount = payload;
+  },
+  SET_PAYSHOPCAR: (state, payload) => {
+    state.payShopCar = payload;
   }
 }
 
@@ -210,6 +220,46 @@ const actions = {
       .catch(err => {
         console.log(err);
       })
+  },
+
+  // 购物车选择商品后价格计算
+  Amount({commit}, formData){
+    mainRequest(formData)
+      .then(res => {
+        console.log('购物车选择商品后价格计算',res);
+        let {data, status} = res;
+        if(status === 200 && data){
+          commit('SET_AMOUNT', data.data);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  },
+
+  // 前往结账 获取购物车列表
+  payShopCar({commit}, formData){
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          console.log('前往结账 获取购物车列表',res);
+          let {data, status} = res;
+          if(status === 200 && data){
+            if(data.status){
+              commit('SET_PAYSHOPCAR', data.data);
+              resolve();
+            }else{
+              this._vm.$message({
+                type: 'error',
+                message: data.msg
+              })
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
   }
 }
 export default { namespaced: true, state, mutations, actions }

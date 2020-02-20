@@ -11,24 +11,24 @@
               </div>
             </CardTitle>
 
-            <div class="total">5件商品在购物篮中</div>
+            <div class="total">{{payShopCarList.length || 0}}件商品在购物篮中</div>
 
             <div class="list-wrapper">
               <div class="list">
-                <div v-for="(item, index) in 5" :key="index" class="item">
-                  <el-row type="flex">
+                <div v-for="(item, index) in payShopCarList" :key="index" class="item">
+                  <el-row type="flex" style="width: 100%;">
                     <el-col :span="8">
-                      <img src="https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg" alt="" width="94" height="94">
+                      <img :src="item.products.image_path" :alt="item.products.name" width="94" height="94">
                     </el-col>
                     <el-col :span="16">
                       <div class="describe">
-                        蚕豆-里香168g烤肉味…这里有很多文案介绍。
+                        {{item.products.name}}
                       </div>
                       <div>
                         <span>
-                          2
+                          {{item.nums}}
                         </span>
-                        <span class="price">500P</span>
+                        <span class="price">{{item.products.amount}}P</span>
                       </div>
                     </el-col>
                   </el-row>
@@ -287,17 +287,29 @@ export default {
 
   computed: {
     ...mapState({
-      articleList: state => state.goods.article.list
+      payShopCarList: state => state.goods.payShopCar.list.filter(item => (item.is_select === true))
     })
   },
 
   created(){
-    
+    this.getPageData();
   },
 
   mounted(){},
 
   methods: {
+    getPageData: async function(){
+      let data = {
+        ids: this.$route.query.ids,
+        method:'cart.getlist',
+        area_id:0,
+        coupon_code:'',
+        point:0,
+        receipt_type:0,
+        token: this.$store.state.app.token
+      }
+      await this.$store.dispatch('goods/payShopCar', data);
+    },
     // 拼图验证
     doVerify: function () {
       this.$refs['registerForm'].validate((valid) => {
@@ -413,7 +425,7 @@ export default {
     padding: 8px 0;
   }
   .list{
-    height: 392px;
+    max-height: 392px;
     overflow-y: scroll;
     .item{
       height: 114px;

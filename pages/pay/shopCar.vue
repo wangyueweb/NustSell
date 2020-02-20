@@ -94,24 +94,24 @@
           <div class="calculate-wrapper">
             <div class="calculate">
               <span>小计</span>
-              <span>600P</span>
+              <span>{{(amount.goods_amount - amount.order_pmt) || 0 }}P</span>
             </div>
             <div class="calculate">
               <span>首单优惠</span>
-              <span>60P</span>
+              <span>{{amount.order_pmt || 0}} P</span>
             </div>
             <div class="calculate">
               <span>运费</span>
-              <span>0P</span>
+              <span>0 P</span>
             </div>
           </div>
           <div class="total">
             <div class="calculate">
               <span>订单总额</span>
-              <span class="hot">540P</span>
+              <span class="hot">{{amount.goods_amount || 0}} P</span>
             </div>
           </div>
-          <nuxt-link :to="{name: 'pay-orderCenter'}"><el-button type="danger" class="large-btn" style="margin-top:20px;">前往结账</el-button></nuxt-link>
+          <el-button type="danger" class="large-btn" style="margin-top:20px;" @click="toPayOrderCenter">前往结账</el-button>
         </div>
       </el-col>
     </el-row>
@@ -209,6 +209,28 @@ export default {
     },
     handleSelectionChange (val) {
       this.selectList = val;
+
+      let ids;
+
+      if(this.selectList.length > 0) {
+        if(this.selectList.length === 1){
+          ids = this.selectList[0].id.toString();
+        }else{
+          ids = this.selectList.map(item => item.id).join(',');
+        }
+
+        let data = {
+          ids: ids,
+          display: 'all',
+          method: 'cart.getlist',
+          token: this.$store.state.app.token
+        }
+        console.log(data);
+        this.$store.dispatch('goods/Amount', data);
+      }else{
+        this.$store.commit("goods/SET_AMOUNT", {});
+      }
+      
     },
     // 添加收藏
     addCollect: function (id) {
@@ -248,6 +270,27 @@ export default {
           });
       })
     },
+    // 前往结账
+    toPayOrderCenter: async function () {
+      let ids;
+
+      if(this.selectList.length > 0) {
+        if(this.selectList.length === 1){
+          ids = this.selectList[0].id.toString();
+        }else{
+          ids = this.selectList.map(item => item.id).join(',');
+        }
+        this.$router.push({name: 'pay-orderCenter', query: {ids: ids}});
+      }else{
+        this.$message({
+          type: 'error',
+          message: '请勾选至少一件商品'
+        })
+      }
+
+
+      
+    }
   },
   created(){
     this.getPageData();
@@ -255,6 +298,7 @@ export default {
   computed: {
     ...mapState({
       collectList: state => state.goods.collect.list,
+      amount: state => state.goods.amount
     })
   },
 }
