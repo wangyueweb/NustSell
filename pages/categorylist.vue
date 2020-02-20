@@ -61,7 +61,7 @@
                   <span class="count">
                     排列条件
                   </span>
-                  <el-select v-model="sort">
+                  <el-select v-model="sort" style="width: 110px;">
                     <el-option
                       value="销量">
                     </el-option>
@@ -70,7 +70,7 @@
                     </el-option>
                   </el-select>
                   <el-col class="rankBtn">
-                    <i class="iconfont icon-fangxiang rank"></i>
+                    <i class="iconfont icon-fangxiang rank" style="color: #DEDEDE;"></i>
                   </el-col>
                 </el-row>
               </el-col>
@@ -357,6 +357,7 @@ export default {
           @cursor-pointer();
         }
         .count{
+            font-size: 15px;
           margin: 0 10px;
         }
         .selected{
@@ -457,4 +458,11 @@ export default {
     }
   }
 }
+
+.grid-content /deep/ .el-pagination button{border: 1px solid #000}
+.grid-content /deep/ .el-pager li{border: 1px solid #000}
+.grid-content /deep/ .el-input__inner{height: 30px;line-height: 30px;}
+.grid-content /deep/ .el-input__icon{height: 30px;line-height: 30px;}
+.grid-content /deep/ .is-justify-space-between{margin: -10px;}
+
 </style>

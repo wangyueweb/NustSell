@@ -61,6 +61,8 @@ export default {
         flex-flow: column-reverse;
       }
       .name{
+        font-weight: 600;
+        padding: 0 0 6px 0;
         border-bottom: 4px @theme-black solid;
       }
       .textLine{

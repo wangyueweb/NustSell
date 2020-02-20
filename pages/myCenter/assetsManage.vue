@@ -9,7 +9,7 @@
       <div class="grade">您目前的账号余额 <span>P728.00</span></div>
       <div class="tips">
         立即充值，获取积分，享受10%的购物优惠。
-        <el-button type="primary" size="mini" @click="pay">立即充值</el-button>
+        <el-button type="primary" size="mini" @click="pay" style="margin-left:15px;padding: 7px 26px;font-size: 14px;">立即充值</el-button>
         <div class="recharge" v-if="dialogVisible">
             <div class="close" @click="pay">X</div>
             <div class="recharge-name">账户充值</div>
@@ -41,8 +41,8 @@
             </div>
           </div>
           <span slot="footer" class="dialog-footer">
-            <el-button type="primary">保 存</el-button>
-            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" style="font-size: 16px;padding: 8px 48px;">确认</el-button>
+            <el-button @click="dialogVisible = false" style="font-size: 16px;padding: 8px 48px;">取消</el-button>
           </span>
         </div>
       </div>
@@ -147,12 +147,12 @@ export default {
   .title{
     height: 40px;
     line-height: 40px;
-    padding-left: 24px;
+    padding-left: 15px;
     border: 1px solid @theme-silvergray;
     background: @theme-light;
   }
   .main{
-    padding: 17px 24px;
+    padding: 17px 15px;
     border-left: 1px solid @theme-silvergray;
     border-right: 1px solid @theme-silvergray;
     border-bottom: 1px solid @theme-silvergray;
@@ -162,7 +162,7 @@ export default {
     .tips{
       font-size: 14px;
       color: @theme-gray;
-      margin-bottom: 43px;
+      margin-bottom: 15px;
       position: relative;
     }
   }
@@ -193,6 +193,7 @@ export default {
     }
     .name{
       width: 200px;
+      font-weight: 600;
     }
     .mobile{
       display: flex;
@@ -204,10 +205,11 @@ export default {
   }
 }
 
-.recharge{position: absolute;width: 881px;border: 1px solid #000;top: 27px;left: -25px;background: #fff;z-index: 100;color: #000;}
-.recharge .recharge-name{font-size: 16px;padding: 10px 0 15px 28px;}
+.recharge{position: absolute;width: 881px;border: 1px solid #000;top: 27px;left: -16px;background: #fff;z-index: 100;color: #000;}
+.recharge .recharge-name{font-size: 16px;padding: 10px 0 15px 28px;font-weight: 600;}
 .recharge .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
-.recharge .el-radio{min-width: 130px;text-align: 0;margin: 0;}
 .dialog-footer{margin: 25px 0 30px 0;}
-
+.table /deep/ .el-table th{background: #F2F2F2;font-weight: 100;}
+.recharge /deep/ .el-input__inner{width: 150px;height: 38px;line-height: 38px;}
+.recharge /deep/ .el-radio{text-align: center;height: 36px;padding: 10px 55px 0 55px;margin: 0;border-radius: 0;}
 </style>

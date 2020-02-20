@@ -320,5 +320,10 @@ export default {
   }
 }
 
-.calculate /deep/ .el-input__inner:focus{border: 1px solid #DCDFE6 !important;}
+
+  .calculate /deep/ .el-input__inner:focus{border: 1px solid #DCDFE6 !important;}
+  .calculate /deep/ .el-input__inner:hover{border: 1px solid #DCDFE6 !important;}
+  .calculate /deep/ .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){border: 1px solid #DCDFE6 !important;}
+  .calculate /deep/ .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){border: 1px solid #DCDFE6 !important;}
+
 </style>

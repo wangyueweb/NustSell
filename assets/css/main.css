@@ -10,9 +10,12 @@ html {
 }
 *,
 *:before,
-*:after {
+*:after,
+*:focus,
+*:hover{
   box-sizing: border-box;
   margin: 0;
+  outline: none;
 }
 body {
   background: #f2f2f2;

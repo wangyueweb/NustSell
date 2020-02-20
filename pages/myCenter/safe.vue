@@ -54,8 +54,8 @@
                     </div>
                   </div>
                   <span slot="footer" class="dialog-footer item">
-                    <el-button type="primary" style="width:200px;">修改密码</el-button>
-                    <el-button @click="dialogVisible = false" style="width:200px;"> 取 消 </el-button>
+                    <el-button type="primary" style="width:130px;font-size: 15px;padding: 9px 0;">修改密码</el-button>
+                    <el-button @click="dialogVisible = false" style="width:130px;font-size: 15px;padding: 9px 0;">取消</el-button>
                   </span>
                 </div>
             </div>
@@ -244,7 +244,7 @@ export default {
     display: flex;
     margin: 10px 0;
     .alias{
-      width: 7em;
+      width: 8.5em;
       margin: 0 10px 0 0;
       text-align: right;
     }
@@ -272,7 +272,7 @@ export default {
 }
 
 .amend{position: absolute;width: 875px;border: 1px solid #000;top: 35px;left: -644px;background: #fff;z-index: 100;}
-.amend .amend-name{font-size: 16px;padding: 10px 0 10px 28px;}
+.amend .amend-name{font-size: 16px;padding: 10px 0 10px 28px;font-family: 600;}
 .amend .dialog-footer{margin: 35px 0 45px 0 !important;}
 .amend .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
 

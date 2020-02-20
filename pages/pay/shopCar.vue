@@ -46,7 +46,7 @@
               align="center"
               label="小计">
               <template slot-scope="scope">
-                {{scope.row.products.amount}}
+                {{scope.row.products.amount}} P
               </template>
             </el-table-column>
             <el-table-column
@@ -61,7 +61,10 @@
           <div style="margin-top: 20px">
             <!-- <el-checkbox v-model="checked" @change="handleCheckAllChange">全选</el-checkbox> -->
             <!-- 移入收藏夹 -->
-            <div @click="delShopCar(selectList.map(item => item.id).join(','))">
+            <div class="favorite">
+              全部移入收藏夹
+            </div>
+            <div class="delete" @click="delShopCar(selectList.map(item => item.id).join(','))">
               删除
             </div>
           </div>
@@ -83,6 +86,9 @@
               <div class="swiper-button-next"></div>
             </div>
           </Swiper> -->
+          <div class="myfavorite">
+              我的收藏
+          </div>
 
           <GoodsScroll :list="collectList" imgKey="url" :options="swiperOption" :customArrow="false"></GoodsScroll>
 
@@ -90,7 +96,7 @@
       </el-col>
       <el-col :span="5">
         <div class="grid-content">
-          <CardTitle name="总计" :titleLine="true"/>
+          <div class="aggregate">总计</div>
           <div class="calculate-wrapper">
             <div class="calculate">
               <span>小计</span>
@@ -111,7 +117,7 @@
               <span class="hot">{{amount.goods_amount || 0}} P</span>
             </div>
           </div>
-          <el-button type="danger" class="large-btn" style="margin-top:20px;" @click="toPayOrderCenter">前往结账</el-button>
+          <el-button type="danger" class="large-btn" style="margin-top:20px;font-size: 15px;" @click="toPayOrderCenter">前往结账</el-button>
         </div>
       </el-col>
     </el-row>
@@ -198,15 +204,15 @@ export default {
           this.$message.error(err);
         })
     },
-    getCollect () {
-      let data = {
-        page: 1,
-        limit: 12,
-        method: "user.goodscollectionlist",
-        token: this.$store.state.app.token
-      }
-      this.$store.dispatch('goods/getCollect', data);
-    },
+    // getCollect () {
+    //   let data = {
+    //     page: 1,
+    //     limit: 12,
+    //     method: "user.goodscollectionlist",
+    //     token: this.$store.state.app.token
+    //   }
+    //   this.$store.dispatch('goods/getCollect', data);
+    // },
     handleSelectionChange (val) {
       this.selectList = val;
 
@@ -371,17 +377,20 @@ export default {
   }
   .calculate-wrapper,.total{
     .calculate{
+        font-size: 15px;
+        margin: 1px 0 0 0;
       display: flex;
       justify-content: space-between;
     }
   }
   .calculate-wrapper{
+      padding: 2px 0 10px 0;
     line-height: 28px;
-    border-bottom: @border;
+    border-bottom: 1px solid #EAEAEA;;
   }
   .total{
     .calculate{
-      font-size: 20px;
+      font-size: 17px;
       line-height: 36px;
       .hot{
         color: @theme-red;
@@ -389,4 +398,19 @@ export default {
     }
   }
 }
+
+.grid-content /deep/ .el-input__inner:focus{border: 1px solid #DCDFE6 !important;}
+.grid-content /deep/ .el-input__inner:hover{border: 1px solid #DCDFE6 !important;}
+.grid-content /deep/ .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){border: 1px solid #DCDFE6 !important;}
+.grid-content /deep/ .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){border: 1px solid #DCDFE6 !important;}
+
+.grid-content /deep/ .el-table th{font-weight: 100;}
+.grid-content /deep/ .el-table td{color: #000;}
+
+.favorite{display: inline-block;}
+.delete{display: inline-block;margin: 0 0 0 14px;}
+.myfavorite{font-size: 16px;padding: 5px 0 10px 0;border-bottom: 1px solid #000;text-align: center;position: relative;}
+.myfavorite:after{content: '';position: absolute;bottom: 0;left: 50%;width: 70px;height: 3px;background: #000;transform: translateX(-50%);}
+.aggregate{border-bottom: 1px solid #EAEAEA;font-size: 18px;padding: 0 0 5px 0;}
+
 </style>

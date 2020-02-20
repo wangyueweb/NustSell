@@ -4,7 +4,7 @@
   <div class="account">
     <CardTitle :textLine='true' :titleLine='true' :name="`欢迎您${authUser ? '，' + authUser.nickname : ''}`"/>
 
-    <el-row type="flex" justify="space-between" style="margin-top:18px;">
+    <el-row type="flex" justify="space-between" style="margin-top:12px;">
       <el-col>
         <div>
           <div class="title">联系信息</div>
@@ -15,15 +15,15 @@
 
         <div style="margin-top: 10px;">
           <nuxt-link to="" class="edit">编辑</nuxt-link>
-          <el-button size="mini" @click="lagout" :disabled="!isLogin">安全退出</el-button>
+          <el-button size="mini" @click="lagout" :disabled="!isLogin" style="border-radius: 4px;font-size: 14px;">安全退出</el-button>
         </div>
       </el-col>
       <el-col :span="8">
         <div>
           <div class="title">邮箱订阅</div>
-          <div class="name-wrapper">订阅“王子小卖部”获取最新<br/>马尼拉美食咨询</div>
+          <div class="name-wrapper2">订阅“王子小卖部”获取最新<br/>马尼拉美食咨询</div>
         </div>
-        <el-button type="primary" size="mini" style="margin-top:10px;">立即订阅</el-button>
+        <el-button type="primary" size="mini" style="margin-top:10px;padding: 8px 26px;font-size: 14px;">立即订阅</el-button>
       </el-col>
     </el-row>
 
@@ -40,7 +40,7 @@
 
       <div v-if="selected === 0">
         <div class="name-wrapper" style="line-height: 50px;">可用积分 : <span class="name">100积分</span></div>
-        <div class="name-wrapper" style="line-height: 50px;">积分兑换活动进行中，您现在可使用积分购买商品。</div>
+        <div class="name-wrapper" style="line-height: 50px;margin-top: -12px;">积分兑换活动进行中，您现在可使用积分购买商品。</div>
 
         <div class="card">
           积分兑换说明：<br/>
@@ -148,6 +148,7 @@ export default {
   background: @theme-white;
   padding: 23px 47px;
   .title, .name-wrapper, .phone-wrapper, .email-wrapper{
+    color: #666;
     line-height: 30px;
   }
   .name, .phone, .email{
@@ -155,19 +156,22 @@ export default {
     font-weight: 700;
   }
   .edit{
-    margin-right: 40px;
+    margin-right: 15px;
     color: @theme-lightgray;
   }
 
   .detail {
     margin-top: 40px;
     .line1 {
+      padding: 0 0 6px 0;
       span {
         color: @theme-lightgray;
         margin-right: 20px;
         @cursor-pointer();
       }
       .selected {
+        padding: 0 0 6px 0;
+        font-weight: 600;
         color: @theme-black;
         border-bottom: 4px @theme-black solid;
       }
@@ -184,4 +188,6 @@ export default {
     }
   }
 }
+.name-wrapper span, .phone-wrapper span, .email-wrapper span{color: #000;}
+.name-wrapper2{line-height: 22px;color: #666;margin: 4px 0 5px 0;}
 </style>
