@@ -228,6 +228,7 @@
 
 <script>
 import CardTitle from "@/components/public/cardTitle";
+import { mapState } from "vuex";
 export default {
   name: "OrderCenter",
   layout: function(context){
@@ -284,9 +285,15 @@ export default {
     CardTitle
   },
 
-  computed: {},
+  computed: {
+    ...mapState({
+      articleList: state => state.goods.article.list
+    })
+  },
 
-  created(){},
+  created(){
+    
+  },
 
   mounted(){},
 
