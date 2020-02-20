@@ -8,7 +8,7 @@
     <div class="table">
       <el-table
         ref="table"
-        :data="tableData"
+        :data="collectList"
         style="width: 100%"
         @selection-change="handleSelectionChange">
           <el-table-column
@@ -18,7 +18,7 @@
           <el-table-column
             width="100">
             <template slot-scope="scope">
-              <img :src="tableData[scope.$index].goods.image_url" style="width:80px;height:80px;"/>
+              <img :src="collectList[scope.$index].goods.image_url" style="width:80px;height:80px;"/>
             </template>
           </el-table-column>
 
@@ -26,7 +26,7 @@
             label="商品信息"
             align="center">
             <template slot-scope="scope">
-              <div v-html="tableData[scope.$index].goods.intro"></div>
+              <div v-html="collectList[scope.$index].goods.intro"></div>
             </template>
           </el-table-column>
 
@@ -40,8 +40,8 @@
             label="操作"
             align="center">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary">移入购物车</el-button>
-              <div @click="cancelCollect(tableData[scope.$index].goods_id)">取消收藏</div>
+              <el-button size="mini" type="primary" @click="addShopCar(collectList[scope.$index].id)">移入购物车</el-button>
+              <div @click="cancelCollect(collectList[scope.$index].goods_id)">取消收藏</div>
             </template>
           </el-table-column>
         </el-table>
@@ -82,27 +82,27 @@ export default {
 
   computed: {
     ...mapState({
-      tableData: state => state.goods.collectList.list,
-      page: state => state.goods.collectList.page,
-      limit: state => state.goods.collectList.limit,
-      count: state => state.goods.collectList.count
+      collectList: state => state.goods.collect.list,
+      page: state => state.goods.collect.page,
+      limit: state => state.goods.collect.limit,
+      count: state => state.goods.collect.count
     })
   },
 
   created() {
-    this.getCollectList();
+    this.getCollect();
   },
 
   mounted() {},
   methods: {
-    getCollectList () {
+    getCollect () {
       let data = {
         page: this.currentPage,
         limit: this.limit,
         method: "user.goodscollectionlist",
         token: this.$store.state.app.token
       }
-      this.$store.dispatch('goods/getCollectList', data);
+      this.$store.dispatch('goods/getCollect', data);
     },
 
     // 取消单个收藏
@@ -112,14 +112,14 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('goods/addCollect', {method:'user.goodscollection', id: id, token: this.$store.state.app.token})
+        this.$store.dispatch('goods/addCollect', {method:'user.goodscollection', goods_id: id, token: this.$store.state.app.token})
           .then(res => {
             console.log(res);
             let {status, data} = res;
             this.$message({
               message: data.msg,
             });
-            this.getCollectList();
+            this.getCollect();
           })
           .catch(err => {
             console.log(err);
@@ -149,7 +149,7 @@ export default {
               this.$message({
                 message: data.msg,
               });
-              this.getCollectList();
+              this.getCollect();
             })
             .catch(err => {
               console.log(err);
@@ -168,8 +168,14 @@ export default {
     // 分页变化
     paginationChange: function (e) {
       this.currentPage = e;
-      this.getCollectList();
-    }
+      this.getCollect();
+    },
+
+    // 加入购物车
+    async addShopCar(id) {
+      await this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: id, nums:1, token: this.$store.state.app.token})
+      this.$store.dispatch('goods/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token});
+    },
   }
 };
 </script>

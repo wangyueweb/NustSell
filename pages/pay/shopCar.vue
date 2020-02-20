@@ -61,7 +61,7 @@
           <div style="margin-top: 20px">
             <!-- <el-checkbox v-model="checked" @change="handleCheckAllChange">全选</el-checkbox> -->
             <!-- 移入收藏夹 -->
-            <div @click="delShopCar(list.map(item => item.id).join(','))">
+            <div @click="delShopCar(selectList.map(item => item.id).join(','))">
               删除
             </div>
           </div>
@@ -70,7 +70,7 @@
           </div>
         </div>
         <div class="grid-content Swipergj" style="margin-top: 10px;padding-bottom:100px;">
-          <Swiper :imgs="banners" :options="swiperOption">
+          <!-- <Swiper :imgs="banners" :options="swiperOption">
             <div slot="detail">
               <div class="describe">金枕头泰国风味榴莲</div>
               <div class="price">P 47.00</div>
@@ -82,7 +82,10 @@
               <div class="swiper-button-prev"></div>
               <div class="swiper-button-next"></div>
             </div>
-          </Swiper>
+          </Swiper> -->
+
+          <GoodsScroll :list="collectList" imgKey="url" :options="swiperOption" :customArrow="false"></GoodsScroll>
+
         </div>
       </el-col>
       <el-col :span="5">
@@ -119,6 +122,7 @@
 import { mapState } from "vuex";
 import Swiper from "@/components/public/swiper"
 import CardTitle from "@/components/public/cardTitle"
+import GoodsScroll from "@/components/public/goodsScroll2"
 export default {
   name: 'ShopCar',
   layout: function(context){
@@ -126,7 +130,8 @@ export default {
   },
   components:{
     Swiper,
-    CardTitle
+    CardTitle,
+    GoodsScroll
   },
   data () {
     return {
@@ -150,14 +155,9 @@ export default {
     }
   },
   methods: {
-    async getPageData () {
-      await this.$store.dispatch('goods/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token})
-        .then(res => {
-          this.list = JSON.parse(JSON.stringify(this.$store.state.goods.shopCar.list));
-        })
-        .catch(err => {
-          this.$message.error(err);
-        })
+    getPageData () {
+      this.getShopCar();
+      this.getCollect();
     },
 
     async numberChange(item, nums) {
@@ -171,6 +171,16 @@ export default {
         })
     },
 
+    getCollect () {
+      let data = {
+        page: this.currentPage,
+        limit: this.limit,
+        method: "user.goodscollectionlist",
+        token: this.$store.state.app.token
+      }
+      this.$store.dispatch('goods/getCollect', data);
+    },
+
     // handleCheckAllChange (val) {
     //   console.log(val);
     //   if (val) {
@@ -179,6 +189,24 @@ export default {
     //     this.$refs.multipleTable.clearSelection();
     //   }
     // },
+    async getShopCar () {
+      await this.$store.dispatch('goods/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token})
+        .then(res => {
+          this.list = JSON.parse(JSON.stringify(this.$store.state.goods.shopCar.list));
+        })
+        .catch(err => {
+          this.$message.error(err);
+        })
+    },
+    getCollect () {
+      let data = {
+        page: 1,
+        limit: 12,
+        method: "user.goodscollectionlist",
+        token: this.$store.state.app.token
+      }
+      this.$store.dispatch('goods/getCollect', data);
+    },
     handleSelectionChange (val) {
       this.selectList = val;
     },
@@ -224,7 +252,11 @@ export default {
   created(){
     this.getPageData();
   },
-  computed: {},
+  computed: {
+    ...mapState({
+      collectList: state => state.goods.collect.list,
+    })
+  },
 }
 </script>
 
