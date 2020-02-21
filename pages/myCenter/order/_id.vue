@@ -14,8 +14,8 @@
         </div>
         <div class="item">
           <span class="alias">付款状态</span>
-          <span class="value">未付款</span>
-          <span><el-button type="primary" size="mini">立即支付</el-button></span>
+          <span class="value value2">未付款</span>
+          <span><el-button type="primary" size="mini" style="padding: 7px 26px;font-size: 14px;">立即支付</el-button></span>
         </div>
         <div class="item">
           <span class="alias">配送状态</span>
@@ -207,6 +207,7 @@ export default {
   }
   .status{
     .alias, .value{
+      font-size: 15px;
       display: inline-block;
       margin-right: 25px;
     }
@@ -214,14 +215,18 @@ export default {
       width: 4em;
     }
     .value{
-      width: 140px;
+      font-weight: 600;
+      width: 90px;
+    }
+    .value2{
+        color: #F51717;
     }
   }
   .info{
-    margin-top: 20px;
+    margin-top: 40px;
     .alias, .value{
       display: inline-block;
-      margin-right: 25px;
+      margin-right: 20px;
     }
     .alias{
       width: 6em;
@@ -250,4 +255,8 @@ export default {
     }
   }
 }
+
+.table /deep/ .el-table th{font-size: 15px;font-weight: 100;text-align: center;background: #F2F2F2;color: #000;}
+.table /deep/ .el-table td .cell{font-size: 14px;text-align: center;}
+
 </style>

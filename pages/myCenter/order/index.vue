@@ -73,51 +73,51 @@ export default {
       tableData: [
         {
           time: '2016-05-03',
-          count: '889.00',
+          count: '₱ 889.00',
           id: '2019082808353',
-          state: '已确认 已付款 收获确认',
+          state: '已确认 已付款 收货确认',
           handle: '已确认'
         },
         {
           time: '2016-05-03',
-          count: '889.00',
+          count: '₱ 889.00',
           id: '2019082808353',
-          state: '已确认 已付款 收获确认',
+          state: '已确认 已付款 收货确认',
           handle: '已确认'
         },
         {
           time: '2016-05-03',
-          count: '889.00',
+          count: '₱ 889.00',
           id: '2019082808353',
-          state: '已确认 已付款 收获确认',
+          state: '已确认 已付款 收货确认',
           handle: '已确认'
         },
         {
           time: '2016-05-03',
-          count: '889.00',
+          count: '₱ 889.00',
           id: '2019082808353',
-          state: '已确认 已付款 收获确认',
+          state: '已确认 已付款 收货确认',
           handle: '已确认'
         },
         {
           time: '2016-05-03',
-          count: '889.00',
+          count: '₱ 889.00',
           id: '2019082808353',
-          state: '已确认 已付款 收获确认',
+          state: '已确认 已付款 收货确认',
           handle: '已确认'
         },
         {
           time: '2016-05-03',
-          count: '889.00',
+          count: '₱ 889.00',
           id: '2019082808353',
-          state: '已确认 已付款 收获确认',
+          state: '已确认 已付款 收货确认',
           handle: '已确认'
         },
         {
           time: '2016-05-03',
-          count: '889.00',
+          count: '₱ 889.00',
           id: '2019082808353',
-          state: '已确认 已付款 收获确认',
+          state: '已确认 已付款 收货确认',
           handle: '已确认'
         }
       ],
@@ -174,4 +174,10 @@ export default {
     border-right: solid 1px @theme-silvergray;
   }
 }
+
+.tool /deep/ .el-input__inner{height: 36px;line-height: 36px;width: 150px;}
+.tool /deep/ .el-input__icon{height: 36px;line-height: 36px;}
+.table /deep/ .el-table th{font-size: 14px;font-weight: 100;text-align: center;background: #F2F2F2;color: #000;}
+.table /deep/ .el-table td .cell{font-size: 14px;text-align: center;}
+
 </style>
