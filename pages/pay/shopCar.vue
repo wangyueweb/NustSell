@@ -168,7 +168,7 @@ export default {
 
     async numberChange(item, nums) {
       console.log(item, nums);
-      await this.$store.dispatch('goods/handleShopCarNumber', {method:'cart.setnums', token: this.$store.state.app.token, id: item.id, nums: nums})
+      await this.$store.dispatch('order/handleShopCarNumber', {method:'cart.setnums', token: this.$store.state.app.token, id: item.id, nums: nums})
         .then(() => {
           this.getPageData();
         })
@@ -196,9 +196,9 @@ export default {
     //   }
     // },
     async getShopCar () {
-      await this.$store.dispatch('goods/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token})
+      await this.$store.dispatch('order/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token})
         .then(res => {
-          this.list = JSON.parse(JSON.stringify(this.$store.state.goods.shopCar.list));
+          this.list = JSON.parse(JSON.stringify(this.$store.state.order.shopCar.list));
         })
         .catch(err => {
           this.$message.error(err);
@@ -232,9 +232,9 @@ export default {
           token: this.$store.state.app.token
         }
         console.log(data);
-        this.$store.dispatch('goods/Amount', data);
+        this.$store.dispatch('order/Amount', data);
       }else{
-        this.$store.commit("goods/SET_AMOUNT", {});
+        this.$store.commit("order/SET_AMOUNT", {});
       }
       
     },
@@ -262,7 +262,7 @@ export default {
         type: 'warning'
       })
       .then(async () => {
-        await this.$store.dispatch('goods/delShopCar', {method:'cart.del', ids: id, token: this.$store.state.app.token})
+        await this.$store.dispatch('order/delShopCar', {method:'cart.del', ids: id, token: this.$store.state.app.token})
           .then(res => {
             this.$message({
               type: "success",
@@ -304,7 +304,7 @@ export default {
   computed: {
     ...mapState({
       collectList: state => state.goods.collect.list,
-      amount: state => state.goods.amount
+      amount: state => state.order.amount
     })
   },
 }

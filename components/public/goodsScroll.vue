@@ -67,8 +67,8 @@ export default {
   methods: {
     // 加入购物车
     async addShopCar(id, num) {
-      await this.$store.dispatch('goods/addShopCar', {method:'cart.add', product_id: id, nums:num, token: this.$store.state.app.token})
-      this.$store.dispatch('goods/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token});
+      await this.$store.dispatch('order/addShopCar', {method:'cart.add', product_id: id, nums:num, token: this.$store.state.app.token})
+      this.$store.dispatch('order/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token});
     }
   }
 }
