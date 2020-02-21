@@ -287,7 +287,7 @@ export default {
 
   computed: {
     ...mapState({
-      payShopCarList: state => state.goods.payShopCar.list.filter(item => (item.is_select === true))
+      payShopCarList: state => state.order.payShopCar.list.filter(item => (item.is_select === true))
     })
   },
 
@@ -308,7 +308,7 @@ export default {
         receipt_type:0,
         token: this.$store.state.app.token
       }
-      await this.$store.dispatch('goods/payShopCar', data);
+      await this.$store.dispatch('order/payShopCar', data);
     },
     // 拼图验证
     doVerify: function () {

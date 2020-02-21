@@ -153,9 +153,9 @@ export default {
     ...mapState({
       isFixed: state => state.app.isFixed,
       allCategories: state => state.goods.allCategories,
-      carNumber: state => state.goods.carNumber,
-      amount: state => state.goods.shopCar.goods_amount,
-      shopCarList: state => state.goods.shopCar.list
+      carNumber: state => state.order.carNumber,
+      amount: state => state.order.shopCar.goods_amount,
+      shopCarList: state => state.order.shopCar.list
     })
   },
   watch: {
@@ -200,10 +200,10 @@ export default {
     // 获取购物车
     async getShopCar () {
       // 获取购物车数量
-      this.$store.dispatch('goods/getCarnumber', { method: 'cart.getnumber', token: this.$store.state.app.token });
-      this.$store.dispatch('goods/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token})
+      this.$store.dispatch('order/getCarnumber', { method: 'cart.getnumber', token: this.$store.state.app.token });
+      this.$store.dispatch('order/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token})
         .then(res => {
-          this.list = JSON.parse(JSON.stringify(this.$store.state.goods.shopCar.list))
+          this.list = JSON.parse(JSON.stringify(this.$store.state.order.shopCar.list))
         })
         .catch(err => {
           this.$message.error(err);
@@ -212,7 +212,7 @@ export default {
     // 购物车数量+-
     async numberChange(item, nums) {
       console.log(item, nums);
-      await this.$store.dispatch('goods/handleShopCarNumber', {method:'cart.setnums', token: this.$store.state.app.token, id: item.id, nums: nums})
+      await this.$store.dispatch('order/handleShopCarNumber', {method:'cart.setnums', token: this.$store.state.app.token, id: item.id, nums: nums})
         .then(() => {
           this.getPageData();
         })
@@ -229,7 +229,7 @@ export default {
         type: 'warning'
       })
       .then(async () => {
-        await this.$store.dispatch('goods/delShopCar', {method:'cart.del', ids: id, token: this.$store.state.app.token})
+        await this.$store.dispatch('order/delShopCar', {method:'cart.del', ids: id, token: this.$store.state.app.token})
           .then(res => {
             this.$message({
               type: "success",
