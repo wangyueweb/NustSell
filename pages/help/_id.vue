@@ -1,31 +1,38 @@
 <!-- help -->
 <template>
   <div class="help">
-    {{$route.query.name}}
+    <CardTitle :name="$route.query.name" :textLine="true" :titleLine="true"/>
+    <div v-html="articleCtx.list.length > 0 ? articleCtx.list[0].content : '暂无内容'" v-if="showCtx"></div>
   </div>
 </template>
 
 <script>
+import CardTitle from "@/components/public/cardTitle"
 import { mapState } from "vuex";
 export default {
   name: 'Help',
   layout: context => 'help',
   data () {
     return {
-      success: 1
+      showCtx: false
     }
   },
 
   components: {
+    CardTitle
   },
 
   computed: {
     ...mapState({
-      
+      articleCtx: state => state.app.articleCtx
     })
   },
 
-  created () {
+  async created () {
+    await this.$store.dispatch('app/getArticelCtx', {type_id: this.$route.query.id, method:'articles.getArticleList'})
+      .then(() => {
+        this.showCtx = true;
+      })
   },
 
   mounted () {},

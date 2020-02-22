@@ -15,7 +15,12 @@
     <div class="main">
       <el-row>
         <el-col :span="4" v-for="(item, index) in alias" :key="index" :push="item.push ? item.push : 0">
-            <div class="grid-content" :class="index<=5?'activef':''" @click.stop="$router.push({name: 'help'})">{{item.label}}</div>
+          <div class="grid-content" :class="index<=5?'activef':''" @click.stop="$router.push({name: 'help'})">{{item.type_name}}</div>
+          <div v-for="(itemJ, indexJ) in item.child" :key="indexJ">
+            <div class="grid-content" @click.stop="$router.push({path: '/help/' + itemJ.id, query: {type:item.type_name, name: itemJ.type_name, id: itemJ.id}})" v-if="index < 5">{{itemJ.type_name}}</div>
+            <div class="grid-content" v-if="index === 5">{{itemJ.type_name}}</div>
+          </div>
+          
         </el-col>
       </el-row>
     </div>
@@ -31,103 +36,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex"
   let img1 = require('~/assets/img/download.png');
   let img2 = require('~/assets/img/gongzhonghao.png');
   export default {
     name: 'Footer',
     data() {
       return {
-        alias: [
-          {
-            label: "新手帮助",
-            value: ""
-          },
-          {
-            label: "购物指南",
-            value: ""
-          },
-          {
-            label: "支付/配送",
-            value: ""
-          },
-          {
-            label: "售后服务",
-            value: ""
-          },
-          {
-            label: "会员服务",
-            value: ""
-          },
-          {
-            label: "王子客服",
-            value: ""
-          },
-          {
-            label: "交易条款协议",
-            value: ""
-          },
-          {
-            label: "订单流程",
-            value: ""
-          },
-          {
-            label: "支付方式",
-            value: ""
-          },
-          {
-            label: "退货",
-            value: ""
-          },
-          {
-            label: "找回密码",
-            value: ""
-          },
-          {
-            label: "在线客服",
-            value: ""
-          },
-          {
-            label: "注册条款",
-            value: ""
-          },
-          {
-            label: "验货与签收",
-            value: ""
-          },
-          {
-            label: "配送方式",
-            value: ""
-          },
-          {
-            label: "退款声明",
-            value: ""
-          },
-          {
-            label: "联系我们",
-            value: ""
-          },
-          {
-            label: "Email:wzeg@gmail.com",
-            value: ""
-          },
-          {
-            label: "支付方式说明",
-            value: ""
-          },
-          {
-            label: "订单配送",
-            value: ""
-          },
-          {
-            label: "配送时间及运费",
-            value: ""
-          },
-          {
-            label: "QQ客服: 280261601",
-            value: "",
-            push: 8,
-          },
-        ],
+        alias: [],
         icon: [
           {
             label: "正品保证",
@@ -155,6 +71,26 @@
       };
     },
     methods: {
+    },
+    computed: {
+      ...mapState({
+        
+      }),
+    },
+    async created() {
+      await this.$store.dispatch("app/getArticleList", {method: 'articles.getArticleType'})
+        .then(() => {
+          console.log(this.$store.state.app.article.list);
+          let endList = {
+            child:[
+              {type_name: '在线客服'},
+              {type_name: 'Email:wzeg@gmail.com'},
+              {type_name: 'QQ客服: 280261601'} 
+            ],
+            type_name:"王子客服"
+          }
+          this.alias = this.$store.state.app.article.list.concat(endList);
+        });
     }
   }
 </script>

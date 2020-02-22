@@ -5,6 +5,8 @@ const state = () => ({
   isFixed: false,
   token: '',
   authUser: null,
+  article: {},
+  articleCtx: {}
 })
 
 const mutations = {
@@ -17,6 +19,12 @@ const mutations = {
   SET_USER: (state, payload) => {
     state.authUser = payload
   },
+  SET_ARTICLE: (state, payload) => {
+    state.article = payload;
+  },
+  SET_ARTICLECTX: (state, payload) => {
+    state.articleCtx = payload;
+  }
 }
 
 const actions = {
@@ -113,6 +121,40 @@ const actions = {
       catch(error){
         reject(`请求状态错误，错误码${status}`);
       }
+    })
+  },
+  // 帮助中心左侧列表分类
+  getArticleList ({commit}, formData){
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          console.log('帮助中心左侧列表分类',res);
+          let {data, status} = res;
+          if(status === 200 && data){
+            commit('SET_ARTICLE', data.data);
+            resolve();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
+  },
+  // 获取文章分类下的文章
+  getArticelCtx ({commit}, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          console.log('获取文章分类下的文章',res);
+          let {data, status} = res;
+          if(status === 200 && data){
+            commit('SET_ARTICLECTX', data.data);
+            resolve();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
     })
   }
 }
