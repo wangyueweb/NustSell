@@ -41,6 +41,26 @@
           <div class="grid-content right">
             <div class="title">收货信息</div>
             <div class="tips">您还没有收货信息</div>
+
+            <div class="address">
+              <!-- <el-checkbox-group v-model="checkList"> -->
+                <div
+                  v-for="(item, index) in addressList"
+                  :key="index"
+                >
+                  <el-checkbox :label="item.name"></el-checkbox>
+
+                  <span class="mobile">{{item.mobile}}</span>
+                  <span class="mobile">{{item.address}}</span>
+                  <span class="tools">
+                    <span>修改</span>|
+                    <span>删除</span>
+                  </span>
+                </div>
+              <!-- </el-checkbox-group> -->
+            </div>
+
+
             <div class="primary-box">
                 <el-button type="primary" size="mini" class="add-btn" @click="addsiteTo">+添加收获地址</el-button>
                 <div class="addsite" v-if="addsiteShow">
@@ -236,6 +256,8 @@ export default {
   },
   data () {
     return {
+      checkList: [],
+      
         expireTimeOption: {
             disabledDate(date) {
                     return date.getTime() <= Date.now();
@@ -287,7 +309,8 @@ export default {
 
   computed: {
     ...mapState({
-      payShopCarList: state => state.order.payShopCar.list.filter(item => (item.is_select === true))
+      payShopCarList: state => state.order.payShopCar.list.filter(item => (item.is_select === true)),
+      addressList: state => state.user.addressList
     })
   },
 
@@ -308,7 +331,14 @@ export default {
         receipt_type:0,
         token: this.$store.state.app.token
       }
-      await this.$store.dispatch('order/payShopCar', data);
+      // 获取前往结账购物车列表
+      this.$store.dispatch('order/payShopCar', data);
+
+      const formData = {
+        method:'user.getusership',token: this.$store.state.app.token
+      }
+      // 获取获取收货地址
+      this.$store.dispatch('user/getAddress', formData);
     },
     // 拼图验证
     doVerify: function () {

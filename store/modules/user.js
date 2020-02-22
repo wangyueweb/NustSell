@@ -28,6 +28,8 @@ const actions = {
       console.log(`getNotice + ${error}`);
     }
   },
+
+  // 获取收货地址
   async getAddress ({ commit }, formData ) {
     try{
       let {status, data} = await mainRequest(formData);

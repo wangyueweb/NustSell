@@ -10,9 +10,9 @@
           <nuxt-link to="/help">帮助中心</nuxt-link>
         </el-breadcrumb-item>
         <el-breadcrumb-item>
-          {{thirdPageName}}
+          {{$route.query.type}}
         </el-breadcrumb-item>
-        <el-breadcrumb-item v-if="$route.params.id">{{$route.params.id}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$route.query.name}}</el-breadcrumb-item>
       </el-breadcrumb>
 
       <el-row :gutter="15">
@@ -21,7 +21,7 @@
           
           <div class="alias">
             <div
-              v-for="(item, index) in articleList"
+              v-for="(item, index) in alias"
               :key="index"
               class="alias-wrapper"
             >
@@ -29,14 +29,23 @@
                 {{item.type_name}}
               </div>
               
-              <nuxt-link
-                :to="{path: '/help/' + itemJ.id, query: {name: itemJ.type_name}}"
+              <div
                 v-for="(itemJ, indexJ) in item.child"
                 :key="indexJ"
-                class="alias-item"
               >
-                {{itemJ.type_name}}
-              </nuxt-link>
+                <nuxt-link
+                  :to="{path: '/help/' + itemJ.id, query: {type:item.type_name, name: itemJ.type_name, id: itemJ.id}}"
+                  class="alias-item"
+                  v-if="index < 5"
+                >
+                  {{itemJ.type_name}}
+                </nuxt-link>
+
+                <div class="alias-item" v-if="index === 5">
+                  {{itemJ.type_name}}
+                </div>
+              </div>
+              
             </div>
           </div>
         </el-col>
@@ -62,136 +71,29 @@ export default {
   },
   data(){
     return {
-      alias: [
-        {
-          label: "新手帮助",
-          value: "",
-          className: 'bold'
-        },
-        {
-          label: "交易条款协议",
-          value: ""
-        },
-        {
-          label: "注册条款",
-          value: ""
-        },
-        {
-          label: "支付方式说明",
-          value: ""
-        },
-
-        {
-          label: "购物指南",
-          value: "",
-          className: 'bold'
-        },
-        {
-          label: "订单流程",
-          value: ""
-        },
-        {
-          label: "验货与签收",
-          value: ""
-        },
-        {
-          label: "订单配送",
-          value: ""
-        },
-
-        {
-          label: "支付/配送",
-          value: "",
-          className: 'bold'
-        },
-        {
-          label: "支付方式",
-          value: ""
-        },
-        {
-          label: "配送方式",
-          value: ""
-        },
-        {
-          label: "配送时间及运费",
-          value: ""
-        },
-
-        {
-          label: "售后服务",
-          value: "",
-          className: 'bold'
-        },
-        {
-          label: "退货",
-          value: ""
-        },
-        {
-          label: "退款声明",
-          value: ""
-        },
-
-        {
-          label: "会员服务",
-          value: "",
-          className: 'bold'
-        },
-        {
-          label: "找回密码",
-          value: ""
-        },
-        {
-          label: "联系我们",
-          value: ""
-        },
-
-        {
-          label: "王子客服",
-          value: "",
-          className: 'bold'
-        },
-        {
-          label: "在线客服",
-          value: ""
-        },
-        {
-          label: "Email: wzeg@gmail.com",
-          value: ""
-        },
-        {
-          label: "QQ客服: 280261601",
-          value: "",
-          push: 8,
-        },
-      ],
-      thirdPageName: ''
     }
   },
   computed: {
     ...mapState({
       isFixed: state => state.app.isFixed,
-      articleList: state => state.goods.article.list
+      articleList: state => state.app.article.list
     }),
-    thirdPage: {
-      get: function(){
-        for(let i in this.alias){
-          if(this.alias[i].path === this.$route.path){
-            this.thirdPageName = this.alias[i].label;
-            return;
-          }else{
-            this.thirdPageName = '我的订单';
-          }
+  },
+  watch: {},
+  async created() {
+    await this.$store.dispatch("app/getArticleList", {method: 'articles.getArticleType'})
+      .then(() => {
+        console.log(this.$store.state.app.article.list);
+        let endList = {
+          child:[
+            {type_name: '在线客服'},
+            {type_name: 'Email:wzeg@gmail.com'},
+            {type_name: 'QQ客服: 280261601'} 
+          ],
+          type_name:"王子客服"
         }
-       
-      },
-      set: function(val){}
-    },
-  },
-  watch: {
-    thirdPage: function(){}
-  },
-  created(){
-    this.$store.dispatch("goods/getArticleList", {method: 'articles.getArticleType'});
+        this.alias = this.$store.state.app.article.list.concat(endList);
+      });
   },
   methods:{},
 }
