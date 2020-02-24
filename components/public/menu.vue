@@ -29,11 +29,12 @@
                   
                   <div class="second" type="flex" justify="center" align="middle">
                     <div class="secondList" v-for="(itemJ, indexJ) in item.child" :key="indexJ" type="flex" justify="center" align="middle">
-                      <div class="link" @click="$router.push({name: 'categorylist', query: itemJ})" style="font-size:18px">
+                      <div class="link" @click="$router.push({name: 'categorylist', query: {...itemJ}})" style="font-size:18px">
                         {{itemJ.name}}
                       </div>
                     </div>
                   </div>
+                <div slot="reference" @click="$router.push({name: 'categorylist', query: {...item, firstId: item.id, firstName: item.name}})">{{item.name}}</div>
               </el-popover>
             </el-col>
           </el-row>
@@ -278,8 +279,13 @@ export default {
         height: 80px;
         display: flex;
         align-items: center;
-        &:hover span{
-          border-bottom: 2px solid #000;
+        span{
+          height: 26px;
+        }
+        &:hover{
+          span{
+            border-bottom: 3px solid @theme-black;
+          }
         }
       }
       .shop-car{

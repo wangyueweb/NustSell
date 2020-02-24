@@ -29,9 +29,9 @@
         <span style="color: #707070" v-if="hasToken">&nbsp; | &nbsp;</span>
 
         <nuxt-link to="/myCenter" no-prefetch v-if="hasToken">
-            <!-- <i class="el-icon-star-on"></i> -->
-            <i class="iconfont icon-shoucang"></i>
-            收藏
+          <i class="iconfont icon-shoucang"></i>
+          <i class="iconfont icon-shoucangxing2"></i>
+          收藏
         </nuxt-link>
         <span style="color: #707070">&nbsp; | &nbsp;</span>
 
@@ -417,24 +417,29 @@
       },
       // 登出
       lagout: function(){
-        this.$confirm('安全退出, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let data = {
-            token: this.$store.state.app.token,
-            method:'user.logout'
-          }
-          this.$store.dispatch("app/logout", data)
-            .then(res => {
-              this.$message(res);
-              this.$router.push({name: 'index'});
-            })
-            .catch(err => {
-              this.$message.error(err);
-            })
-        })
+        let data = {
+          token: this.$store.state.app.token,
+          method:'user.logout'
+        }
+
+
+        this.$confirm(
+          '退出, 是否继续?', '提示', 
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          })
+          .then(() => {
+            this.$store.dispatch("app/logout", data)
+              .then(res => {
+                this.$message(res);
+                this.$router.push({name: 'index'});
+              })
+              .catch(err => {
+                this.$message.error(err);
+              })
+          })
       },
     }
   }
