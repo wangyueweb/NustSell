@@ -328,6 +328,7 @@ export default {
           line-height: 40px;
           @cursor-pointer();
           &:hover{
+            text-indent: 5px;
             color: @theme-red;
           }
         }

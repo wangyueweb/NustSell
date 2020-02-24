@@ -112,18 +112,24 @@ export default {
 
   methods: {
     lagout: function(){
-      let data = {
-        token: this.$store.state.app.token,
-        method:'user.logout'
-      }
-      this.$store.dispatch("app/logout", data)
-        .then(res => {
-          this.$message(res);
-          this.$router.push({name: 'index'});
-        })
-        .catch(err => {
-          this.$message.error(err);
-        })
+      this.$confirm('安全退出, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let data = {
+          token: this.$store.state.app.token,
+          method:'user.logout'
+        }
+        this.$store.dispatch("app/logout", data)
+          .then(res => {
+            this.$message(res);
+            this.$router.push({name: 'index'});
+          })
+          .catch(err => {
+            this.$message.error(err);
+          })
+      })
     },
     getUserInfo: function(){
       let data = {

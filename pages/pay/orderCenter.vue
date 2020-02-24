@@ -89,8 +89,9 @@
                     </div>
                     <div class="item">
                       <div class="alias d-ib">收货人手机</div> 
-                      <div class="mobile d-ib">
-                        <el-input v-model="addsite.phone" placeholder="+63    |"></el-input>
+                      <div class="mobile hintbox d-ib">
+                        <el-input class="hintinput" v-model="addsite.phone" placeholder="请输入在菲手机号"></el-input>
+                        <div class="hint">+63  |</div>
                       </div>
                     </div>
                     <div class="item">
@@ -142,8 +143,8 @@
 
             <div class="line"></div>
             <div class="title">请选择您的付款方式 <span class="discount">（满500P免运费）</span></div>
-
-            <el-radio-group v-model="fromData.pay_method" @change="histTypeUpdate">
+            
+            <el-radio-group class="radiogroup" v-model="fromData.pay_method" @change="histTypeUpdate">
               <el-radio :label="0" border>货到付款</el-radio>
               <el-radio :label="1" border>微信</el-radio>
               <el-radio :label="2" border>支付宝</el-radio>
@@ -508,5 +509,9 @@ export default {
 .addsite .protocol{margin: 10px 0 15px 136px;}
 .addsite .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
 
+.radiogroup /deep/ .el-radio{margin-right: 30px !important;}
+.hintbox{position: relative;}
+.hintinput /deep/ .el-input__inner{padding: 0 0 0 40px;}
+.hint{position: absolute;top: 8px;left: 5px;font-size: 16px;color: #999;}
 
 </style>

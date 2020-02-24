@@ -11,6 +11,7 @@
             @selection-change="handleSelectionChange">
             <el-table-column
               type="selection"
+              :selectable='checkboxT'
               width="55">
             </el-table-column>
             <el-table-column
@@ -185,6 +186,11 @@ export default {
         token: this.$store.state.app.token
       }
       this.$store.dispatch('goods/getCollect', data);
+      for(let i=0;i<this.list.length;i++){
+          if(this.list[i].style == this.checkbox){
+              this.$refs.multipleTable.toggleRowSelection(this.list[i],true);
+          }
+      }
     },
 
     // handleCheckAllChange (val) {
@@ -293,13 +299,11 @@ export default {
           message: '请勾选至少一件商品'
         })
       }
-
-
-      
     }
   },
   created(){
     this.getPageData();
+    
   },
   computed: {
     ...mapState({
@@ -312,8 +316,8 @@ export default {
 
 <style lang="less" scoped>
 @import "../../assets/css/theme.less";
-.Swipergj /deep/ .swiper-button-prev{width: 38px;height: 38px;background-image: url(../../assets/img/arrow-left2.png) !important;background-size: 38px 38px !important;opacity: 0.9 !important;}
-.Swipergj /deep/ .swiper-button-next{width: 38px;height: 38px;background-image: url(../../assets/img/arrow-right2.png) !important;background-size: 38px 38px !important;opacity: 0.9 !important;}
+.Swipergj /deep/ .swiper-button-prev{width: 38px;height: 38px;background-image: url(../../assets/img/arrow-left2.png) !important;background-size: 38px 38px !important;}
+.Swipergj /deep/ .swiper-button-next{width: 38px;height: 38px;background-image: url(../../assets/img/arrow-right2.png) !important;background-size: 38px 38px !important;}
 
 .menu{
   @1200();

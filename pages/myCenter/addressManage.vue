@@ -8,7 +8,7 @@
       
       <div class="newbox" v-if="dialogVisible">
         <div class="close" @click="dialogVisible = !dialogVisible">X</div>
-        <div class="newbox-name">修改密码</div>
+        <div class="newbox-name">新增收货地址</div>
         <div>
           <div class="item">
             <div class="alias">所 在 地 区</div> 
@@ -30,8 +30,9 @@
           </div>
           <div class="item">
             <div class="alias">收货人手机</div> 
-            <div class="mobile">
-              <el-input v-model="addData.mobile" placeholder="+63    |"></el-input>
+            <div class="mobile hintbox">
+              <el-input class="hintinput" v-model="addData.mobile" placeholder="请输入在菲手机号"></el-input>
+              <div class="hint">+63  |</div>
             </div>
           </div>
           <el-checkbox label="设置为默认收货地址" v-model="auto"></el-checkbox>
@@ -242,5 +243,9 @@ export default {
 .newbox .el-radio{margin: 0;min-width: 120px;}
 .newbox .el-checkbox{margin: 0 0 0 138px;}
 .dialog-footer{margin: 25px 0 30px 0;}
+
+.hintbox{position: relative;}
+.hintinput /deep/ .el-input__inner{padding: 0 0 0 40px;}
+.hint{position: absolute;top: 8px;left: 5px;font-size: 16px;color: #999;}
 
 </style>

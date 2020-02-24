@@ -52,7 +52,8 @@
         <div class="buy-btn" @click="addShopCar(goodsDetail.product.id, num)">加入购物车</div>
 
         <div class="collect" @click="addCollect">
-          <i class="iconfont icon-shoucang"></i>
+          <i class="iconfont icon-shoucang" v-if="goodsDetail.isfav === 'false'"></i>
+          <i class="el-icon-star-on" v-if="goodsDetail.isfav === 'true'"></i>
           {{(goodsDetail.isfav === 'true') ? '已收藏' : '收藏'}}
         </div>
       </el-col>

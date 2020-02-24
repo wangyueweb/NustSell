@@ -28,7 +28,11 @@
         <span class="text" v-if="authUser" @click="lagout">[退出]</span>
         <span style="color: #707070" v-if="hasToken">&nbsp; | &nbsp;</span>
 
-        <nuxt-link to="/myCenter" no-prefetch v-if="hasToken"><i class="el-icon-star-on"></i>收藏</nuxt-link>
+        <nuxt-link to="/myCenter" no-prefetch v-if="hasToken">
+            <!-- <i class="el-icon-star-on"></i> -->
+            <i class="iconfont icon-shoucang"></i>
+            收藏
+        </nuxt-link>
         <span style="color: #707070">&nbsp; | &nbsp;</span>
 
         <span @mouseenter="showNoticeList = !showNoticeList" @mouseleave="showNoticeList = !showNoticeList" class="text" style="position:relative">
@@ -49,7 +53,7 @@
       </div>
 
       <div v-if="stepActive === 'find'">
-        <span class="login-title" @click="stepActive = 'login'" style="line-height:20px">< 返回</span>
+        <span class="login-title" @click="stepActive = 'login'" style="line-height:20px">返回</span>
         <span class="login-title active" style="margin-left:20px;">找回密码</span>
       </div>
 
@@ -413,18 +417,24 @@
       },
       // 登出
       lagout: function(){
-        let data = {
-          token: this.$store.state.app.token,
-          method:'user.logout'
-        }
-        this.$store.dispatch("app/logout", data)
-          .then(res => {
-            this.$message(res);
-            this.$router.push({name: 'index'});
-          })
-          .catch(err => {
-            this.$message.error(err);
-          })
+        this.$confirm('安全退出, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let data = {
+            token: this.$store.state.app.token,
+            method:'user.logout'
+          }
+          this.$store.dispatch("app/logout", data)
+            .then(res => {
+              this.$message(res);
+              this.$router.push({name: 'index'});
+            })
+            .catch(err => {
+              this.$message.error(err);
+            })
+        })
       },
     }
   }

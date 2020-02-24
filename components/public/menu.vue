@@ -25,7 +25,8 @@
                 :visible-arrow="true"
                 transition="el-zoom-in-top"
                 >
- 
+                  <div slot="reference" @click="$router.push({name: 'categorylist', query: item.child[0]})">{{item.name}}</div>
+                  
                   <div class="second" type="flex" justify="center" align="middle">
                     <div class="secondList" v-for="(itemJ, indexJ) in item.child" :key="indexJ" type="flex" justify="center" align="middle">
                       <div class="link" @click="$router.push({name: 'categorylist', query: itemJ})" style="font-size:18px">
@@ -33,8 +34,6 @@
                       </div>
                     </div>
                   </div>
-
-                <div slot="reference">{{item.name}}</div>
               </el-popover>
             </el-col>
           </el-row>
@@ -279,8 +278,8 @@ export default {
         height: 80px;
         display: flex;
         align-items: center;
-        &:hover{
-          text-decoration: underline;
+        &:hover span{
+          border-bottom: 2px solid #000;
         }
       }
       .shop-car{
@@ -356,6 +355,7 @@ export default {
     // align-items: center;
   }
   
+  .menu-type span{border-bottom: 2px solid #fff;}
   .toolsboz /deep/ .el-input__inner:focus{border: 1px solid #DCDFE6 !important;}
   .toolsboz /deep/ .el-input__inner:hover{border: 1px solid #DCDFE6 !important;}
   .toolsboz /deep/ .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){border: 1px solid #DCDFE6 !important;}
