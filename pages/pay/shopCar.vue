@@ -8,10 +8,11 @@
             :data="list"
             tooltip-effect="dark"
             style="width: 100%"
+            row-key="id"
             @selection-change="handleSelectionChange">
             <el-table-column
               type="selection"
-              :selectable='checkboxT'
+              :reserve-selection='selectable'
               width="55">
             </el-table-column>
             <el-table-column
@@ -186,11 +187,6 @@ export default {
         token: this.$store.state.app.token
       }
       this.$store.dispatch('goods/getCollect', data);
-      for(let i=0;i<this.list.length;i++){
-          if(this.list[i].style == this.checkbox){
-              this.$refs.multipleTable.toggleRowSelection(this.list[i],true);
-          }
-      }
     },
 
     // handleCheckAllChange (val) {

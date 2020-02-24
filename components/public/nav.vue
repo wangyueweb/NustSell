@@ -30,7 +30,7 @@
 
         <nuxt-link to="/myCenter" no-prefetch v-if="hasToken">
           <i class="iconfont icon-shoucang"></i>
-          <i class="iconfont icon-shoucangxing2"></i>
+          <!-- <i class="iconfont icon-shoucangxing2"></i> -->
           收藏
         </nuxt-link>
         <span style="color: #707070">&nbsp; | &nbsp;</span>

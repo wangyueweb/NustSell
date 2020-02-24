@@ -25,8 +25,6 @@
                 :visible-arrow="true"
                 transition="el-zoom-in-top"
                 >
-                  <div slot="reference" @click="$router.push({name: 'categorylist', query: item.child[0]})">{{item.name}}</div>
-                  
                   <div class="second" type="flex" justify="center" align="middle">
                     <div class="secondList" v-for="(itemJ, indexJ) in item.child" :key="indexJ" type="flex" justify="center" align="middle">
                       <div class="link" @click="$router.push({name: 'categorylist', query: {...itemJ}})" style="font-size:18px">
@@ -63,7 +61,9 @@
                     <div class="content" style="width:382px;height: 100%;padding:11px 25px 25px;box-sizing:border-box;">
                       <div v-if="carNumber > 0">
                         <div @click="visible = !visible" style="text-align:right;">
-                          <i class="iconfont icon-guanbi" style="font-size:20px;"></i>
+                          <div class="rotate">
+                            <i class="iconfont icon-guanbi" style="font-size:20px;"></i>
+                          </div>
                         </div>
                         <div class="count">
                           <div>
@@ -366,5 +366,8 @@ export default {
   .toolsboz /deep/ .el-input__inner:hover{border: 1px solid #DCDFE6 !important;}
   .toolsboz /deep/ .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){border: 1px solid #DCDFE6 !important;}
   .toolsboz /deep/ .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){border: 1px solid #DCDFE6 !important;}
+    
+  .rotate{display: inline-block;transition: transform 1s}
+  .rotate:hover{transform:rotate(360deg);}
 
 </style>
