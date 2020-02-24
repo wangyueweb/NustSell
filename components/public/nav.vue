@@ -28,7 +28,11 @@
         <span class="text" v-if="authUser" @click="lagout">[退出]</span>
         <span style="color: #707070" v-if="hasToken">&nbsp; | &nbsp;</span>
 
-        <nuxt-link to="/myCenter" no-prefetch v-if="hasToken"><i class="el-icon-star-on"></i>收藏</nuxt-link>
+        <nuxt-link to="/myCenter" no-prefetch v-if="hasToken">
+          <i class="iconfont icon-shoucang"></i>
+          <i class="iconfont icon-shoucangxing2"></i>
+          收藏
+        </nuxt-link>
         <span style="color: #707070">&nbsp; | &nbsp;</span>
 
         <span @mouseenter="showNoticeList = !showNoticeList" @mouseleave="showNoticeList = !showNoticeList" class="text" style="position:relative">
@@ -417,13 +421,24 @@
           token: this.$store.state.app.token,
           method:'user.logout'
         }
-        this.$store.dispatch("app/logout", data)
-          .then(res => {
-            this.$message(res);
-            this.$router.push({name: 'index'});
+
+
+        this.$confirm(
+          '退出, 是否继续?', '提示', 
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
           })
-          .catch(err => {
-            this.$message.error(err);
+          .then(() => {
+            this.$store.dispatch("app/logout", data)
+              .then(res => {
+                this.$message(res);
+                this.$router.push({name: 'index'});
+              })
+              .catch(err => {
+                this.$message.error(err);
+              })
           })
       },
     }

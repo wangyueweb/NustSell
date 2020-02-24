@@ -3,7 +3,8 @@
     <!-- 面包屑 -->
     <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>{{$route.query.name}}</el-breadcrumb-item>
+      <!-- <el-breadcrumb-item :to="{ name: 'categorylist', query: {...$route.query }}" v-if="$route.query.firstName">{{$route.query.firstName}}</el-breadcrumb-item> -->
+      <el-breadcrumb-item>{{$route.query.firstName ? $route.query.firstName : $route.query.name}}</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 头部标识 -->
     <div class="title">
@@ -193,10 +194,13 @@ export default {
         let arr = [];
         for (let i in this.$store.state.goods.allCategories){
           for (let j in this.$store.state.goods.allCategories[i].child){
-              if(this.$route.query.id.toString() === this.$store.state.goods.allCategories[i].child[j].id.toString()){
-                arr = this.$store.state.goods.allCategories[i]['child'];
-                return arr;
-              }
+            if(this.$route.query.firstId && this.$route.query.firstId === this.$store.state.goods.allCategories[i].id){
+              arr = this.$store.state.goods.allCategories[i]['child'];
+              return arr;
+            }else if(this.$route.query.id.toString() === this.$store.state.goods.allCategories[i].child[j].id.toString()){
+              arr = this.$store.state.goods.allCategories[i]['child'];
+              return arr;
+            }
           }
         }
       },
@@ -209,12 +213,22 @@ export default {
   },
   methods:{
     async getPageData(){
-      this.formData = {
-        page: 1,
-        limit: this.small ? 10 : 3,
-        where: `{"cat_id": ${this.$route.query.id}}`,
-        method: "goods.getlist",
-        token: this.$store.state.app.token
+      if(this.$route.query.firstId){
+        this.formData = {
+          page: 1,
+          limit: this.small ? 10 : 3,
+          where: `{"cat_id": ${this.$route.query.firstId}}`,
+          method: "goods.getlist",
+          token: this.$store.state.app.token
+        }
+      }else{
+        this.formData = {
+          page: 1,
+          limit: this.small ? 10 : 3,
+          where: `{"cat_id": ${this.$route.query.id}}`,
+          method: "goods.getlist",
+          token: this.$store.state.app.token
+        }
       }
       this.getGoodsList();
     },
