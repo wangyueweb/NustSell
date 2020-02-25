@@ -29,8 +29,8 @@
         <span style="color: #707070" v-if="hasToken">&nbsp; | &nbsp;</span>
 
         <nuxt-link to="/myCenter" no-prefetch v-if="hasToken">
-          <i class="iconfont icon-shoucang"></i>
-          <!-- <i class="iconfont icon-shoucangxing2"></i> -->
+          <i class="iconfont icon-shoucang" v-if="collectCount === 0"></i>
+          <i class="iconfont icon-shoucangxing2" v-if="collectCount > 0"></i>
           收藏
         </nuxt-link>
         <span style="color: #707070">&nbsp; | &nbsp;</span>
@@ -227,6 +227,7 @@
       if(this.hasToken){
         console.log('已经登录');
         this.getUserInfo();
+        this.getCollect();
       }
     },
     created(){
@@ -235,7 +236,8 @@
     computed: {
       ...mapState({
         authUser: state => state.app.authUser,
-        noticeList: state => state.user.noticeList
+        noticeList: state => state.user.noticeList,
+        collectCount: state => state.goods.collect.count || 0
       }),
       hasToken: {
         get: function(){
@@ -440,6 +442,16 @@
                 this.$message.error(err);
               })
           })
+      },
+      // 获取购物车列表
+      getCollect () {
+        let data = {
+          page: this.currentPage,
+          limit: this.limit,
+          method: "user.goodscollectionlist",
+          token: this.$store.state.app.token
+        }
+        this.$store.dispatch('goods/getCollect', data);
       },
     }
   }
