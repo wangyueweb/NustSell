@@ -34,7 +34,7 @@ const actions = {
   async getAddress ({ commit }, formData ) {
     try{
       let {status, data} = await mainRequest(formData);
-      console.log(status,data);
+      console.log('获取购物车列表',status,data);
       if(status === 200 && data && data.status){
         commit('SET_ADDRESS', data.data);
       }

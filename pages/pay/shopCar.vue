@@ -12,7 +12,7 @@
             @selection-change="handleSelectionChange">
             <el-table-column
               type="selection"
-              :reserve-selection='selectable'
+              :reserve-selection='true'
               width="55">
             </el-table-column>
             <el-table-column
@@ -146,7 +146,7 @@ export default {
   methods: {
     getPageData () {
       this.getShopCar();
-      this.getCollect();
+      // this.getCollect();
     },
 
     async numberChange(item, nums) {
@@ -160,15 +160,15 @@ export default {
         })
     },
 
-    getCollect () {
-      let data = {
-        page: this.currentPage,
-        limit: this.limit,
-        method: "user.goodscollectionlist",
-        token: this.$store.state.app.token
-      }
-      this.$store.dispatch('goods/getCollect', data);
-    },
+    // getCollect () {
+    //   let data = {
+    //     page: this.currentPage,
+    //     limit: this.limit,
+    //     method: "user.goodscollectionlist",
+    //     token: this.$store.state.app.token
+    //   }
+    //   this.$store.dispatch('goods/getCollect', data);
+    // },
 
     // handleCheckAllChange (val) {
     //   console.log(val);
@@ -189,6 +189,7 @@ export default {
         })
     },
     setSelect: function (rows) {
+      console.log(rows);
       var _this = this;
       if (rows) {
         rows.forEach(row => {
@@ -205,15 +206,6 @@ export default {
         this.$refs.multipleTable.clearSelection();
       }
     },
-    // getCollect () {
-    //   let data = {
-    //     page: 1,
-    //     limit: 12,
-    //     method: "user.goodscollectionlist",
-    //     token: this.$store.state.app.token
-    //   }
-    //   this.$store.dispatch('goods/getCollect', data);
-    // },
     handleSelectionChange (val) {
       this.selectList = val;
 

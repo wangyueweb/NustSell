@@ -40,29 +40,35 @@
         <el-col :span="16">
           <div class="grid-content right">
             <div class="title">收货信息</div>
-            <div class="tips">您还没有收货信息</div>
+            <div class="tips" v-if="addressList.length === 0">您还没有收货信息</div>
 
             <div class="address">
-              <!-- <el-checkbox-group v-model="checkList"> -->
-                <div
+              <el-checkbox-group
+                v-model="checkList"
+              >
+                <el-checkbox
                   v-for="(item, index) in addressList"
                   :key="index"
+                  @change="checkboxChange(item)"
+                  border
+                  :label="item.name"
+                  :checked="item.is_def === 1"
+                  style="height: 32px;display: flex;align-items: center;margin:5px 0;padding: 0 20px;"
                 >
-                  <el-checkbox :label="item.name"></el-checkbox>
-
-                  <span class="mobile">{{item.mobile}}</span>
-                  <span class="mobile">{{item.address}}</span>
-                  <span class="tools">
-                    <span>修改</span>|
-                    <span>删除</span>
-                  </span>
-                </div>
-              <!-- </el-checkbox-group> -->
+                  <div style="width: 690px;">
+                    <span class="name" style="display:inline-block; width:30%">{{item.name}}</span>
+                    <span class="mobile" style="display:inline-block; width:30%">{{item.mobile}}</span>
+                    <span class="address" style="display:inline-block; width:25%">{{item.address}}</span>
+                    <span class="tools">
+                      <span>修改</span> | <span>删除</span>
+                    </span>
+                  </div>
+                </el-checkbox>
+              </el-checkbox-group>
             </div>
 
-
             <div class="primary-box">
-                <el-button type="primary" size="mini" class="add-btn" @click="addsiteTo">+添加收获地址</el-button>
+                <el-button type="primary" size="mini" class="add-btn" @click="addsiteTo">+新增收获地址</el-button>
                 <div class="addsite" v-if="addsiteShow">
                   <div class="close" @click="closeTo">X</div>
                   <div class="addsite-name">由于您未登录下单，填入以下信息将会自动注册账号</div>
@@ -126,7 +132,7 @@
             <div class="title">收货时间</div>
 
             <el-date-picker
-              v-model="value1"
+              v-model="receiving_time"
               type="date"
               placeholder="选择日期"
               :picker-options="expireTimeOption">
@@ -134,7 +140,7 @@
 
             <el-time-picker
               arrow-control
-              v-model="value2"
+              v-model="receiving_time"
               :picker-options="{
                 selectableRange: '18:30:00 - 20:30:00'
               }"
@@ -144,7 +150,7 @@
             <div class="line"></div>
             <div class="title">请选择您的付款方式 <span class="discount">（满500P免运费）</span></div>
             
-            <el-radio-group class="radiogroup" v-model="fromData.pay_method" @change="histTypeUpdate">
+            <el-radio-group class="radiogroup" v-model="receipt_type" @change="histTypeUpdate">
               <el-radio :label="0" border>货到付款</el-radio>
               <el-radio :label="1" border>微信</el-radio>
               <el-radio :label="2" border>支付宝</el-radio>
@@ -166,12 +172,13 @@
               type="textarea"
               :autosize="{ minRows: 4, maxRows: 6}"
               placeholder="亲，如果您有什么特别嘱咐，请备注给我们哟～～"
-              v-model="textarea2">
+              v-model="memo">
             </el-input>
           </div>
         </el-col>
       </el-row>
     </div>
+    
     <el-footer height="80px" class="footer">
       <div class="content">
         <el-row>
@@ -180,11 +187,11 @@
             <el-row type="flex" align="middle" style="height:80px">
               <el-col>
                 <div>商品金额</div>
-                <div>P880</div>
+                <div>P{{(amount.goods_amount - amount.order_pmt) || 0 }}</div>
               </el-col>
               <el-col>
                 <div>商品优惠</div>
-                <div>20P</div>
+                <div>P{{amount.order_pmt || 0}}</div>
               </el-col>
               <el-col>
                 <div>运费</div>
@@ -192,11 +199,11 @@
               </el-col>
               <el-col>
                 <div>还需支付</div>
-                <div class="count">P888.00</div>
+                <div class="count">P{{amount.goods_amount || 0}}</div>
               </el-col>
               <el-col>
                 <div>
-                  <el-button type="danger" class="large-btn" @click="$router.push({name: 'pay-success1'})">提交订单</el-button>
+                  <el-button type="danger" class="large-btn" @click="shopCarSubmit">提交订单</el-button>
                 </div>
               </el-col>
             </el-row>
@@ -258,6 +265,10 @@ export default {
   data () {
     return {
       checkList: [],
+      receiving_time: new Date(),
+      receipt_type: 1,
+      memo: "",
+
       
         expireTimeOption: {
             disabledDate(date) {
@@ -266,12 +277,9 @@ export default {
         },
       addsiteShow: false,
       value1: '',
-      value2: new Date(2016, 9, 10, 18, 40),
       currentShow: false,
       textarea2: "",
-      fromData: {
-        pay_method: ""
-      },
+
       no_login: this.$store.state.app.token ? false : true,
 
       registerRules:{
@@ -311,7 +319,8 @@ export default {
   computed: {
     ...mapState({
       payShopCarList: state => state.order.payShopCar.list.filter(item => (item.is_select === true)),
-      addressList: state => state.user.addressList
+      addressList: state => state.user.addressList,
+      amount: state => state.order.amount
     })
   },
 
@@ -341,6 +350,41 @@ export default {
       // 获取获取收货地址
       this.$store.dispatch('user/getAddress', formData);
     },
+    checkboxChange: function(e){
+      console.log(e);
+      this.checkList = [];
+      this.checkList.push(e.name);
+    },
+
+    shopCarSubmit: async function(){
+      let addressID = this.addressList.find(item => item.name === this.checkList[0])['id'];
+      console.log(addressID);
+      let data = {
+        cart_ids: this.$route.query.ids,
+        memo: this.memo, // 留言备注
+        receipt_type: this.receipt_type, // 支付方式 （目前默认为1，线下支付）
+        uship_id: addressID, // 收货地址ID
+        receiving_time: this.dayjs(this.receiving_time).format('YYYY-MM-DD HH:mm:ss'), // 收货时间
+        method: "order.create",
+        token: this.$store.state.app.token
+      }
+
+      console.log(data);
+
+      await this.$store.dispatch("order/shopCarSubmit", data)
+        .then(() => {
+          console.log('提交成功');
+          this.$router.push({name: 'pay-success1'});
+        })
+        .catch(err => {
+          console.log('提交失败');
+        })
+
+      
+    },
+
+
+
     // 拼图验证
     doVerify: function () {
       this.$refs['registerForm'].validate((valid) => {
@@ -494,6 +538,7 @@ export default {
     margin: 20px 0;
   }
 }
+
 
 .d-ib{display: inline-block;}
 .primary-box{position: relative;}
