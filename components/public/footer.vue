@@ -80,7 +80,6 @@ import { mapState } from "vuex"
     async created() {
       await this.$store.dispatch("app/getArticleList", {method: 'articles.getArticleType'})
         .then(() => {
-          console.log(this.$store.state.app.article.list);
           let endList = {
             child:[
               {type_name: '在线客服'},

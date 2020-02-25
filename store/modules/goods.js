@@ -70,7 +70,7 @@ const actions = {
   getCollect({commit}, formData) {
     mainRequest(formData)
       .then(res => {
-        console.log('获取搜藏列表',res);
+        console.log('获取收藏列表',res);
         let {data, status} = res;
         if(status === 200 && data){
           commit('SET_COLLECT', data.data);

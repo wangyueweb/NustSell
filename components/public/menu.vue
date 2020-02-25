@@ -155,13 +155,13 @@ export default {
       allCategories: state => state.goods.allCategories,
       carNumber: state => state.order.carNumber,
       amount: state => state.order.shopCar.goods_amount,
-      shopCarList: state => state.order.shopCar.list
+      shopCarList: state => state.order.shopCar.list,
+      
     })
   },
   watch: {
     shopCarList: {
       handler(newVal, oldVal) {
-        console.log(newVal);
         if(newVal && JSON.stringify(newVal) != JSON.stringify(oldVal)){
           this.$nextTick(() => {
             this.getShopCar();
@@ -243,6 +243,7 @@ export default {
           });
       })
     },
+    
   },
   destroyed () {
     // 离开页面 关闭监听 不然会报错

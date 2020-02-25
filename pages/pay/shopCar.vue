@@ -75,19 +75,6 @@
           </div>
         </div>
         <div class="grid-content Swipergj" style="margin-top: 10px;padding-bottom:100px;">
-          <!-- <Swiper :imgs="banners" :options="swiperOption">
-            <div slot="detail">
-              <div class="describe">金枕头泰国风味榴莲</div>
-              <div class="price">P 47.00</div>
-              <div class="buy-btn">
-                加入购物车
-              </div>
-            </div>
-            <div slot="arrow" class="arrow-wrapper">
-              <div class="swiper-button-prev"></div>
-              <div class="swiper-button-next"></div>
-            </div>
-          </Swiper> -->
           <div class="myfavorite">
               我的收藏
           </div>
@@ -145,12 +132,6 @@ export default {
     return {
       list: [],
       selectList: [],
-      banners: [
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg",
-        "https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg"
-      ],
       swiperOption: {
         slidesPerView: 3,
         centeredSlidesBounds: true,
@@ -201,10 +182,28 @@ export default {
       await this.$store.dispatch('order/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token})
         .then(res => {
           this.list = JSON.parse(JSON.stringify(this.$store.state.order.shopCar.list));
+          this.setSelect(this.list);
         })
         .catch(err => {
           this.$message.error(err);
         })
+    },
+    setSelect: function (rows) {
+      var _this = this;
+      if (rows) {
+        rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row,true);
+        });
+      } 
+    },
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
     },
     // getCollect () {
     //   let data = {

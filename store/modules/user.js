@@ -16,10 +16,11 @@ const mutations = {
 }
 
 const actions = {
+  // 获取公告列表
   async getNotice ({ commit }, formData ) {
     try{
       let {status, data} = await mainRequest(formData);
-      console.log(status,data);
+      console.log('获取公告列表',data);
       if(status === 200 && data && data.status){
         commit('SET_NOTICE', data.data);
       }
