@@ -7,9 +7,9 @@
       </div>
       <div class="content-wrapper">
         <div class="describe">微信扫码二维码付款</div>
-        <div class="time">支付剩余时间：29分42秒</div>
+        <div class="time">下单时间：{{dayjs($store.state.order.order.payment_time).format('YYYY-MM-DD HH:mm:ss')}}</div>
         <div class="number">
-            <span id="key">订单号：20184878851</span>
+            <span id="key">订单号：{{$store.state.order.order.order_id}}</span>
             <span title="复制" type="copy" class="copy"  data-clipboard-target="#key" @click="copy" >
                 <img src="../../assets/img/fz.png" alt="" class="copeimg">
             </span>
@@ -27,7 +27,7 @@
       </div>
       <div class="content-wrapper">
         <div class="describe">订单成功 派送员在路上 请保持电话畅通</div>
-        <div class="number">订单号：20184878851</div>
+        <div class="number">订单号：{{$store.state.order.order.order_id}}</div>
         <div class="btn-wrapper">
           <el-button @click="$router.push({name: 'index'})">返回首页</el-button>
           <el-button @click="success = 1">联系客服</el-button>

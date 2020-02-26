@@ -6,7 +6,8 @@ const state = () => ({
   amount: {},
   payShopCar: {
     list: []
-  }
+  },
+  order: {}
 })
 
 const mutations = {
@@ -21,6 +22,9 @@ const mutations = {
   },
   SET_PAYSHOPCAR: (state, payload) => {
     state.payShopCar = payload;
+  },
+  SET_ORDER: (state, payload) => {
+    state.order = payload;
   }
 }
 
@@ -161,8 +165,29 @@ const actions = {
     })
   },
 
-  shopCarSubmit({}, formData) {
-    
+  // 购物车提交
+  shopCarSubmit({commit}, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          console.log('购物车提交',res);
+          let {data, status} = res;
+          if(status === 200 && data){
+            if(data.status){
+              commit('SET_ORDER', data.data);
+              resolve();
+            }else{
+              this._vm.$message({
+                type: 'error',
+                message: data.msg
+              })
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
   }
 }
 export default { namespaced: true, state, mutations, actions }

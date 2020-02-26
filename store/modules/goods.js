@@ -22,6 +22,9 @@ const mutations = {
   SET_GOODSDETAIL: (state, payload) => {
     state.goodsDetail = payload;
   },
+  SET_COLLECTCOUNT: (state, payload) => {
+    state.collect.count = payload
+  }
 }
 
 const actions = {
@@ -53,11 +56,12 @@ const actions = {
   },
 
   // 添加收藏
-  addCollect({}, formData) {
+  addCollect({commit}, formData) {
     return new Promise((resolve, reject) => {
       mainRequest(Qs.stringify(formData))
         .then(res => {
-          console.log(res)
+          console.log('添加收藏', res);
+          commit('SET_COLLECTCOUNT', res.data.goodsCollectioncount);
           resolve(res);
         })
         .catch(err => {
