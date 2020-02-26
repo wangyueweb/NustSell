@@ -51,7 +51,7 @@
                   :key="index"
                   @change="checkboxChange(item)"
                   border
-                  :label="item.name"
+                  :label="item.id"
                   :checked="item.is_def === 1"
                   style="height: 32px;display: flex;align-items: center;margin:5px 0;padding: 0 20px;"
                 >
@@ -67,7 +67,9 @@
               </el-checkbox-group>
             </div>
 
-            <div class="primary-box">
+            <AddAddress @success="getPageData()" :type="2"  style="position:relative"/>
+
+            <!-- <div class="primary-box">
                 <el-button type="primary" size="mini" class="add-btn" @click="addsiteTo">+新增收获地址</el-button>
                 <div class="addsite" v-if="addsiteShow">
                   <div class="close" @click="closeTo">X</div>
@@ -126,7 +128,8 @@
                       <a href="" class="userAgreement">《用户协议》</a>
                   </div>
                 </div>
-            </div>  
+            </div> -->
+
             <div class="line"></div>
 
             <div class="title">收货时间</div>
@@ -256,6 +259,7 @@
 
 <script>
 import CardTitle from "@/components/public/cardTitle";
+import AddAddress from "@/components/public/addAddress1";
 import { mapState } from "vuex";
 export default {
   name: "OrderCenter",
@@ -313,7 +317,8 @@ export default {
   },
 
   components: {
-    CardTitle
+    CardTitle,
+    AddAddress
   },
 
   computed: {
@@ -353,17 +358,15 @@ export default {
     checkboxChange: function(e){
       console.log(e);
       this.checkList = [];
-      this.checkList.push(e.name);
+      this.checkList.push(e.id);
     },
 
     shopCarSubmit: async function(){
-      let addressID = this.addressList.find(item => item.name === this.checkList[0])['id'];
-      console.log(addressID);
       let data = {
         cart_ids: this.$route.query.ids,
         memo: this.memo, // 留言备注
         receipt_type: this.receipt_type, // 支付方式 （目前默认为1，线下支付）
-        uship_id: addressID, // 收货地址ID
+        uship_id: this.checkList[0], // 收货地址ID
         receiving_time: this.dayjs(this.receiving_time).format('YYYY-MM-DD HH:mm:ss'), // 收货时间
         method: "order.create",
         token: this.$store.state.app.token

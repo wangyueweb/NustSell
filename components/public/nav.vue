@@ -28,7 +28,7 @@
         <span class="text" v-if="authUser" @click="lagout">[退出]</span>
         <span style="color: #707070" v-if="hasToken">&nbsp; | &nbsp;</span>
 
-        <nuxt-link to="/myCenter" no-prefetch v-if="hasToken">
+        <nuxt-link to="/myCenter/collect" no-prefetch v-if="hasToken">
           <i class="iconfont icon-shoucang" v-if="collectCount === 0"></i>
           <i class="iconfont icon-shoucangxing2" v-if="collectCount > 0"></i>
           收藏

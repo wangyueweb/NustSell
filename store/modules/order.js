@@ -37,6 +37,7 @@ const actions = {
   getCarnumber({commit}, formData) {
     mainRequest(formData)
       .then(({data, status}) => {
+        console.log('获取购物车数量', status, data);
         if(status === 200 && data){
           commit('SET_CARNUMBER', data.data);
         }
