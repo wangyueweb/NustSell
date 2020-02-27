@@ -71,6 +71,7 @@ export default {
   },
   data(){
     return {
+      alias: []
     }
   },
   computed: {

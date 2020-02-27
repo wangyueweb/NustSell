@@ -3,6 +3,13 @@
   <div class="addressManage">
     <div class="newaddress">
       <AddAddress @success="getPageData()" :type="1"/>
+
+      <EditAddress
+        @success="getPageData();dialogVisible = !dialogVisible"
+        :option="editOption"
+        v-if="dialogVisible"
+        @close="dialogVisible = !dialogVisible"
+      />
     </div>
 
     <div class="table">
@@ -33,19 +40,21 @@
             label="操作">
             <template slot-scope="scope">
               <div>
-                <el-button @click="deleteAddress(scope.row)" type="text" size="small">修改</el-button>
+                <el-button @click="openEditAddress(scope.row)" type="text" size="small">修改</el-button>
                 <el-divider direction="vertical"></el-divider>
                 <el-button @click="deleteAddress(scope.row)" class="delete" type="text" size="small">删除</el-button>
               </div>
             </template>
           </el-table-column>
       </el-table>
+      
     </div>
   </div>
 </template>
 
 <script>
 import AddAddress from "@/components/public/addAddress1";
+import EditAddress from "@/components/public/editAddress";
 import { mapState } from 'vuex';
 export default {
   name: "addressManage",
@@ -54,11 +63,14 @@ export default {
   },
   data() {
     return {
+      editOption: {},
+      dialogVisible: false,
     };
   },
 
   components: {
-    AddAddress
+    AddAddress,
+    EditAddress
   },
 
   computed: {
@@ -97,6 +109,12 @@ export default {
           this.getPageData();
         })
         .catch(err => {})
+    },
+    // 修改地址
+    openEditAddress: function (item) {
+      console.log(item);
+      this.editOption = JSON.parse(JSON.stringify(item));
+      this.dialogVisible = true;
     }
   }
 };
