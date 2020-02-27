@@ -243,7 +243,6 @@ export default {
           });
       })
     },
-    
   },
   destroyed () {
     // 离开页面 关闭监听 不然会报错

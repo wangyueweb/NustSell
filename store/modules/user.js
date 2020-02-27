@@ -43,5 +43,40 @@ const actions = {
       console.log(`getAddress + ${error}`);
     }
   },
+
+  // 添加地址
+  async addAddress ({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(({status, data}) => {
+          console.log(data);
+          this._vm.$message({
+            message: data.msg,
+            type: data.status ? 'success' : 'warning'
+          });
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
+  },
+
+  // 删除地址
+  async deleteAddress ({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(({status, data}) => {
+          this._vm.$message({
+            message: data.msg,
+            type: data.status ? 'success' : 'warning'
+          });
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
+  }
 }
 export default { namespaced: true, state, mutations, actions }
