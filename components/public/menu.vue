@@ -12,7 +12,7 @@
         <el-col :span="24" v-if="!isFixed">
           <div class="logo">
             <nuxt-link :to="{path: '/'}">
-              <el-image :src="require('@/assets/img/logo.png')" style="width:160px;margin: 20px 0 -5px 0;"></el-image>
+              <el-image :src="require('@/assets/img/logo.png')" style="width:180px;margin: 20px 0 -5px 0;"></el-image>
             </nuxt-link>
           </div>
         </el-col>
@@ -20,7 +20,7 @@
           <el-row>
             <el-col :span="4" v-for="(item, index) in allCategories" :key="index" class="menu-type">
               <el-popover
-                placement="bottom"
+                placement="bottom-start"
                 trigger="hover"
                 :visible-arrow="true"
                 transition="el-zoom-in-top"
@@ -28,7 +28,7 @@
                   <div class="second" type="flex" justify="center" align="middle">
                     <div class="secondList" v-for="(itemJ, indexJ) in item.child" :key="indexJ" type="flex" justify="center" align="middle">
                       <div class="link" @click="$router.push({name: 'categorylist', query: {...itemJ}})" style="font-size:18px">
-                        <img class="secondimg" :src="itemJ.image_url" style="width:65px;"></img>
+                        <img class="secondimg" :src="itemJ.image_url"></img>
                         <div class="secondname">{{itemJ.name}}</div>
                       </div>
                     </div>
@@ -254,10 +254,10 @@ export default {
 
 <style lang="less" scoped>
   @import "../../assets/css/theme.less";
-  .second{background: #fff;padding: 0 20px;}
+  .second{background: #fff;padding: 0 35px;min-height: 250px;max-width: 1200px;}
   .secondList{display: inline-block;}
-  .secondimg{width: 120px;height: auto;margin: 40px 30px 0 30px;}
-  .secondname{font-size: 16px;margin: 6px 20px 35px 20px;}
+  .secondimg{width: 95px;height: auto;margin: 55px 35px 0 35px;}
+  .secondname{font-size: 18px;margin: 10px 0 35px 0;font-weight: 600;}
   .link:hover{color: #F65151;}
   .activemi{opacity: 0.5;top: 50px;}
   .menu{
@@ -276,7 +276,7 @@ export default {
       .menu-type{
         @cursor-pointer();
         font-weight: 600;
-        font-size: 18px;
+        font-size: 22px;
         color: @theme-black;
         // line-height: 140px;
         height: 80px;

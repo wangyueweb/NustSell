@@ -171,12 +171,14 @@ export default {
   flex-flow: column;
   @centered();
   @cursor-pointer();
-  margin: 33px 0 20px 0;
+  margin: 5px 0 20px 0;
   span{
-    width: 60px;
-    height: 6px;
+    width: 276px;
+    height: 15px;
     display: block;
-    background: @theme-black;
+    margin: 3px 0 3px 0;
+    background: url(../assets/img/line_title.png) no-repeat center center;
+    background-size: 100% 100%;
   }
 }
 </style>

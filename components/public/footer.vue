@@ -120,6 +120,7 @@ import { mapState } from "vuex"
             @circle();
             border:1px solid #707070;
             display: inline-block;
+            margin: 0 3px 0 0;
             i{
               font-size: 32px;
               color: @theme-white;
