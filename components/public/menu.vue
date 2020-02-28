@@ -12,7 +12,7 @@
         <el-col :span="24" v-if="!isFixed">
           <div class="logo">
             <nuxt-link :to="{path: '/'}">
-              <el-image :src="require('@/assets/img/logo.png')" style="width:90px;margin: 20px 0 -5px 0;"></el-image>
+              <el-image :src="require('@/assets/img/logo.png')" style="width:160px;margin: 20px 0 -5px 0;"></el-image>
             </nuxt-link>
           </div>
         </el-col>
@@ -28,7 +28,8 @@
                   <div class="second" type="flex" justify="center" align="middle">
                     <div class="secondList" v-for="(itemJ, indexJ) in item.child" :key="indexJ" type="flex" justify="center" align="middle">
                       <div class="link" @click="$router.push({name: 'categorylist', query: {...itemJ}})" style="font-size:18px">
-                        {{itemJ.name}}
+                        <img class="secondimg" :src="itemJ.image_url" style="width:65px;"></img>
+                        <div class="secondname">{{itemJ.name}}</div>
                       </div>
                     </div>
                   </div>
@@ -253,8 +254,10 @@ export default {
 
 <style lang="less" scoped>
   @import "../../assets/css/theme.less";
-  .second{background: #fff;}
-  .secondList{width: 100%;}
+  .second{background: #fff;padding: 0 20px;}
+  .secondList{display: inline-block;}
+  .secondimg{width: 120px;height: auto;margin: 40px 30px 0 30px;}
+  .secondname{font-size: 16px;margin: 6px 20px 35px 20px;}
   .link:hover{color: #F65151;}
   .activemi{opacity: 0.5;top: 50px;}
   .menu{
@@ -306,8 +309,7 @@ export default {
     }
   }
   .link{
-    height: 60px;
-    line-height: 60px;
+    color: #000;
     @cursor-pointer();
   }
   .count{
