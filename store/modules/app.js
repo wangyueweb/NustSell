@@ -47,9 +47,7 @@ const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         const { data, status } = await mainRequest(userInfo);
-        
-        if(status === 200){
-          console.log(status, data);
+          console.log('登录', status, data);
           if(status === 200 && data && data.status){
             // 是否自动登录
             if(auto > 0){
@@ -57,18 +55,13 @@ const actions = {
             }else{
               Cookie.set('token', data.data);
             }
-            resolve({
-              message: data.msg,
-              type: 'success'
-            });
-          }else{
-            reject(data.msg);
+
+            this._vm.$message({
+              type: (status === 200 && data && data.status) ? 'success' : 'error',
+              message: data.msg
+            })
+            resolve();
           }
-        }else{
-          reject(`请求状态错误，错误码${status}`);
-        }
-  
-        
       } catch (error) {
         if (error.response && error.response.status === 401) {
           throw new Error('Bad credentials')

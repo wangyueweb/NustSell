@@ -384,14 +384,12 @@
 
             this.$store.dispatch('app/login', {userInfo, auto})
               .then(res => {
-                this.$message(res);
                 location.reload();
               })
               .catch(err => {
                 this.dologin();
                 this.loginError = true;
                 this.loginErrorMsg = err;
-                this.$message.error(err);
               })
           }
         })

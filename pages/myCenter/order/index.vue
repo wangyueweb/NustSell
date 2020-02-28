@@ -70,6 +70,13 @@ export default {
   },
   data() {
     return {
+      formData: {
+        method:'order.getorderlist',
+        token: this.$store.state.app.token,
+        page: 1,
+        limit: 10,
+        id:""
+      },
       tableData: [
         {
           time: '2016-05-03',
@@ -145,11 +152,16 @@ export default {
 
   computed: {},
 
-  created() {},
+  created() {
+    this.getOrderList();
+  },
 
   mounted() {},
 
   methods: {
+    getOrderList: function() {
+      this.$store.dispatch("order/getOrderList", this.formData);
+    },
     toId: function (e) {
       this.$router.push({path: '/myCenter/order/' + e.id});
     }

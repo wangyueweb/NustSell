@@ -49,25 +49,32 @@
                 <el-checkbox
                   v-for="(item, index) in addressList"
                   :key="index"
-                  @change="checkboxChange(item)"
                   border
                   :label="item.id"
                   :checked="item.is_def === 1"
                   style="height: 32px;display: flex;align-items: center;margin:5px 0;padding: 0 20px;"
+                  @change="checkboxChange(item)"
                 >
                   <div style="width: 690px;">
                     <span class="name" style="display:inline-block; width:30%">{{item.name}}</span>
                     <span class="mobile" style="display:inline-block; width:30%">{{item.mobile}}</span>
                     <span class="address" style="display:inline-block; width:25%">{{item.address}}</span>
                     <span class="tools">
-                      <span>修改</span> | <span>删除</span>
+                      <span @click.stop="openEditAddress(item)">修改</span> | <span @click.stop="deleteAddress(item)">删除</span>
                     </span>
                   </div>
                 </el-checkbox>
               </el-checkbox-group>
             </div>
 
-            <AddAddress @success="getPageData()" :type="2"  style="position:relative"/>
+            <AddAddress @success="editSuccess" :type="2"  style="position:relative"/>
+
+            <EditAddress
+              @success="editSuccess"
+              :option="editOption"
+              v-if="dialogVisible"
+              @close="editSuccess"
+            />
 
             <!-- <div class="primary-box">
                 <el-button type="primary" size="mini" class="add-btn" @click="addsiteTo">+新增收获地址</el-button>
@@ -260,6 +267,7 @@
 <script>
 import CardTitle from "@/components/public/cardTitle";
 import AddAddress from "@/components/public/addAddress1";
+import EditAddress from "@/components/public/editAddress";
 import { mapState } from "vuex";
 export default {
   name: "OrderCenter",
@@ -268,10 +276,12 @@ export default {
   },
   data () {
     return {
-      checkList: [],
-      receiving_time: new Date(),
-      receipt_type: 1,
-      memo: "",
+      checkList: [], // 选取收货人员
+      receiving_time: new Date(), // 收货时间
+      receipt_type: 1, // 收款方式
+      memo: "", // 备注
+      dialogVisible: "", // 控制显示编辑地址弹框
+      editOption: "", // 编辑地址对象数据
 
       
         expireTimeOption: {
@@ -318,7 +328,8 @@ export default {
 
   components: {
     CardTitle,
-    AddAddress
+    AddAddress,
+    EditAddress
   },
 
   computed: {
@@ -355,12 +366,13 @@ export default {
       // 获取获取收货地址
       this.$store.dispatch('user/getAddress', formData);
     },
+    // 收货人员选取
     checkboxChange: function(e){
       console.log(e);
       this.checkList = [];
       this.checkList.push(e.id);
     },
-
+    // 提交购物车
     shopCarSubmit: async function(){
       let data = {
         cart_ids: this.$route.query.ids,
@@ -384,6 +396,36 @@ export default {
         })
 
       
+    },
+    // 删除地址
+    deleteAddress: function (item) {
+      let formData = {
+        method:'user.removeship',
+        token: this.$store.state.app.token,
+        id:item.id
+      }
+      this.$confirm('删除地址, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        .then(async () => {
+          await this.$store.dispatch("user/deleteAddress", formData);
+          location.reload();
+        })
+        .catch(err => {
+          location.reload();
+        })
+    },
+    // 修改地址
+    openEditAddress: function (item) {
+      console.log(item);
+      this.editOption = JSON.parse(JSON.stringify(item));
+      this.dialogVisible = true;
+    },
+
+    editSuccess: function () {
+      location.reload()
     },
 
 

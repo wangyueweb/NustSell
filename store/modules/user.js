@@ -44,7 +44,7 @@ const actions = {
     }
   },
 
-  // 添加地址
+  // 添加收货地址
   async addAddress ({ commit }, formData) {
     return new Promise((resolve, reject) => {
       mainRequest(formData)
@@ -62,11 +62,29 @@ const actions = {
     })
   },
 
-  // 删除地址
+  // 删除收货地址
   async deleteAddress ({ commit }, formData) {
     return new Promise((resolve, reject) => {
       mainRequest(formData)
         .then(({status, data}) => {
+          this._vm.$message({
+            message: data.msg,
+            type: data.status ? 'success' : 'warning'
+          });
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
+  },
+
+  // 修改收货地址
+  async editAddress ({ commit }, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(({status, data}) => {
+          console.log('修改收货地址', data);
           this._vm.$message({
             message: data.msg,
             type: data.status ? 'success' : 'warning'
