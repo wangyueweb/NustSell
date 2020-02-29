@@ -22,7 +22,7 @@
               <el-popover
                 placement="bottom-start"
                 trigger="hover"
-                :visible-arrow="true"
+                :visible-arrow="false"
                 transition="el-zoom-in-top"
                 >
                   <div class="second" type="flex" justify="center" align="middle">
@@ -254,9 +254,9 @@ export default {
 
 <style lang="less" scoped>
   @import "../../assets/css/theme.less";
-  .second{background: #fff;padding: 0 35px;min-height: 250px;max-width: 1200px;}
-  .secondList{display: inline-block;}
-  .secondimg{width: 95px;height: auto;margin: 55px 35px 0 35px;}
+  .second{background: #fff;padding: 0 0 0 55px;min-height: 250px;width: 1200px;text-align: left;border: 1px solid #DCDBDB;box-shadow: 0 0 0 #fff;}
+  .secondList{display: inline-block;text-align: center;}
+  .secondimg{width: 100px;height: auto;margin: 50px 40px 0 40px;}
   .secondname{font-size: 18px;margin: 10px 0 35px 0;font-weight: 600;}
   .link:hover{color: #F65151;}
   .activemi{opacity: 0.5;top: 50px;}
@@ -279,11 +279,11 @@ export default {
         font-size: 22px;
         color: @theme-black;
         // line-height: 140px;
-        height: 80px;
+        height: 40px;
         display: flex;
         align-items: center;
         span{
-          height: 26px;
+          height: 40px;
         }
         &:hover{
           span{
@@ -371,5 +371,5 @@ export default {
     
   .rotate{display: inline-block;transition: transform 1s}
   .rotate:hover{transform:rotate(360deg);}
-
+  
 </style>

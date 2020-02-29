@@ -113,6 +113,7 @@ a {
 }
 .el-popover {
   padding: 0;
+  border: none;
 }
 .menu-popover {
   width: 100%;
