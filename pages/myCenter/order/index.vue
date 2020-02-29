@@ -34,16 +34,20 @@
 
     <div class="table">
       <el-table
-        :data="tableData"
+        :data="orderList"
         style="width: 100%"
         @row-click="toId">
           <el-table-column
-            prop="id"
+            prop="order_id"
             label="订单号">
           </el-table-column>
           <el-table-column
-            prop="time"
             label="下单时间">
+            <template slot-scope="scope">
+              <div>
+                {{dayjs(scope.row.ctime).format('YYYY-MM-DD HH:mm:ss')}}
+              </div>
+            </template>
           </el-table-column>
           <el-table-column
             prop="count"
@@ -63,6 +67,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex"
 export default {
   name: "Order",
   layout: function(context){
@@ -75,7 +80,7 @@ export default {
         token: this.$store.state.app.token,
         page: 1,
         limit: 10,
-        id:""
+        status:0
       },
       tableData: [
         {
@@ -150,7 +155,11 @@ export default {
 
   components: {},
 
-  computed: {},
+  computed: {
+    ...mapState({
+      orderList: state => state.order.orderList.list
+    })
+  },
 
   created() {
     this.getOrderList();

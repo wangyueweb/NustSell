@@ -30,8 +30,7 @@
       <div class="table">
         <el-table
           :data="tableData"
-          style="width: 100%"
-          @row-click="toId">
+          style="width: 100%">
             <el-table-column
               prop="name"
               label="商品名称"
