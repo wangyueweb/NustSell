@@ -3,12 +3,14 @@
     <!-- 轮播 -->
 
     <div :class="{nick : isFixed}" class="carousel">
-      <Swiper :imgs="adverlist.map(item => item.img)" :options="bannerOption" style="height:500px" :customArrow="true">
+      <Swiper :imgs="adverlist.map(item => item.img)" :options="bannerOption" ref="swiperTop" style="height:500px" :customArrow="true">
         <div slot="arrow" class="arrow-wrapper">
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
         </div>
         <div class="swiper-pagination" slot="pagination"></div>
+      </Swiper>
+      <Swiper class="gallery-thumbs" :imgs="adverlist.map(item => item.img)" :options="swiperOptionThumbs" ref="swiperThumbs" :customArrow="true">
       </Swiper>
     </div>
     
@@ -52,6 +54,13 @@ export default {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev',
         }
+      },
+      swiperOptionThumbs: {
+        spaceBetween: 10,
+        centeredSlides: true,
+        slidesPerView: "auto",
+        touchRatio: 0.2,
+        slideToClickedSlide: true
       },
       goodsScrollOption: {
         slidesPerView: 5,
@@ -128,6 +137,14 @@ export default {
         })
       
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      const swiperTop = this.$refs.swiperTop.mySwiper
+      const swiperThumbs = this.$refs.swiperThumbs.mySwiper
+      swiperTop.controller.control = swiperThumbs
+      swiperThumbs.controller.control = swiperTop
+    })
   }
 }
 </script>
@@ -136,12 +153,17 @@ export default {
 @import '../assets/css/theme.less';
 .swiper-button-prev{width: 32px;height: 55px;background-image: url(../assets/img/arrow-left3.png) !important;background-size: 40px 40px !important;}
 .swiper-button-next{width: 32px;height: 55px;background-image: url(../assets/img/arrow-right3.png) !important;background-size: 40px 40px !important;}
+.gallery-thumbs{width: 50%;height: 80px !important;box-sizing: border-box;padding: 10px 0;bottom: 20px;left: 25%;position: absolute;}
+.gallery-thumbs /deep/ .swiper-slide {width: 25%;height: auto;opacity: 0.4;}
+.gallery-thumbs /deep/ .swiper-slide-active {opacity: 1;}
+
 
 .banner{
   width: 100%;
 }
 .carousel{
   @1200-min();
+  position: relative;
   height: 500px;
 }
 .main{
@@ -181,4 +203,6 @@ export default {
     background-size: 100% 100%;
   }
 }
+
+
 </style>
