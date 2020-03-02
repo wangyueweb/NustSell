@@ -8,7 +8,8 @@ const state = () => ({
     list: []
   },
   order: {},
-  orderList: []
+  orderList: [],
+  orderDetail: {}
 })
 
 const mutations = {
@@ -29,6 +30,9 @@ const mutations = {
   },
   SET_ORDERLIST: (state, payload) => {
     state.orderList = payload;
+  },
+  SET_ORDERDETAIL: (state, payload) => {
+    state.orderDetail = payload;
   }
 }
 
@@ -219,5 +223,78 @@ const actions = {
         })
     })
   },
+
+  // 获取支付单详情
+  getOrderDetail ({commit}, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          console.log('获取支付单详情',res);
+          let {data, status} = res;
+          if(status === 200 && data){
+            if(data.status){
+              commit('SET_ORDERDETAIL', data.data);
+              resolve();
+            }else{
+              this._vm.$message({
+                type: 'error',
+                message: data.msg
+              })
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
+  },
+
+  // 撤销订单
+  orderCancel ({}, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          console.log('撤销订单',res);
+          let {data, status} = res;
+          if(status === 200 && data){
+            if(data.status){
+              resolve();
+            }else{
+              this._vm.$message({
+                type: 'error',
+                message: data.msg
+              })
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
+  },
+
+  // 确认收货
+  orderConfirm ({}, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          console.log('确认收货',res);
+          let {data, status} = res;
+          if(status === 200 && data){
+            if(data.status){
+              resolve();
+            }else{
+              this._vm.$message({
+                type: 'error',
+                message: data.msg
+              })
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
+  }
 }
 export default { namespaced: true, state, mutations, actions }

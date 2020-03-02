@@ -6,20 +6,20 @@
       <div class="content">
         <div class="item">
           <span class="alias">订单号</span>
-          <span class="value">{{$route.query.order_id}}</span>
+          <span class="value">{{orderDetail.order_id || ''}}</span>
         </div>
         <div class="item">
           <span class="alias">订单状态</span>
-          <span class="value">{{$route.query.ship_status}}</span>
+          <span class="value">{{orderDetail.ship_status | statusFilter}}</span>
         </div>
         <div class="item">
           <span class="alias">付款状态</span>
-          <span class="value value2">{{$route.query.pay_status}}</span>
+          <span class="value value2">{{orderDetail.pay_status | payFilter}}</span>
           <span><el-button type="primary" size="mini" style="padding: 7px 26px;font-size: 14px;">立即支付</el-button></span>
         </div>
         <div class="item">
           <span class="alias">配送状态</span>
-          <span class="value">未发货</span>
+          <span class="value">{{orderDetail.status | deliverFilter}}</span>
         </div>
       </div>
     </div>
@@ -38,7 +38,7 @@
               width="260px">
             </el-table-column>
             <el-table-column
-              prop="property"
+              prop="addon"
               label="属性"
               align="center">
             </el-table-column>
@@ -48,20 +48,20 @@
               align="center">
             </el-table-column>
             <el-table-column
-              prop="num"
+              prop="nums"
               label="购买数量"
               align="center">
             </el-table-column>
             <el-table-column
-              prop="count"
+              prop="amount"
               label="小计"
               align="center">
             </el-table-column>
         </el-table>
       </div>
       <div class="summary">
-        <span>商品总价 <b>₱ 1800.00</b></span>
-        <span>支付方式 <b>支付宝扫码</b></span>
+        <span>商品总价 <b>₱ {{orderDetail.order_amount || "0.00"}}</b></span>
+        <span>支付方式 <b>{{orderDetail.payment_name || ""}}</b></span>
       </div>
     </div>
 
@@ -72,7 +72,7 @@
           <el-col :span="12">
             <div class="item">
               <span class="alias">收货人姓名</span>
-              <span class="value"><b>{{$route.query.ship_name}}</b></span>
+              <span class="value"><b>{{orderDetail.ship_name || ''}}</b></span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -84,7 +84,7 @@
           <el-col :span="12">
             <div class="item">
               <span class="alias">详细地址</span>
-              <span class="value"><b>{{$route.query.ship_address}}</b></span>
+              <span class="value"><b>{{orderDetail.ship_address ||''}}</b></span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -96,13 +96,13 @@
           <el-col :span="12">
             <div class="item">
               <span class="alias">手机</span>
-              <span class="value"><b>{{$route.query.ship_mobile}}</b></span>
+              <span class="value"><b>{{orderDetail.ship_mobile || ''}}</b></span>
             </div>
           </el-col>
           <el-col :span="12">
             <div class="item">
               <span class="alias">支付方式</span>
-              <span class="value"><b>支付宝扫码</b></span>
+              <span class="value"><b>{{orderDetail.payment_name || ''}}</b></span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -114,7 +114,7 @@
           <el-col :span="12">
             <div class="item">
               <span class="alias">标志地址</span>
-              <span class="value"><b>{{$route.query.ship_area_id}}</b></span>
+              <span class="value"><b>{{orderDetail.ship_area_name || ''}}</b></span>
             </div>
           </el-col>
         </el-row>
@@ -125,6 +125,7 @@
 
 <script>
 import CardTitle from '@/components/public/cardTitle';
+import { mapState } from "vuex";
 export default {
   name: "OrderDetail",
   layout: function(context){
@@ -133,8 +134,41 @@ export default {
   
   data () {
     return {
-      tableData: []
     };
+  },
+
+  filters: {
+    statusFilter: function (status) {
+      if(status < 3){
+        return '未发货'
+      }
+      if(status === 3) {
+        return '已发货 等待收货'
+      }
+      if(status > 3) {
+        return '已收货'
+      }
+    },
+    payFilter: function (status) {
+      if(status === 1) {
+        return '未付款'
+      }
+      if(status > 1) {
+        return '已付款'
+      }
+    },
+    
+    deliverFilter: function (status) {
+      if(status < 2){
+        return '待发货'
+      }
+      if(status === 3) {
+        return '已发货 等待收货'
+      }
+      if(status > 3) {
+        return '已完成'
+      }
+    }
   },
 
   fetch ({ app: { context: ctx, router: { currentRoute: cur } }, redirect}) {
@@ -144,16 +178,32 @@ export default {
     CardTitle
   },
 
-  computed: {},
+  computed: {
+    ...mapState({
+      orderDetail: state => state.order.orderDetail,
+    }),
+    tableData: {
+      get: function(){
+        return this.$store.state.order.orderDetail.items;
+      },
+      set: function(val){}
+    }
+  },
 
   created(){
-    this.tableData = this.$route.query.items
+    this.tableData = this.$route.query.items;
+
+    this.getPageData();
   },
 
   mounted(){
   },
 
-  methods: {}
+  methods: {
+    getPageData: function () {
+      this.$store.dispatch("order/getOrderDetail", {method: 'order.details', order_id: this.$route.query.id, token: this.$store.state.app.token});
+    }
+  }
 }
 </script>
 

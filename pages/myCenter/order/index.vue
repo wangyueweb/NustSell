@@ -4,25 +4,18 @@
     
     <div class="tool">
       <span class="title">显示</span>
-      <el-select v-model="value" placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
 
-      <el-select v-model="value" placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
+      <el-date-picker
+        v-model="value"
+        type="daterange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        value-format="timestamp"
+        @change="dataPickerChange">
+      </el-date-picker>
 
-      <el-select v-model="value" placeholder="请选择">
+      <el-select v-model="formData.status" placeholder="请选择" @change="selectChange">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -66,15 +59,28 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="操作">
+            label="操作"
+            >
             <template slot-scope="scope">
-              <div @click="handle(scope.row.status)">
+              <div @click.stop="handle(scope.row)">
                 {{scope.row.status | statusHandle}}
               </div>
             </template>
           </el-table-column>
       </el-table>
+
+      
     </div>
+
+    <el-pagination
+      @current-change="paginationChange"
+      :page-count="page"
+      :current-page="formData.page"
+      background
+      layout="prev, pager, next"
+      style="margin-top: 10px;"
+    >
+    </el-pagination>
   </div>
 </template>
 
@@ -96,23 +102,20 @@ export default {
         end_time: "",
         status:0
       },
+      value: [],
       options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: ''
+        value: 0,
+        label: '全部'
+      }, {
+        value: 1,
+        label: '待付款'
+      }, {
+        value: 2,
+        label: '待发货'
+      }, {
+        value: 3,
+        label: '待收货'
+      }],
     };
   },
   filters: {
@@ -150,32 +153,91 @@ export default {
 
   computed: {
     ...mapState({
-      orderList: state => state.order.orderList.list
+      orderList: state => state.order.orderList.list,
+      page: state => state.order.orderList.page
     })
   },
 
   created() {
-    this.getOrderList();
+    this.getPageData();
   },
 
   mounted() {},
 
   methods: {
-    getOrderList: function() {
+    getPageData: function() {
       this.$store.dispatch("order/getOrderList", this.formData);
     },
     // 表格操作
-    handle: function (status) {
-      if(status === 1){
+    handle: function (item) {
+      if(item.status === 1){
         console.log('撤销申请');
+        this.orderCancel(item.order_id);
       }
 
-      if(status === 3){
+      if(item.status === 3){
         console.log('确认收货');
+        this.orderConfirm(item.order_id);
       }
     },
     toId: function (e) {
-      this.$router.push({path: '/myCenter/order/' + e.order_id, query: e});
+      this.$router.push({path: '/myCenter/order/' + e.order_id, query: {id: e.order_id}});
+    },
+    dataPickerChange: function (val) {
+      console.log(val);
+      if(val){
+        this.$set(this.formData, "start_time", val[0]);
+        this.$set(this.formData, "end_time", val[1]);
+      }else{
+        this.$set(this.formData, "start_time", "");
+        this.$set(this.formData, "end_time", "");
+      }
+      this.$store.dispatch("order/getOrderList", this.formData);
+    },
+    selectChange: function(){
+      console.log(this.formData);
+      this.$store.dispatch("order/getOrderList", this.formData);
+    },
+    paginationChange: function(e) {
+      this.$set(this.formData, 'page', e);
+      this.$store.dispatch("order/getOrderList", this.formData);
+    },
+    // 撤销订单
+    orderCancel: function (id) {
+      let data = {
+        method: "order.cancel",
+        token: this.$store.state.app.token,
+        order_ids: id
+      }
+      this.$confirm('撤销订单, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        .then(async () => {
+          await this.$store.dispatch("order/orderCancel", data);
+          this.$store.dispatch("order/getOrderList", this.formData);
+        })
+        .catch(err => {})
+    },
+
+    // 确认收货
+    orderConfirm: function (id) {
+      let data = {
+        method: "order.confirm",
+        token: this.$store.state.app.token,
+        order_id: id
+      }
+      this.$confirm('确认收货, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        .then(async () => {
+          await this.$store.dispatch("order/orderConfirm", data);
+          this.$store.dispatch("order/getOrderList", this.formData);
+        })
+        .catch(err => {})
     }
   }
 };
@@ -199,9 +261,11 @@ export default {
   }
 }
 
-.tool /deep/ .el-input__inner{height: 36px;line-height: 36px;width: 150px;}
+.tool /deep/ .el-input__inner{height: 36px;line-height: 36px;}
 .tool /deep/ .el-input__icon{height: 36px;line-height: 36px;}
+.tool /deep/ .el-range-separator{width: auto; line-height: 27px;}
 .table /deep/ .el-table th{font-size: 14px;font-weight: 100;text-align: center;background: #F2F2F2;color: #000;}
 .table /deep/ .el-table td .cell{font-size: 14px;text-align: center;}
+/deep/ .el-pagination{padding: 2px 0;}
 
 </style>
