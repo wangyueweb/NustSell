@@ -50,16 +50,28 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="count"
             label="总金额">
+            <template slot-scope="scope">
+              <div>
+                ₱ {{scope.row.goods_amount}}
+              </div>
+            </template>
           </el-table-column>
           <el-table-column
-            prop="state"
             label="状态">
+            <template slot-scope="scope">
+              <div>
+                {{scope.row.status | statusFilter}}
+              </div>
+            </template>
           </el-table-column>
           <el-table-column
-            prop="handle"
             label="操作">
+            <template slot-scope="scope">
+              <div @click="handle(scope.row.status)">
+                {{scope.row.status | statusHandle}}
+              </div>
+            </template>
           </el-table-column>
       </el-table>
     </div>
@@ -80,59 +92,10 @@ export default {
         token: this.$store.state.app.token,
         page: 1,
         limit: 10,
+        start_time: "",
+        end_time: "",
         status:0
       },
-      tableData: [
-        {
-          time: '2016-05-03',
-          count: '₱ 889.00',
-          id: '2019082808353',
-          state: '已确认 已付款 收货确认',
-          handle: '已确认'
-        },
-        {
-          time: '2016-05-03',
-          count: '₱ 889.00',
-          id: '2019082808353',
-          state: '已确认 已付款 收货确认',
-          handle: '已确认'
-        },
-        {
-          time: '2016-05-03',
-          count: '₱ 889.00',
-          id: '2019082808353',
-          state: '已确认 已付款 收货确认',
-          handle: '已确认'
-        },
-        {
-          time: '2016-05-03',
-          count: '₱ 889.00',
-          id: '2019082808353',
-          state: '已确认 已付款 收货确认',
-          handle: '已确认'
-        },
-        {
-          time: '2016-05-03',
-          count: '₱ 889.00',
-          id: '2019082808353',
-          state: '已确认 已付款 收货确认',
-          handle: '已确认'
-        },
-        {
-          time: '2016-05-03',
-          count: '₱ 889.00',
-          id: '2019082808353',
-          state: '已确认 已付款 收货确认',
-          handle: '已确认'
-        },
-        {
-          time: '2016-05-03',
-          count: '₱ 889.00',
-          id: '2019082808353',
-          state: '已确认 已付款 收货确认',
-          handle: '已确认'
-        }
-      ],
       options: [{
           value: '选项1',
           label: '黄金糕'
@@ -151,6 +114,36 @@ export default {
         }],
         value: ''
     };
+  },
+  filters: {
+    statusFilter: function (status) {
+      switch (status) {
+        case 1:
+          return '待付款';
+        case 2:
+          return '已确认 待发货';
+        case 3:
+          return '已确认 已发货';
+        case 4:
+          return '已完成';
+        default:
+          return ''
+      }
+    },
+    statusHandle: function (status) {
+      switch (status) {
+        case 1:
+          return '撤销申请';
+        case 2:
+          return '已确认';
+        case 3:
+          return '确认收货';
+        case 4:
+          return '已完成';
+        default:
+          return ''
+      }
+    }
   },
 
   components: {},
@@ -171,8 +164,18 @@ export default {
     getOrderList: function() {
       this.$store.dispatch("order/getOrderList", this.formData);
     },
+    // 表格操作
+    handle: function (status) {
+      if(status === 1){
+        console.log('撤销申请');
+      }
+
+      if(status === 3){
+        console.log('确认收货');
+      }
+    },
     toId: function (e) {
-      this.$router.push({path: '/myCenter/order/' + e.id});
+      this.$router.push({path: '/myCenter/order/' + e.order_id, query: e});
     }
   }
 };

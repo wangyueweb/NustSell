@@ -6,15 +6,15 @@
       <div class="content">
         <div class="item">
           <span class="alias">订单号</span>
-          <span class="value">2019092145593</span>
+          <span class="value">{{$route.query.order_id}}</span>
         </div>
         <div class="item">
           <span class="alias">订单状态</span>
-          <span class="value">已确认</span>
+          <span class="value">{{$route.query.ship_status}}</span>
         </div>
         <div class="item">
           <span class="alias">付款状态</span>
-          <span class="value value2">未付款</span>
+          <span class="value value2">{{$route.query.pay_status}}</span>
           <span><el-button type="primary" size="mini" style="padding: 7px 26px;font-size: 14px;">立即支付</el-button></span>
         </div>
         <div class="item">
@@ -72,7 +72,7 @@
           <el-col :span="12">
             <div class="item">
               <span class="alias">收货人姓名</span>
-              <span class="value"><b>Dwan</b></span>
+              <span class="value"><b>{{$route.query.ship_name}}</b></span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -84,7 +84,7 @@
           <el-col :span="12">
             <div class="item">
               <span class="alias">详细地址</span>
-              <span class="value"><b>B4518 SM JAZZ Residences Makati</b></span>
+              <span class="value"><b>{{$route.query.ship_address}}</b></span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -96,7 +96,7 @@
           <el-col :span="12">
             <div class="item">
               <span class="alias">手机</span>
-              <span class="value"><b>09566781122</b></span>
+              <span class="value"><b>{{$route.query.ship_mobile}}</b></span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -114,7 +114,7 @@
           <el-col :span="12">
             <div class="item">
               <span class="alias">标志地址</span>
-              <span class="value"><b>RCBC 附近</b></span>
+              <span class="value"><b>{{$route.query.ship_area_id}}</b></span>
             </div>
           </el-col>
         </el-row>
@@ -133,43 +133,7 @@ export default {
   
   data () {
     return {
-      tableData: [
-        {
-          name: '【椰树-椰汁铁罐装245ml】正宗椰树牌椰子汁 植物蛋白椰奶',
-          property: '889.00',
-          price: '₱ 109.00',
-          num: '1',
-          count: '₱ 109.00'
-        },
-        {
-          name: '【椰树-椰汁铁罐装245ml】正宗椰树牌椰子汁 植物蛋白椰奶',
-          property: '889.00',
-          price: '₱ 109.00',
-          num: '1',
-          count: '₱ 109.00'
-        },
-        {
-          name: '【椰树-椰汁铁罐装245ml】正宗椰树牌椰子汁 植物蛋白椰奶',
-          property: '889.00',
-          price: '₱ 109.00',
-          num: '1',
-          count: '₱ 109.00'
-        },
-        {
-          name: '【椰树-椰汁铁罐装245ml】正宗椰树牌椰子汁 植物蛋白椰奶',
-          property: '889.00',
-          price: '₱ 109.00',
-          num: '1',
-          count: '₱ 109.00'
-        },
-        {
-          name: '【椰树-椰汁铁罐装245ml】正宗椰树牌椰子汁 植物蛋白椰奶',
-          property: '889.00',
-          price: '₱ 109.00',
-          num: '1',
-          count: '₱ 109.00'
-        },
-      ],
+      tableData: []
     };
   },
 
@@ -182,7 +146,9 @@ export default {
 
   computed: {},
 
-  created(){},
+  created(){
+    this.tableData = this.$route.query.items
+  },
 
   mounted(){
   },
