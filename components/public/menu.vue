@@ -12,7 +12,7 @@
         <el-col :span="24" v-if="!isFixed">
           <div class="logo">
             <nuxt-link :to="{path: '/'}">
-              <el-image :src="require('@/assets/img/logo.png')" style="width:180px;margin: 20px 0 -5px 0;"></el-image>
+              <el-image :src="require('@/assets/img/logo.png')" style="width:180px;margin: 15px 0 0 0;"></el-image>
             </nuxt-link>
           </div>
         </el-col>
@@ -20,10 +20,12 @@
           <el-row>
             <el-col :span="4" v-for="(item, index) in allCategories" :key="index" class="menu-type">
               <el-popover
-                placement="bottom-start"
+                placement="bottom"
                 trigger="hover"
                 :visible-arrow="false"
                 transition="el-zoom-in-top"
+                offset="-1"
+                popper-class="navpop"
                 >
                   <div class="second" type="flex" justify="center" align="middle">
                     <div class="secondList" v-for="(itemJ, indexJ) in item.child" :key="indexJ" type="flex" justify="center" align="middle">
@@ -39,7 +41,7 @@
           </el-row>
         </el-col>
         <el-col :span="isFixed ? 5 : 6" :push="isFixed ? 0 : 2">
-          <el-row type="flex" justify="space-between" align="center">
+          <el-row class="san" type="flex" justify="space-between" align="center">
             <el-col :span="18">
               <el-input
                 placeholder="想吃啥？搜一搜"
@@ -254,6 +256,7 @@ export default {
 
 <style lang="less" scoped>
   @import "../../assets/css/theme.less";
+  .san{position: relative;top: -10px;left: 0;}
   .second{background: #fff;padding: 0 0 0 55px;min-height: 250px;width: 1200px;text-align: left;border: 1px solid #DCDBDB;box-shadow: 0 0 0 #fff;}
   .secondList{display: inline-block;text-align: center;}
   .secondimg{width: 100px;height: auto;margin: 50px 40px 0 40px;}
@@ -266,7 +269,7 @@ export default {
     .content{
       @1200();
       .logo{
-        height: 90px;
+        height: 130px;
         @centered();
         img{
           width: 58px;
@@ -371,5 +374,7 @@ export default {
     
   .rotate{display: inline-block;transition: transform 1s}
   .rotate:hover{transform:rotate(360deg);}
+  
+  .swiper-wrapper{width: 100px;}
   
 </style>

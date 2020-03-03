@@ -8,7 +8,6 @@
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
         </div>
-        <div class="swiper-pagination" slot="pagination"></div>
       </Swiper>
       <Swiper class="gallery-thumbs" :imgs="adverlist.map(item => item.img)" :options="swiperOptionThumbs" ref="swiperThumbs" :customArrow="true">
       </Swiper>
@@ -46,9 +45,6 @@ export default {
       bannerOption: {
         slidesPerView: 1,
         centeredSlidesBounds: true,
-        pagination: {
-          el: '.swiper-pagination',
-        },
         // spaceBetween: 30,
         navigation: {
           nextEl: '.swiper-button-next',
@@ -153,10 +149,10 @@ export default {
 @import '../assets/css/theme.less';
 .swiper-button-prev{width: 32px;height: 55px;background-image: url(../assets/img/arrow-left3.png) !important;background-size: 40px 40px !important;}
 .swiper-button-next{width: 32px;height: 55px;background-image: url(../assets/img/arrow-right3.png) !important;background-size: 40px 40px !important;}
-.gallery-thumbs{width: 50%;height: 80px !important;box-sizing: border-box;padding: 10px 0;bottom: 20px;left: 25%;position: absolute;}
-.gallery-thumbs /deep/ .swiper-slide {width: 25%;height: auto;opacity: 0.4;}
+.gallery-thumbs{width: 50%;height: 80px !important;box-sizing: border-box;padding: 10px 0;bottom: 20px;left: 43%;position: absolute;}
+.gallery-thumbs /deep/ .swiper-slide {width: 130px;height: auto;opacity: 0.4;}
 .gallery-thumbs /deep/ .swiper-slide-active {opacity: 1;}
-
+.gallery-thumbs /deep/ .swiper-wrapper{transform: translate3d(0px, 0px, 0px) !important;}
 
 .banner{
   width: 100%;
