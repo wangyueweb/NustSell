@@ -38,23 +38,23 @@
                   <div class="item">
                     <div class="alias">原 密 码</div> 
                     <div class="address">
-                      <el-input v-model="formData.oldPassword" style="width: 200px;"></el-input>
+                      <el-input v-model="formData.oldpwd" style="width: 200px;"></el-input>
                     </div>
                   </div>
                   <div class="item">
                     <div class="alias">新 密 码</div> 
                     <div class="address">
-                      <el-input v-model="formData.newPassword" style="width: 200px;"></el-input>
+                      <el-input v-model="formData.repwd" style="width: 200px;"></el-input>
                     </div>
                   </div>
                   <div class="item">
                     <div class="alias">确认密码</div> 
                     <div class="address">
-                      <el-input v-model="formData.newPassword" style="width: 200px;"></el-input>
+                      <el-input v-model="formData.newpwd" style="width: 200px;"></el-input>
                     </div>
                   </div>
                   <span slot="footer" class="dialog-footer item">
-                    <el-button type="primary" style="width:130px;font-size: 15px;padding: 9px 0;">修改密码</el-button>
+                    <el-button type="primary" style="width:130px;font-size: 15px;padding: 9px 0;" @click="resetPwd">修改密码</el-button>
                     <el-button @click="dialogVisible = false" style="width:130px;font-size: 15px;padding: 9px 0;">取消</el-button>
                   </span>
                 </div>
@@ -135,8 +135,9 @@ export default {
       amendShow: false,
       dialogVisible: false,
       formData: {
-        oldPassword: "",
-        newPassword: "",
+        oldpwd: "", // 旧密码
+        repwd: "", // 新密码
+        newpwd: "" // 重复密码
       }
     }
   },
@@ -150,11 +151,9 @@ export default {
   mounted() {},
 
   methods: {
-    toId: function (e) {
-      this.$router.push({path: '/myCenter/order/' + e.id});
-    },
-    handleSelectionChange: function (e) {
-      console.log(e)
+    // 修改密码
+    resetPwd: function () {
+      
     },
   }
 };
