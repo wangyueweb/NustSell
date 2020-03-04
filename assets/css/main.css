@@ -131,4 +131,4 @@ a {
 
 .swiper-button-prev:hover{opacity: 0.6 !important;}
 .swiper-button-next:hover{opacity: 0.6 !important;}
-.navpop{position: absolute;top: 0;left: 50%;transform: translateX(-50%);}
+.navpop{position: absolute;top: 0;left: 50%;transform: translateX(-50%);box-shadow: none;}

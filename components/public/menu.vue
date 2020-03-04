@@ -3,14 +3,14 @@
     <div :class="{menu_fixed : isFixed}" v-if="allCategories.length > 0">
       <el-row class="content" style="display: flex;align-items: center;flex-wrap: wrap;">
         <el-col :span="3" v-if="isFixed">
-          <div class="logo">
+          <div class="logo" style="height:90px">
             <nuxt-link :to="{path: '/'}">
               <el-image :src="require('@/assets/img/logo3.png')" style="width:65px;"></el-image>
             </nuxt-link>
           </div>
         </el-col>
         <el-col :span="24" v-if="!isFixed">
-          <div class="logo">
+          <div class="logo" style="height:130px">
             <nuxt-link :to="{path: '/'}">
               <el-image :src="require('@/assets/img/logo.png')" style="width:180px;margin: 15px 0 0 0;"></el-image>
             </nuxt-link>
@@ -257,7 +257,7 @@ export default {
 <style lang="less" scoped>
   @import "../../assets/css/theme.less";
   .san{position: relative;top: -10px;left: 0;}
-  .second{background: #fff;padding: 0 0 0 55px;min-height: 250px;width: 1200px;text-align: left;border: 1px solid #DCDBDB;box-shadow: 0 0 0 #fff;}
+  .second{background: #fff;padding: 0 0 0 55px;min-height: 250px;width: 1200px;text-align: left;border: 1px solid #000000;box-shadow:none;}
   .secondList{display: inline-block;text-align: center;}
   .secondimg{width: 100px;height: auto;margin: 50px 40px 0 40px;}
   .secondname{font-size: 18px;margin: 10px 0 35px 0;font-weight: 600;}
@@ -269,7 +269,6 @@ export default {
     .content{
       @1200();
       .logo{
-        height: 130px;
         @centered();
         img{
           width: 58px;
@@ -286,7 +285,7 @@ export default {
         display: flex;
         align-items: center;
         span{
-          height: 40px;
+          height: 41px;
         }
         &:hover{
           span{
@@ -295,6 +294,7 @@ export default {
         }
       }
       .shop-car{
+          cursor:pointer;
         .iconfont{
           font-size: 40px;
         }

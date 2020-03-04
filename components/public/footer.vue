@@ -113,6 +113,7 @@ import { mapState } from "vuex"
           font-size: 20px;
           font-weight: 700;
           .icon{
+            font-weight: 100;
             width: 58px;
             height: 58px;
             line-height: 58px;

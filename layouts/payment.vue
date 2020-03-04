@@ -6,7 +6,7 @@
         <el-row class="content" type="flex" align="middle">
           <el-col :span="12" class="left">
             <nuxt-link to="/">
-              <img src="../assets/img/logo2.png" alt="" class="nuxt-logo" />
+              <img src="../assets/img/logo.png" alt="" class="nuxt-logo" />
               <img src="../assets/img/logo_slogan.png" alt="" class="nuxt-img" />
             </nuxt-link>
           </el-col>
