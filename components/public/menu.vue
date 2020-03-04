@@ -289,7 +289,7 @@ export default {
         }
         &:hover{
           span{
-            border-bottom: 3px solid @theme-black;
+            border-bottom: 5px solid @theme-black;
           }
         }
       }
