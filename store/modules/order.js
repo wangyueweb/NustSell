@@ -249,12 +249,12 @@ const actions = {
     })
   },
 
-  // 撤销订单
+  // 取消订单
   orderCancel ({}, formData) {
     return new Promise((resolve, reject) => {
       mainRequest(formData)
         .then(res => {
-          console.log('撤销订单',res);
+          console.log('取消订单',res);
           let {data, status} = res;
           if(status === 200 && data){
             if(data.status){

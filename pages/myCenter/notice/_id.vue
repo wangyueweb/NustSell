@@ -3,10 +3,11 @@
   <div class="detail">
     <div class="title">
       {{detail.title || ''}}
-      <div class="time">{{detail.ctime || ''}}</div>
+      <div class="time">{{dayjs(detail.ctime).format('YYYY-MM-DD HH:mm:ss') || ''}}</div>
     </div>
     <div class="content">
       尊敬的客户：<br/>
+      <br/>
       &#8195;&#8195;{{detail.content || ''}}<br/>
       <br/>
       感谢您长期对王子的关注与支持
