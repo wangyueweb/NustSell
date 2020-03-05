@@ -161,10 +161,10 @@
             <div class="title">请选择您的付款方式 <span class="discount">（满500P免运费）</span></div>
             
             <el-radio-group class="radiogroup" v-model="receipt_type" @change="histTypeUpdate">
-              <el-radio :label="0" border>货到付款</el-radio>
-              <el-radio :label="1" border>微信</el-radio>
-              <el-radio :label="2" border>支付宝</el-radio>
-              <el-radio :label="3" border>余额付款</el-radio>
+              <el-radio :label="1" border>货到付款</el-radio>
+              <el-radio :label="2" border>微信</el-radio>
+              <el-radio :label="3" border>支付宝</el-radio>
+              <el-radio :label="4" border>余额付款</el-radio>
             </el-radio-group>
             <div class="line"></div>
             
@@ -354,11 +354,16 @@ export default {
         area_id:0,
         coupon_code:'',
         point:0,
-        receipt_type:0,
+        receipt_type:1,
         token: this.$store.state.app.token
       }
       // 获取前往结账购物车列表
-      this.$store.dispatch('order/payShopCar', data);
+      this.$store.dispatch('order/payShopCar', data)
+        .then(res => {
+          if(this.payShopCarList.length === 0) {
+            this.$router.push({path: '/'});
+          }
+        });
 
       const formData = {
         method:'user.getusership',token: this.$store.state.app.token

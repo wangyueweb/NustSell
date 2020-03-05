@@ -24,10 +24,8 @@
 
           <el-table-column
             label="商品信息"
-            align="center">
-            <template slot-scope="scope">
-              <div v-html="collectList[scope.$index].goods.intro"></div>
-            </template>
+            align="center"
+            prop="goods.name">
           </el-table-column>
 
           <el-table-column

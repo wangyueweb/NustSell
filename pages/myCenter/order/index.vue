@@ -136,7 +136,7 @@ export default {
     statusHandle: function (status) {
       switch (status) {
         case 1:
-          return '撤销申请';
+          return '取消订单';
         case 2:
           return '已确认';
         case 3:
@@ -171,7 +171,7 @@ export default {
     // 表格操作
     handle: function (item) {
       if(item.status === 1){
-        console.log('撤销申请');
+        console.log('取消订单');
         this.orderCancel(item.order_id);
       }
 
@@ -202,14 +202,14 @@ export default {
       this.$set(this.formData, 'page', e);
       this.$store.dispatch("order/getOrderList", this.formData);
     },
-    // 撤销订单
+    // 取消订单
     orderCancel: function (id) {
       let data = {
         method: "order.cancel",
         token: this.$store.state.app.token,
         order_ids: id
       }
-      this.$confirm('撤销订单, 是否继续?', '提示', {
+      this.$confirm('取消订单, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
