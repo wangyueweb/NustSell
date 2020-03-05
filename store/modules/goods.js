@@ -7,6 +7,7 @@ const state = () => ({
   collect: {},
   browsing: {},
   goodsDetail: {},
+  search: {}
 })
 
 const mutations = {
@@ -24,6 +25,9 @@ const mutations = {
   },
   SET_COLLECTCOUNT: (state, payload) => {
     state.collect.count = payload
+  },
+  SET_SEARCH: (state, payload) => {
+    state.search = payload;
   }
 }
 
@@ -96,5 +100,22 @@ const actions = {
         console.log(err);
       })
   },
+
+  // 搜索商品
+  getSearchList ({commit}, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(Qs.stringify(formData))
+        .then(res => {
+          console.log('搜索商品', res);
+          let { data, status } = res;
+          commit("SET_SEARCH", data);
+
+          resolve();
+        })
+        .catch(err => {
+          reject();
+        })
+    })
+  }
 }
 export default { namespaced: true, state, mutations, actions }

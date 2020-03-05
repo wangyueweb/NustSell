@@ -43,14 +43,28 @@
         <el-col :span="isFixed ? 5 : 6" :push="isFixed ? 0 : 2">
           <el-row class="san" type="flex" justify="space-between" align="center">
             <el-col :span="18">
-              <el-input
-                placeholder="想吃啥？搜一搜"
-                v-model="value"
-                clearable
-                class="search"
-                suffix-icon="el-icon-search"
-                :clearable="false">
-              </el-input>
+                <el-input
+                  placeholder="想吃啥？搜一搜"
+                  v-model="value"
+                  clearable
+                  class="search"
+                  suffix-icon="el-icon-search"
+                  :clearable="false"
+                  @input="search">
+                </el-input>
+
+                <!-- <div v-if="showSearch">123</div> -->
+                <el-popover
+                  
+                  v-model="showSearch"
+                >
+                  <div class="content" style="width:225px;height: 100%;padding:11px 25px 25px;box-sizing:border-box;">
+                    123
+                  </div>
+                </el-popover>
+
+
+              
             </el-col>
             <el-col :span="5">
               <div class="shop-car">
@@ -159,8 +173,17 @@ export default {
       carNumber: state => state.order.carNumber,
       amount: state => state.order.shopCar.goods_amount,
       shopCarList: state => state.order.shopCar.list,
-      
-    })
+    }),
+    showSearch: {
+      get: function(){
+        if(this.$store.state.goods.search && this.$store.state.goods.search.data && this.$store.state.goods.search.data.list){
+          return true;
+        }
+
+        return false;
+      },
+      set: function(val){}
+    }
   },
   watch: {
     shopCarList: {
@@ -176,7 +199,7 @@ export default {
   },
   mounted () {
     // 设置bar浮动阈值为 #fixedBar 至页面顶部的距离
-    this.offsetTop = document.querySelector('#menu').offsetTop;
+    // this.offsetTop = document.querySelector('#menu').offsetTop;
     // 开启滚动监听
     window.addEventListener('scroll', this.handleScroll);
   },
@@ -246,6 +269,20 @@ export default {
           });
       })
     },
+    // 搜索
+    search: async function () {
+      console.log(this.value);
+      let data = {
+        page: 1,
+        limit: 10,
+        where: `{"search_name": "${this.value}"}`,
+        method: "goods.getlist"
+      }
+      await this.$store.dispatch("goods/getSearchList", data)
+      if(!this.value){
+        this.$store.commit("goods/SET_SEARCH", {});
+      }
+    }
   },
   destroyed () {
     // 离开页面 关闭监听 不然会报错
