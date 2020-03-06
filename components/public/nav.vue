@@ -225,7 +225,7 @@
     },
     mounted(){
       if(this.hasToken){
-        console.log('已经登录');
+        // console.log('已经登录');
         this.getUserInfo();
         this.getCollect();
       }

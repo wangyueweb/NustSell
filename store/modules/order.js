@@ -1,4 +1,5 @@
 import { getCategories, mainRequest } from "@/services/api"
+import { getCookie } from "@/utils/utils"
 import Qs from "qs"
 const state = () => ({
   carNumber: 0,
@@ -37,18 +38,19 @@ const mutations = {
 }
 
 const actions = {
-  nuxtServerInit({ commit }, { req }) {
-
-  },
 
   // 获取购物车数量
   getCarnumber({commit}, formData) {
+    console.log('获取购物车数量');
     mainRequest(formData)
       .then(({data, status}) => {
         console.log('获取购物车数量', status, data);
         if(status === 200 && data && data.status){
           commit('SET_CARNUMBER', data.data);
         }
+      })
+      .catch(err => {
+        console.log('获取购物车数量', err);
       })
   },
 

@@ -48,9 +48,10 @@
                   v-model="value"
                   clearable
                   class="search"
-                  suffix-icon="el-icon-search"
                   :clearable="false"
-                  @input="search">
+                  >
+                  <!-- @input="search" -->
+                  <i slot="suffix" class="el-input__icon el-icon-search" @click="search"></i>
                 </el-input>
 
                 <!-- <div v-if="showSearch">123</div> -->
@@ -172,7 +173,7 @@ export default {
       allCategories: state => state.goods.allCategories,
       carNumber: state => state.order.carNumber,
       amount: state => state.order.shopCar.goods_amount,
-      shopCarList: state => state.order.shopCar.list,
+      shopCarList: state => state.order.shopCar.list || [],
     }),
     showSearch: {
       get: function(){
@@ -183,6 +184,12 @@ export default {
         return false;
       },
       set: function(val){}
+    },
+    hasToken: {
+      get: function(){
+        return this.$store.state.app.token ? true : false;
+      },
+      set: function(val){}
     }
   },
   watch: {
@@ -190,7 +197,10 @@ export default {
       handler(newVal, oldVal) {
         if(newVal && JSON.stringify(newVal) != JSON.stringify(oldVal)){
           this.$nextTick(() => {
-            this.getShopCar();
+            if(this.hasToken){
+              // console.log('已经登录');
+              this.getShopCar();
+            }
           })
         }
       },
@@ -221,19 +231,17 @@ export default {
     getPageData () {
       // 获取所有分类
       this.$store.dispatch('goods/getAllCategories', { method: 'categories.getallcat' });
-      this.getShopCar();
+      if(this.hasToken){
+        // console.log('已经登录');
+        this.getShopCar();
+      }
     },
     // 获取购物车
     async getShopCar () {
       // 获取购物车数量
       this.$store.dispatch('order/getCarnumber', { method: 'cart.getnumber', token: this.$store.state.app.token });
-      this.$store.dispatch('order/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token})
-        .then(res => {
-          this.list = JSON.parse(JSON.stringify(this.$store.state.order.shopCar.list))
-        })
-        .catch(err => {
-          this.$message.error(err);
-        })
+      await this.$store.dispatch('order/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token});
+      this.list = JSON.parse(JSON.stringify(this.$store.state.order.shopCar.list));
     },
     // 购物车数量+-
     async numberChange(item, nums) {
@@ -272,16 +280,17 @@ export default {
     // 搜索
     search: async function () {
       console.log(this.value);
-      let data = {
-        page: 1,
-        limit: 10,
-        where: `{"search_name": "${this.value}"}`,
-        method: "goods.getlist"
-      }
-      await this.$store.dispatch("goods/getSearchList", data)
-      if(!this.value){
-        this.$store.commit("goods/SET_SEARCH", {});
-      }
+      this.$router.push({name: 'categorylist', query: {search_name: this.value, name: this.value}});
+      // let data = {
+      //   page: 1,
+      //   limit: 10,
+      //   where: `{"search_name": "${this.value}"}`,
+      //   method: "goods.getlist"
+      // }
+      // await this.$store.dispatch("goods/getSearchList", data)
+      // if(!this.value){
+      //   this.$store.commit("goods/SET_SEARCH", {});
+      // }
     }
   },
   destroyed () {
