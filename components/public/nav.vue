@@ -772,11 +772,11 @@
     color: @theme-gray;
   }
   .dialog{
-    padding-left: 1100px;
+    padding-left: 1127px;
   }
   @media screen and (max-width: 1518px) {
     .dialog{
-      padding-left: 900px;
+      padding-left: 869px;
     }
   }
   @media screen and (max-width: 1200px) {
