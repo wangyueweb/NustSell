@@ -43,14 +43,29 @@
         <el-col :span="isFixed ? 5 : 6" :push="isFixed ? 0 : 2">
           <el-row class="san" type="flex" justify="space-between" align="center">
             <el-col :span="18">
-              <el-input
-                placeholder="想吃啥？搜一搜"
-                v-model="value"
-                clearable
-                class="search"
-                suffix-icon="el-icon-search"
-                :clearable="false">
-              </el-input>
+                <el-input
+                  placeholder="想吃啥？搜一搜"
+                  v-model="value"
+                  clearable
+                  class="search"
+                  :clearable="false"
+                  >
+                  <!-- @input="search" -->
+                  <i slot="suffix" class="el-input__icon el-icon-search" @click="search"></i>
+                </el-input>
+
+                <!-- <div v-if="showSearch">123</div> -->
+                <el-popover
+                  
+                  v-model="showSearch"
+                >
+                  <div class="content" style="width:225px;height: 100%;padding:11px 25px 25px;box-sizing:border-box;">
+                    123
+                  </div>
+                </el-popover>
+
+
+              
             </el-col>
             <el-col :span="5">
               <div class="shop-car">
@@ -158,16 +173,34 @@ export default {
       allCategories: state => state.goods.allCategories,
       carNumber: state => state.order.carNumber,
       amount: state => state.order.shopCar.goods_amount,
-      shopCarList: state => state.order.shopCar.list,
-      
-    })
+      shopCarList: state => state.order.shopCar.list || [],
+    }),
+    showSearch: {
+      get: function(){
+        if(this.$store.state.goods.search && this.$store.state.goods.search.data && this.$store.state.goods.search.data.list){
+          return true;
+        }
+
+        return false;
+      },
+      set: function(val){}
+    },
+    hasToken: {
+      get: function(){
+        return this.$store.state.app.token ? true : false;
+      },
+      set: function(val){}
+    }
   },
   watch: {
     shopCarList: {
       handler(newVal, oldVal) {
         if(newVal && JSON.stringify(newVal) != JSON.stringify(oldVal)){
           this.$nextTick(() => {
-            this.getShopCar();
+            if(this.hasToken){
+              // console.log('已经登录');
+              this.getShopCar();
+            }
           })
         }
       },
@@ -176,7 +209,7 @@ export default {
   },
   mounted () {
     // 设置bar浮动阈值为 #fixedBar 至页面顶部的距离
-    this.offsetTop = document.querySelector('#menu').offsetTop;
+    // this.offsetTop = document.querySelector('#menu').offsetTop;
     // 开启滚动监听
     window.addEventListener('scroll', this.handleScroll);
   },
@@ -198,19 +231,17 @@ export default {
     getPageData () {
       // 获取所有分类
       this.$store.dispatch('goods/getAllCategories', { method: 'categories.getallcat' });
-      this.getShopCar();
+      if(this.hasToken){
+        // console.log('已经登录');
+        this.getShopCar();
+      }
     },
     // 获取购物车
     async getShopCar () {
       // 获取购物车数量
       this.$store.dispatch('order/getCarnumber', { method: 'cart.getnumber', token: this.$store.state.app.token });
-      this.$store.dispatch('order/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token})
-        .then(res => {
-          this.list = JSON.parse(JSON.stringify(this.$store.state.order.shopCar.list))
-        })
-        .catch(err => {
-          this.$message.error(err);
-        })
+      await this.$store.dispatch('order/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token});
+      this.list = JSON.parse(JSON.stringify(this.$store.state.order.shopCar.list));
     },
     // 购物车数量+-
     async numberChange(item, nums) {
@@ -246,6 +277,21 @@ export default {
           });
       })
     },
+    // 搜索
+    search: async function () {
+      console.log(this.value);
+      this.$router.push({name: 'categorylist', query: {search_name: this.value, name: this.value}});
+      // let data = {
+      //   page: 1,
+      //   limit: 10,
+      //   where: `{"search_name": "${this.value}"}`,
+      //   method: "goods.getlist"
+      // }
+      // await this.$store.dispatch("goods/getSearchList", data)
+      // if(!this.value){
+      //   this.$store.commit("goods/SET_SEARCH", {});
+      // }
+    }
   },
   destroyed () {
     // 离开页面 关闭监听 不然会报错

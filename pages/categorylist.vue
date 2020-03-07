@@ -3,7 +3,6 @@
     <!-- 面包屑 -->
     <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <!-- <el-breadcrumb-item :to="{ name: 'categorylist', query: {...$route.query }}" v-if="$route.query.firstName">{{$route.query.firstName}}</el-breadcrumb-item> -->
       <el-breadcrumb-item>{{$route.query.firstName ? $route.query.firstName : $route.query.name}}</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 头部标识 -->
@@ -174,12 +173,9 @@ export default {
       small: true,
       value: 1, 
       sort: "", // 排序
-
       formData: {},
       goodsOptions: {},
-
       currentPage: 1,
-
     }
   },
   components: {
@@ -197,7 +193,7 @@ export default {
             if(this.$route.query.firstId && this.$route.query.firstId === this.$store.state.goods.allCategories[i].id){
               arr = this.$store.state.goods.allCategories[i]['child'];
               return arr;
-            }else if(this.$route.query.id.toString() === this.$store.state.goods.allCategories[i].child[j].id.toString()){
+            }else if(this.$route.query.id && this.$route.query.id.toString() === this.$store.state.goods.allCategories[i].child[j].id.toString()){
               arr = this.$store.state.goods.allCategories[i]['child'];
               return arr;
             }
@@ -216,25 +212,33 @@ export default {
       if(this.$route.query.firstId){
         this.formData = {
           page: 1,
-          limit: this.small ? 10 : 3,
+          limit: this.small ? 12 : 3,
           where: `{"cat_id": ${this.$route.query.firstId}}`,
           method: "goods.getlist",
-          token: this.$store.state.app.token
         }
-      }else{
+      }
+      else if(this.$route.query.search_name) {
+        this.formData= {
+          page: 1,
+          limit: this.small ? 12 : 3,
+          where: `{"search_name": "${this.$route.query.search_name}"}`,
+          method: "goods.getlist"
+        }
+        this.getGoodsList();
+      }
+      else{
         this.formData = {
           page: 1,
-          limit: this.small ? 10 : 3,
+          limit: this.small ? 12 : 3,
           where: `{"cat_id": ${this.$route.query.id}}`,
           method: "goods.getlist",
-          token: this.$store.state.app.token
         }
       }
       this.getGoodsList();
     },
     // 获取最近浏览商品
     getBrowsingList(page){
-      this.$store.dispatch('goods/getBrowsingList', {method: "user.goodsbrowsing", limit: 3, page: page, token: this.$store.state.app.token})
+      this.$store.dispatch('goods/getBrowsingList', {method: "user.goodsbrowsing", limit: 3, page: page, token: this.$store.state.app.token});
     },
     // 获取商品列表
     getGoodsList: async function () {
@@ -266,7 +270,7 @@ export default {
     },
     // 加入购物车
     async addShopCar(id, num) {
-      await this.$store.dispatch('order/addShopCar', {method:'cart.add', product_id: id, nums:num, token: this.$store.state.app.token})
+      await this.$store.dispatch('order/addShopCar', {method:'cart.add', product_id: id, nums:num, token: this.$store.state.app.token});
       this.$store.dispatch('order/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token});
     },
     // 分页变化
@@ -286,26 +290,70 @@ export default {
       console.log(this.sort);
       
       if(this.sort === '销量'){
-        this.formData = {
-          page: 1,
-          limit: this.small ? 10 : 3,
-          order: "buy_count desc",
-          where: `{"cat_id": ${this.$route.query.id}}`,
-          method: "goods.getlist",
-          token: this.$store.state.app.token
+
+        if(this.$route.query.firstId){
+          this.formData = {
+            page: 1,
+            limit: this.small ? 12 : 3,
+            order: "buy_count desc",
+            where: `{"cat_id": ${this.$route.query.firstId}}`,
+            method: "goods.getlist",
+          }
         }
+        else if(this.$route.query.search_name) {
+          this.formData= {
+            page: 1,
+            limit: this.small ? 12 : 3,
+            order: "buy_count desc",
+            where: `{"search_name": "${this.$route.query.search_name}"}`,
+            method: "goods.getlist"
+          }
+          this.getGoodsList();
+        }
+        else{
+          this.formData = {
+            page: 1,
+            limit: this.small ? 12 : 3,
+            order: "buy_count desc",
+            where: `{"cat_id": ${this.$route.query.id}}`,
+            method: "goods.getlist",
+          }
+        }
+
         this.getGoodsList();
       }
 
       if(this.sort === '价格'){
-        this.formData = {
-          page: 1,
-          limit: this.small ? 10 : 3,
-          order: "price asc",
-          where: `{"cat_id": ${this.$route.query.id}}`,
-          method: "goods.getlist",
-          token: this.$store.state.app.token
+
+        if(this.$route.query.firstId){
+          this.formData = {
+            page: 1,
+            limit: this.small ? 12 : 3,
+            order: "price asc",
+            where: `{"cat_id": ${this.$route.query.firstId}}`,
+            method: "goods.getlist",
+          }
         }
+        else if(this.$route.query.search_name) {
+          this.formData= {
+            page: 1,
+            limit: this.small ? 12 : 3,
+            order: "price asc",
+            where: `{"search_name": "${this.$route.query.search_name}"}`,
+            method: "goods.getlist"
+          }
+          this.getGoodsList();
+        }
+        else{
+          this.formData = {
+            page: 1,
+            limit: this.small ? 12 : 3,
+            order: "price asc",
+            where: `{"cat_id": ${this.$route.query.id}}`,
+            method: "goods.getlist",
+          }
+        }
+
         this.getGoodsList();
       }
     },
