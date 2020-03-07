@@ -41,6 +41,7 @@ export default {
     '@/plugins/element-ui',
     '@/plugins/dayjs',
     { src: "@/plugins/vue-awesome-swiper", ssr: false },
+    { src: "@/plugins/slide-verify", ssr: false },
     { src: '@/plugins/utils.js', ssr: false }
   ],
   /*

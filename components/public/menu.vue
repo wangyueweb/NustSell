@@ -211,7 +211,9 @@ export default {
     // 设置bar浮动阈值为 #fixedBar 至页面顶部的距离
     // this.offsetTop = document.querySelector('#menu').offsetTop;
     // 开启滚动监听
-    window.addEventListener('scroll', this.handleScroll);
+    if (process.client) {
+      window.addEventListener('scroll', this.handleScroll); // 这里就是操作window对象的代码
+    }
   },
   created () {
     this.getPageData();
@@ -295,7 +297,9 @@ export default {
   },
   destroyed () {
     // 离开页面 关闭监听 不然会报错
-    window.removeEventListener('scroll', this.handleScroll);
+    if (process.client) {
+      window.removeEventListener('scroll', this.handleScroll); // 这里就是操作window对象的代码
+    }
   }
 }
 </script>

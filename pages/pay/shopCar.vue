@@ -115,7 +115,6 @@
 
 <script>
 import { mapState } from "vuex";
-import Swiper from "@/components/public/swiper"
 import CardTitle from "@/components/public/cardTitle"
 import GoodsScroll from "@/components/public/goodsScroll2"
 export default {
@@ -124,7 +123,6 @@ export default {
     return 'payment'
   },
   components:{
-    Swiper,
     CardTitle,
     GoodsScroll
   },
