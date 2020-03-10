@@ -31,7 +31,7 @@
         <nuxt-link to="/myCenter/collect" no-prefetch v-if="hasToken">
           <i class="iconfont icon-shoucang" v-if="collectCount === 0"></i>
           <i class="iconfont icon-shoucangxing2" v-if="collectCount > 0"></i>
-          收藏
+          我的收藏
         </nuxt-link>
         <span style="color: #707070">&nbsp; | &nbsp;</span>
 
@@ -519,6 +519,7 @@
       }
 
       .nav-right {
+        width: 317px;
         position: relative;
         span {
           cursor: pointer;

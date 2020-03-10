@@ -3,16 +3,16 @@
     <div :class="{menu_fixed : isFixed}" v-if="allCategories.length > 0">
       <el-row class="content" style="display: flex;align-items: center;flex-wrap: wrap;">
         <el-col :span="3" v-if="isFixed">
-          <div class="logo" style="height:90px">
+          <div class="logo" style="height:76px;justify-content: left;">
             <nuxt-link :to="{path: '/'}">
-              <el-image :src="require('@/assets/img/logo3.png')" style="width:65px;"></el-image>
+              <el-image :src="require('@/assets/img/logo3.png')" style="width:56px;"></el-image>
             </nuxt-link>
           </div>
         </el-col>
         <el-col :span="24" v-if="!isFixed">
-          <div class="logo" style="height:130px">
+          <div class="logo" style="height:110px">
             <nuxt-link :to="{path: '/'}">
-              <el-image :src="require('@/assets/img/logo.png')" style="width:180px;margin: 15px 0 0 0;"></el-image>
+              <el-image :src="require('@/assets/img/logo.png')" style="width:180px;margin: 13px 0 0 0;"></el-image>
             </nuxt-link>
           </div>
         </el-col>
@@ -44,16 +44,18 @@
           <el-row class="san" type="flex" justify="space-between" align="center">
             <el-col :span="18">
                 <el-input
-                  placeholder="想吃啥？搜一搜"
+                  :placeholder="place"
+                  @blur="inputBlur"
+                  @focus="inputFocus"
                   v-model="value"
-                  clearable
+                  clearable="true"
                   class="search"
                   :clearable="false"
                   >
                   <!-- @input="search" -->
                   <i slot="suffix" class="el-input__icon el-icon-search" @click="search"></i>
                 </el-input>
-
+                
                 <!-- <div v-if="showSearch">123</div> -->
                 <el-popover
                   
@@ -76,7 +78,7 @@
                     trigger="focus"
                     v-model="visible"
                   >
-                    <div class="content" style="width:382px;height: 100%;padding:11px 25px 25px;box-sizing:border-box;">
+                    <div class="content basket" style="width:382px;height: 100%;padding:11px 25px 25px;box-sizing:border-box;">
                       <div v-if="carNumber > 0">
                         <div @click="visible = !visible" style="text-align:right;">
                           <div class="rotate">
@@ -127,7 +129,12 @@
                         </div>
                       </div>
                       <div v-else class="footer-btn">
-                        购物车没有商品
+                          <div @click="visible = !visible" style="text-align:right;line-height: 36px;">
+                            <div class="rotate">
+                              <i class="iconfont icon-guanbi" style="font-size:20px;"></i>
+                            </div>
+                          </div>
+                          <div>购物车没有商品</div>
                       </div>
                       
                     </div>
@@ -165,6 +172,7 @@ export default {
       value: '',
       visible: false,
       list: [],
+      place: '想吃啥？搜一搜',
     }
   },
   computed:{
@@ -293,7 +301,13 @@ export default {
       // if(!this.value){
       //   this.$store.commit("goods/SET_SEARCH", {});
       // }
-    }
+    },
+    inputBlur(){
+        this.place = '想吃啥？搜一搜'
+    },
+    inputFocus(){
+        this.place = ''
+    },
   },
   destroyed () {
     // 离开页面 关闭监听 不然会报错
@@ -313,6 +327,7 @@ export default {
   .secondname{font-size: 18px;margin: 10px 0 35px 0;font-weight: 600;}
   .link:hover{color: #F65151;}
   .activemi{opacity: 0.5;top: 50px;}
+  .basket{background: #fff;border: 1px solid #404040;box-shadow:none;border-radius: 0;}
   .menu{
     @1200-min();
     background: @theme-white;
@@ -335,10 +350,9 @@ export default {
         display: flex;
         align-items: center;
         span{
+          display: inline-block;
           height: 41px;
-        }
-        &:hover{
-          span{
+          &:hover{
             border-bottom: 5px solid @theme-black;
           }
         }
@@ -407,9 +421,9 @@ export default {
     }
   }
   .footer-btn{
-    height: 54px;
+    height: 90px;
     text-align: center;
-    line-height: 78px;
+    line-height: 55px;
     color: @theme-lightgray;
     @cursor-pointer();
     // display: flex;

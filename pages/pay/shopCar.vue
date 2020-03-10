@@ -331,6 +331,9 @@ export default {
   // 清空
   .clear{
     color: @theme-lightgray;
+    display: inline-block;
+    margin: 0 0 0 15px;
+    cursor:pointer;
   }
   .swiper{
     margin-top: 50px;
@@ -396,10 +399,10 @@ export default {
 .grid-content /deep/ .el-table th{font-weight: 100;}
 .grid-content /deep/ .el-table td{color: #000;}
 
-.favorite{display: inline-block;}
-.delete{display: inline-block;margin: 0 0 0 14px;}
+.favorite{display: inline-block;cursor:pointer;}
+.delete{display: inline-block;margin: 0 0 0 14px;cursor:pointer;}
 .myfavorite{font-size: 16px;padding: 5px 0 10px 0;border-bottom: 1px solid #000;text-align: center;position: relative;}
 .myfavorite:after{content: '';position: absolute;bottom: 0;left: 50%;width: 70px;height: 3px;background: #000;transform: translateX(-50%);}
 .aggregate{border-bottom: 1px solid #EAEAEA;font-size: 18px;padding: 0 0 5px 0;}
-
+.continue{cursor:pointer;}
 </style>

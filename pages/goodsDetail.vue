@@ -47,6 +47,9 @@
 
         <div class="calculate">
           <el-input-number v-model="num" size="small" :min="1" :max="10" label="描述文字"></el-input-number>
+          <div class="case">
+            <el-checkbox v-model="checked">按箱购买（1箱=24）</el-checkbox>
+          </div>
         </div>
         
         <div class="buy-btn" @click="addShopCar(goodsDetail.product.id, num)">加入购物车</div>
@@ -116,7 +119,8 @@ export default {
       },
       goodsDetail: {},
       otherList: [],
-      show_image: ""
+      show_image: "",
+      checked:false
     };
   },
   components: {
@@ -327,4 +331,6 @@ export default {
   .calculate /deep/ .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){border: 1px solid #DCDFE6 !important;}
   .calculate /deep/ .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){border: 1px solid #DCDFE6 !important;}
 
+  .case{display: inline-block;margin: 0 0 0 30px;}
+  .case /deep/ .el-checkbox{color: #999;}
 </style>

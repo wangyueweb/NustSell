@@ -17,7 +17,7 @@
             <CardTitle name="分类" :textLine="true" :titleLine="true"/>
             <div class="content">
               <!-- <div class="hot">_膨化.零嘴（20）</div> -->
-              <div class="common" v-for="(itemI, indexI) in categoryList" :key="indexI" @click="$router.push({name: 'categorylist', query: itemI})">{{itemI.name}}</div>
+              <div class="common" :style="$route.query.name == itemI.name ? 'color:#F65151':''" v-for="(itemI, indexI) in categoryList" :key="indexI" @click="$router.push({name: 'categorylist', query: itemI})">{{itemI.name}}</div>
               <div>
                 <span class="other" v-for="(itemJ, indexJ) in other" :key="indexJ">{{itemJ}}</span>
               </div>
@@ -26,8 +26,10 @@
           <div class="grid-content" v-if="browsing">
             <CardTitle name="最近浏览商品" :textLine="true" :titleLine="true">
               <div slot="tool">
-                  <img src="../assets/img/arrow-left1.png" alt="" class="tool-img"  @click="currentPage --;" v-if="currentPage > 1"/>
+                  <img src="../assets/img/arrow-left1.png" alt="" class="tool-img" @click="currentPage --;" v-if="currentPage > 1"/>
+                  <img src="../assets/img/arrow-left4.png" alt="" class="tool-img" v-if="currentPage <= 1"/>
                   <img src="../assets/img/arrow-right1.png" alt="" class="tool-img" v-if="browsing.count > currentPage * 3" @click="currentPage ++;"/>
+                  <img src="../assets/img/arrow-right4.png" alt="" class="tool-img" v-if="browsing.count <= currentPage * 3"/>
               </div>
             </CardTitle>
             <div class="content">
@@ -79,7 +81,8 @@
           <!-- 商品列表 -->
           <el-row :gutter="10">
             <el-col :span="small ? 6 : 24" v-for="(item, index) in goodsOptions.list" :key="index" :class="small ? 'big-good-wrapper' : 'small-good-wrapper'">
-              <div class="grid-content">
+              <div class="grid-content productList">
+                <div class="sign">特惠</div>
                 <nuxt-link :to="{name: 'goodsDetail', query: {id: item.id}}">
                   <div class="goodpic-wrapper">
                     <el-image
@@ -95,6 +98,7 @@
                     </div>
                     <div class="price">
                       P {{item.price}}
+                      <div class="discount">P {{item.price}}</div>
                     </div>
                   </div>
 
@@ -399,10 +403,12 @@ export default {
           line-height: 20px;
           color: @theme-gray;
           margin-right: 12px;
+          cursor:pointer;
         }
         .img-wrapper{
           margin-top: 10px;
           .img{
+            border: 1px solid #F2F2F2;
             width: 100%;
             display: block;
           }
@@ -527,5 +533,11 @@ export default {
 .grid-content /deep/ .el-input__inner{height: 30px;line-height: 30px;}
 .grid-content /deep/ .el-input__icon{height: 30px;line-height: 30px;}
 .grid-content /deep/ .is-justify-space-between{margin: -10px;}
+.productList{position: relative;}
+.productList .sign{position: absolute;top: 13px;right: 13px;width: 40px;height: 40px;line-height: 40px;font-size: 13px;background: #EB5202;color: #fff;text-align: center;border-radius: 50%;z-index: 100;}
+.discount{display: inline-block;margin: 0 0 0 20px;color: #FF3D3D;text-decoration:line-through;}
+
 
 </style>
+
+

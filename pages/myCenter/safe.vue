@@ -32,7 +32,7 @@
           <div class="handle">
             <el-button size="mini" type="primary" @click="dialogVisible = !dialogVisible">修改密码</el-button>
             <div class="amend" v-if="dialogVisible">
-                <div class="close" @click="dialogVisible = !dialogVisible">X</div>
+              <div class="close" @click="dialogVisible = !dialogVisible">X</div>
               <div class="amend-name">修改密码</div>
                 <div style="width: 400px;margin: auto;">
                   <div class="item">
@@ -83,7 +83,32 @@
           <div class="content">可使用已绑定邮箱登录王子易购账号。并订阅 最新马尼拉华人没事咨询</div>
         </el-col>
         <el-col :span="6">
-          <div class="handle"><el-button size="mini" type="primary">立即绑定</el-button></div>
+          <div class="handle">
+              <el-button size="mini" type="primary" @click="bindemailShow = !bindemailShow">立即绑定</el-button>
+              <div class="amend" v-if="bindemailShow">
+                <div class="close" @click="bindemailShow = !bindemailShow">X</div>
+                <div class="amend-name">绑定邮箱</div>
+                  <div style="width: 450px;margin: 35px auto 70px;">
+                    <div class="item">
+                      <div class="alias">邮箱地址</div>
+                      <div class="address">
+                        <el-input v-model="formData.oldpwd" style="width: 240px;"></el-input>
+                      </div>
+                      <div class="verify">邮箱验证</div>
+                    </div>
+                    
+                    <div class="item">
+                      <div class="alias">验证码</div>
+                      <div class="address">
+                        <el-input v-model="formData.oldpwd" style="width: 150px;"></el-input>
+                      </div>
+                    </div>
+                    <span slot="footer" class="dialog-footer item">
+                        <el-button type="primary" style="width:130px;font-size: 15px;padding: 9px 0;margin-left: 75px;">绑定邮箱</el-button>
+                        <el-button @click="dialogVisible = false" style="width:130px;font-size: 15px;padding: 9px 0;">取消</el-button></span>
+                  </div>
+              </div>
+          </div>
         </el-col>
       </el-row>
 
@@ -132,8 +157,8 @@ export default {
   },
   data() {
     return {
-      amendShow: false,
       dialogVisible: false,
+      bindemailShow: false,
       formData: {
         oldpwd: "", // 旧密码
         repwd: "", // 新密码
@@ -209,6 +234,7 @@ export default {
       .item{
         display: flex;
         align-items: center;
+        justify-content: flex-start;
       }
       .name{
         font-weight: 700;
@@ -243,9 +269,10 @@ export default {
     display: flex;
     margin: 10px 0;
     .alias{
-      width: 8.5em;
-      margin: 0 10px 0 0;
+      width: 97px;
+      margin: 0 10px 2px 0;
       text-align: right;
+      white-space: nowrap;
     }
     .discount{
       font-size: 14px;
@@ -274,6 +301,6 @@ export default {
 .amend .amend-name{font-size: 16px;padding: 10px 0 10px 28px;font-weight: 600;}
 .amend .dialog-footer{margin: 35px 0 45px 0 !important;}
 .amend .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
-
+.verify{padding: 9px 26px;background: #404040;color: #fff;white-space: nowrap;margin: 0 0 0 16px;cursor:pointer}
 
 </style>

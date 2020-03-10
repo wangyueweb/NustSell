@@ -16,14 +16,12 @@
           <div>
             <div class="item">
               <div class="alias">充 值 金 额</div> 
-              <el-select v-model="payData.value" placeholder="请选择">
-                <el-option
-                  v-for="(item,index) in 100"
-                  :key="index"
-                  :label="item"
-                  :value="item">
-                </el-option>
-              </el-select>
+              <el-autocomplete
+                v-model="payData.value"
+                :fetch-suggestions="querySearch"
+                placeholder="请输入内容"
+              ></el-autocomplete>
+              
               <div class="discount">( ￥ 21.79 )</div>
             </div>
             <div class="item">
@@ -89,6 +87,8 @@ export default {
   },
   data () {
     return {
+      restaurants: [],
+      state1: '',
       dialogVisible: false,
       payData: {
         value: "",
@@ -126,7 +126,9 @@ export default {
 
   created(){},
 
-  mounted(){},
+  mounted(){
+      this.restaurants = this.loadAll();
+  },
 
   methods: {
     pay: function(){
@@ -134,6 +136,28 @@ export default {
     },
     radioChange: function (selection, row) {
       console.log('checkboxChange',selection, row);
+    },
+    
+    querySearch(queryString, cb) {
+      var restaurants = this.restaurants;
+      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
+    loadAll() {
+      return [
+        { "value": "1" },
+        { "value": "5"},
+        { "value": "10"},
+        { "value": "15"},
+        { "value": "20"},
+        { "value": "25"},
+      ];
     },
   }
 }

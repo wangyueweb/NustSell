@@ -14,7 +14,40 @@
         </div>
 
         <div style="margin-top: 10px;">
-          <nuxt-link to="" class="edit">编辑</nuxt-link>
+          <!-- <nuxt-link to="" class="edit">编辑</nuxt-link> -->
+          <div class="handle">
+            <span class="edit" @click="dialogVisible = !dialogVisible">编辑</span>
+            <div class="amend" v-if="dialogVisible">
+              <div class="close" @click="dialogVisible = !dialogVisible">X</div>
+              <div class="amend-name">编辑资料</div>
+                <div style="width: 400px;margin: auto;">
+                  <div class="item">
+                    <div class="alias">用户名</div> 
+                    <div class="address">
+                      <el-input v-model="editName" style="width: 160px;"></el-input>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="alias">电话</div> 
+                    <div class="address phonebox">
+                      <el-input v-model="editPhone" style="width: 245px;"></el-input>
+                      <div class="phoneline">+63 |</div>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="alias">邮箱地址</div> 
+                    <div class="address">
+                      <el-input v-model="editEmail" style="width: 245px;"></el-input>
+                    </div>
+                  </div>
+                  <span slot="footer" class="dialog-footer item">
+                    <el-button type="primary" style="width:130px;font-size: 15px;padding: 9px 0;">保存</el-button>
+                    <el-button @click="dialogVisible = false" style="width:130px;font-size: 15px;padding: 9px 0;">取消</el-button>
+                  </span>
+                </div>
+            </div>
+          </div>
+          
           <el-button size="mini" @click="lagout" :disabled="!isLogin" style="border-radius: 4px;font-size: 14px;">安全退出</el-button>
         </div>
       </el-col>
@@ -84,7 +117,12 @@ export default {
         phone: "09054624544",
         email: "dwan.designer@gmail.com"
       },
-      selected: 0
+      selected: 0,
+      dialogVisible: false,
+      
+      editName:'',
+      editPhone:'',
+      editEmail:'',
     };
   },
 
@@ -196,7 +234,48 @@ export default {
       line-height: 28px;
     }
   }
+  .item{
+      display: flex;
+      margin: 10px 0;
+      align-items: center;
+      justify-content: center;
+      .alias{
+        width: 8.5em;
+        margin: 0 10px 2px 0;
+        text-align: right;
+        
+      }
+      .discount{
+        font-size: 14px;
+        color: @theme-gray;
+        display: flex;
+        align-items: flex-end;
+        margin-left: 8px;
+      }
+      .address{
+        width: 570px;
+        position: relative;
+      }
+      .name{
+        width: 200px;
+      }
+      .mobile{
+        display: flex;
+        width: 200px;
+      }
+  }
 }
 .name-wrapper span, .phone-wrapper span, .email-wrapper span{color: #000;}
 .name-wrapper2{line-height: 22px;color: #666;margin: 4px 0 5px 0;}
+
+.handle{display: inline-block;position: relative;}
+.handle .edit{cursor:pointer;}
+.amend{position: absolute;width: 853px;border: 1px solid #000;top: 35px;left: 0;background: #fff;z-index: 100;}
+.amend .amend-name{font-size: 16px;padding: 10px 0 10px 28px;font-weight: 600;}
+.amend .dialog-footer{margin: 35px 0 45px 0 !important;}
+.amend .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
+.phoneline{position: absolute;color: #999;top: 7px;left: 6px;font-size: 17px;}
+.phonebox /deep/ .el-input__inner{text-indent: 30px;}
+
+
 </style>
