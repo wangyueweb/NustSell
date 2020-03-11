@@ -38,8 +38,9 @@
             label="操作"
             align="center">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="addShopCar(collectList[scope.$index].id)">移入购物车</el-button>
-              <div @click="cancelCollect(collectList[scope.$index].goods_id)">取消收藏</div>
+              <el-button size="mini" type="primary" @click="addShopCar(scope.row.id)" v-if="scope.row.stock > 0">移入购物车</el-button>
+              <div class="cant-btn" v-else>库存不足</div>
+              <div class="cancel-collect" @click="cancelCollect(scope.row.goods_id)">取消收藏</div>
             </template>
           </el-table-column>
         </el-table>
@@ -193,6 +194,18 @@ export default {
     border-top: solid 1px @theme-silvergray;
     border-left: solid 1px @theme-silvergray;
     border-right: solid 1px @theme-silvergray;
+    .cancel-collect{
+      @cursor-pointer();
+    }
+    .cant-btn{
+      width: 120px;
+      height: 34px;
+      line-height: 34px;
+      text-align: center;
+      background: @theme-lightgray;
+      color: @theme-white;
+      cursor: not-allowed;
+    }
   }
 }
 </style>

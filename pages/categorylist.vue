@@ -98,7 +98,7 @@
                     </div>
                     <div class="price">
                       P {{item.price}}
-                      <div class="discount">P {{item.price}}</div>
+                      <div class="discount">P {{item.mktprice}}</div>
                     </div>
                   </div>
 
@@ -110,7 +110,8 @@
                       </div>
                     </el-col>
                     <el-col>
-                      <div class="buy-btn" @click.stop="addShopCar(item.product.id, 1)">加入购物车</div>
+                      <div class="buy-btn" @click.stop="addShopCar(item.product.id, 1)" v-if="item.stock > 0">加入购物车</div>
+                      <div class="cant-btn" v-else>库存不足</div>
                     </el-col>
                   </el-row>
                 </div>
@@ -263,6 +264,7 @@ export default {
       this.$store.dispatch('goods/addCollect', {method:'user.goodscollection', goods_id: item.id, token: this.$store.state.app.token})
         .then(({status, data}) => {
           this.$message({
+            type: "warning",
             message: data.msg,
           });
           this.getPageData();
@@ -276,6 +278,7 @@ export default {
     async addShopCar(id, num) {
       await this.$store.dispatch('order/addShopCar', {method:'cart.add', product_id: id, nums:num, token: this.$store.state.app.token});
       this.$store.dispatch('order/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token});
+      this.getGoodsList();
     },
     // 分页变化
     paginationChange: function (e) {
@@ -480,6 +483,15 @@ export default {
           background: @theme-black;
           color: @theme-white;
         }
+        .cant-btn{
+          width: 120px;
+          height: 34px;
+          line-height: 34px;
+          text-align: center;
+          background: @theme-lightgray;
+          color: @theme-white;
+          cursor: not-allowed;
+        }
       }
     }
     .small-good-wrapper{
@@ -534,7 +546,7 @@ export default {
 .grid-content /deep/ .el-input__icon{height: 30px;line-height: 30px;}
 .grid-content /deep/ .is-justify-space-between{margin: -10px;}
 .productList{position: relative;}
-.productList .sign{position: absolute;top: 13px;right: 13px;width: 40px;height: 40px;line-height: 40px;font-size: 13px;background: #EB5202;color: #fff;text-align: center;border-radius: 50%;z-index: 100;}
+.productList .sign{position: absolute;top: 13px;right: 13px;width: 40px;height: 40px;line-height: 40px;font-size: 13px;background: #EB5202;color: #fff;text-align: center;border-radius: 50%;z-index: 98;}
 .discount{display: inline-block;margin: 0 0 0 20px;color: #FF3D3D;text-decoration:line-through;}
 
 
