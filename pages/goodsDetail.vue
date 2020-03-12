@@ -47,7 +47,10 @@
 
         <div class="calculate">
           <el-input-number v-model="num" size="small" :min="1" :max="10" label="描述文字"></el-input-number>
-          <div class="case">
+          <div class="case" v-if="goodsDetail.product && goodsDetail.product.default_spes_desc">
+            <div v-for="(item, index) in goodsDetail.product.default_spes_desc" :key="index">
+              {{index}}
+            </div>
             <el-checkbox v-model="checked">按箱购买（1箱=24）</el-checkbox>
           </div>
         </div>
