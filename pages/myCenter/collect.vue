@@ -116,6 +116,7 @@ export default {
             console.log(res);
             let {status, data} = res;
             this.$message({
+              type: "warning",
               message: data.msg,
             });
             this.getCollect();

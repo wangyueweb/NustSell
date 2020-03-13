@@ -27,6 +27,8 @@
               label="商品名称">
               <template slot-scope="scope">
                 {{scope.row.products.name}}
+                <br>
+                {{scope.row.products.spes_desc}}
               </template>
             </el-table-column>
             <el-table-column
@@ -41,7 +43,7 @@
               label="数量"
               width="220">
               <template slot-scope="scope">
-                <el-input-number v-model="scope.row.nums" @change="numberChange(scope.row, scope.row.nums)"></el-input-number>
+                <el-input-number v-model="scope.row.nums" @change="numberChange(scope.row, scope.row.nums)" :min="1"></el-input-number>
               </template>
             </el-table-column>
             <el-table-column
@@ -142,60 +144,42 @@ export default {
     }
   },
   methods: {
-    getPageData () {
-      this.getShopCar();
-      // this.getCollect();
-    },
-
     async numberChange(item, nums) {
       console.log(item, nums);
       await this.$store.dispatch('order/handleShopCarNumber', {method:'cart.setnums', token: this.$store.state.app.token, id: item.id, nums: nums})
         .then(() => {
-          this.getPageData();
+          this.getShopCar();
+          this.getAmount();
         })
         .catch(err => {
           this.$message.error(err);
         })
     },
 
-    // getCollect () {
-    //   let data = {
-    //     page: this.currentPage,
-    //     limit: this.limit,
-    //     method: "user.goodscollectionlist",
-    //     token: this.$store.state.app.token
-    //   }
-    //   this.$store.dispatch('goods/getCollect', data);
-    // },
-
-    // handleCheckAllChange (val) {
-    //   console.log(val);
-    //   if (val) {
-    //     this.$refs.multipleTable.toggleAllSelection();
-    //   } else {
-    //     this.$refs.multipleTable.clearSelection();
-    //   }
-    // },
     async getShopCar () {
       await this.$store.dispatch('order/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token})
         .then(res => {
           this.list = JSON.parse(JSON.stringify(this.$store.state.order.shopCar.list));
-          this.setSelect(this.list);
+          this.setSelect();
         })
         .catch(err => {
           this.$message.error(err);
         })
     },
     setSelect: function (rows) {
-      console.log(rows);
       var _this = this;
-      if (rows) {
-        rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row,true);
-        });
-      } 
+      this.$nextTick(() => {
+        if (this.list && this.list.length > 0) {
+          this.list.map(row => {
+            if(this.$refs.multipleTable){
+              this.$refs.multipleTable.toggleRowSelection(row,true);
+            }
+          });
+        } 
+      })
     },
     toggleSelection(rows) {
+      console.log(rows);
       if (rows) {
         rows.forEach(row => {
           this.$refs.multipleTable.toggleRowSelection(row);
@@ -205,8 +189,12 @@ export default {
       }
     },
     handleSelectionChange (val) {
+      console.log('handleSelectionChange', val);
       this.selectList = val;
-
+      // this.getAmount();
+    },
+    // 获取订单总额
+    getAmount: function () {
       let ids;
 
       if(this.selectList.length > 0) {
@@ -227,7 +215,6 @@ export default {
       }else{
         this.$store.commit("order/SET_AMOUNT", {});
       }
-      
     },
     // 添加收藏
     addCollect: function (id) {
@@ -235,9 +222,10 @@ export default {
       this.$store.dispatch('goods/addCollect', {method:'user.goodscollection', goods_id: id, token: this.$store.state.app.token})
         .then(({status, data}) => {
           this.$message({
+            type: "warning",
             message: data.msg,
           });
-          this.getPageData();
+          this.getShopCar();
         })
         .catch(err => {
           console.log(err);
@@ -259,7 +247,7 @@ export default {
               type: "success",
               message: res,
             });
-            this.getPageData();
+            this.getShopCar();
           })
           .catch(err => {
             console.log(err);
@@ -287,8 +275,7 @@ export default {
     }
   },
   created(){
-    this.getPageData();
-    
+    this.getShopCar();
   },
   computed: {
     ...mapState({
@@ -296,6 +283,11 @@ export default {
       amount: state => state.order.amount
     })
   },
+  watch: {
+    selectList: function(newval,oldval){
+      this.getAmount();
+    }
+  }
 }
 </script>
 
