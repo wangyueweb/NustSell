@@ -1,7 +1,7 @@
 <template>
 	<div class="menu" id="menu">
     <div :class="{menu_fixed : isFixed}" v-if="allCategories.length > 0">
-      <el-row class="content" style="display: flex;align-items: center;flex-wrap: wrap;">
+      <el-row class="content" style="display: flex;align-items: center;flex-wrap: wrap;justify-content:space-between">
         <el-col :span="3" v-if="isFixed">
           <div class="logo" style="height:76px;justify-content: left;">
             <nuxt-link :to="{path: '/'}">
@@ -10,7 +10,7 @@
           </div>
         </el-col>
         <el-col :span="24" v-if="!isFixed">
-          <div class="logo" style="height:110px">
+          <div class="logo" style="height:100px">
             <nuxt-link :to="{path: '/'}">
               <el-image :src="require('@/assets/img/logo.png')" style="width:180px;margin: 13px 0 0 0;"></el-image>
             </nuxt-link>
@@ -40,8 +40,8 @@
             </el-col>
           </el-row>
         </el-col>
-        <el-col :span="isFixed ? 5 : 6" :push="isFixed ? 0 : 2">
-          <el-row class="san" type="flex" justify="space-between" align="center">
+        <el-col :span="6" :class="isFixed ? '' : 'distance'">
+          <el-row class="san" type="flex" align="center">
             <el-col :span="18">
                 <el-input
                   :placeholder="place"
@@ -67,9 +67,8 @@
                 </el-popover>
 
 
-              
             </el-col>
-            <el-col :span="5">
+            <el-col :span="3" style="margin: 0 2px 0 20px;">
               <div class="shop-car">
                 <div class="contentgj">
                   <el-popover
@@ -320,7 +319,7 @@ export default {
 
 <style lang="less" scoped>
   @import "../../assets/css/theme.less";
-  .san{position: relative;top: -10px;left: 0;}
+  .san{position: relative;top: -4px;left: 0;justify-content: flex-end}
   .second{background: #fff;padding: 0 0 0 55px;min-height: 250px;width: 1200px;text-align: left;border: 1px solid #000000;box-shadow:none;}
   .secondList{display: inline-block;text-align: center;}
   .secondimg{width: 100px;height: auto;margin: 50px 40px 0 40px;}
@@ -342,6 +341,7 @@ export default {
       }
       .menu-type{
         @cursor-pointer();
+        margin: 10px 0 0 0;
         font-weight: 600;
         font-size: 22px;
         color: @theme-black;
@@ -371,7 +371,7 @@ export default {
       left: 0;
       width: 100%;
       background: @theme-white;
-      z-index: 99;
+      z-index: 100000;
       border-bottom: 4px solid @theme-black;
     }
   }
@@ -440,5 +440,6 @@ export default {
   .rotate:hover{transform:rotate(360deg);}
   
   .swiper-wrapper{width: 100px;}
-  
+  .shopp{display: inline-block;width: 20px;}
+  .distance{margin: 0 0 0 150px;}
 </style>

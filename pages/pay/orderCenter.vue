@@ -568,6 +568,7 @@ export default {
 }
 .right{
   background: @theme-white;
+  position: relative;
   padding: 30px 34px;
   .title{
     margin-bottom: 9px;
@@ -608,5 +609,6 @@ export default {
 .hintbox{position: relative;}
 .hintinput /deep/ .el-input__inner{padding: 0 0 0 40px;}
 .hint{position: absolute;top: 8px;left: 5px;font-size: 16px;color: #999;}
+.address{position: relative;}
 
 </style>

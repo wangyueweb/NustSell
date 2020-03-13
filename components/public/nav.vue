@@ -519,7 +519,8 @@
       }
 
       .nav-right {
-        width: 317px;
+        width: 307px;
+        text-align: right;
         position: relative;
         span {
           cursor: pointer;
@@ -732,6 +733,7 @@
           left: -150px;
           z-index: 9999;
           background: #fff;
+          text-align: left;
           .notice-list-item{
             color: #404040;
             border-bottom: 1px solid #DEDEDE;
