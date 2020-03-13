@@ -96,7 +96,7 @@
                             <span>P {{amount}}</span>
                           </div>
                         </div>
-                        <el-button type="danger" class="large-btn" @click="$router.push({name : 'pay-shopCar'})">
+                        <el-button type="danger" class="large-btn" @click="toPayOrderCenter">
                           前往结账
                         </el-button>
                         <div class="scroll">
@@ -300,6 +300,19 @@ export default {
       // if(!this.value){
       //   this.$store.commit("goods/SET_SEARCH", {});
       // }
+    },
+    // 前往结账
+    toPayOrderCenter: async function () {
+      let ids;
+
+      if(this.list.length > 0) {
+        if(this.list.length === 1){
+          ids = this.list[0].id.toString();
+        }else{
+          ids = this.list.map(item => item.id).join(',');
+        }
+        this.$router.push({name: 'pay-orderCenter', query: {ids: ids}});
+      }
     },
     inputBlur(){
         this.place = '想吃啥？搜一搜'
