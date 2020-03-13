@@ -47,15 +47,15 @@
 
         <div class="calculate">
           <el-input-number v-model="num" size="small" :min="1" :max="10" label="描述文字"></el-input-number>
-          <div class="case" v-if="goodsDetail.product && goodsDetail.product.default_spes_desc">
-            <div v-for="(item, index) in goodsDetail.product.default_spes_desc" :key="index">
-              {{index}}
+          
+          <div style="display:block">
+            <div v-for="(item, index) in checkList" :key="index">
+              <el-checkbox :label="itemJ.name" v-for="(itemJ, indexJ) in item" :key="indexJ" :value="itemJ.is_default && itemJ.is_default === true" @change="checkboxChange(itemJ)"></el-checkbox>
             </div>
-            <el-checkbox v-model="checked">按箱购买（1箱=24）</el-checkbox>
           </div>
         </div>
         
-        <div class="buy-btn" @click="addShopCar(goodsDetail.product.id, num)">加入购物车</div>
+        <div class="buy-btn" @click="addShopCar(id, num)">加入购物车</div>
 
         <div class="collect" @click="addCollect">
           <i class="iconfont icon-shoucang" v-if="goodsDetail.isfav === 'false'"></i>
@@ -109,7 +109,9 @@ export default {
   name: "goodsDetail",
   data() {
     return {
-      num: 1,
+      checkList:{}, // 多选框
+      id: null, // 提交的商品id
+      num: 1, // 提交的商品变量
       selected: 0,
       goodsScrollOption: {
         slidesPerView: 4,
@@ -123,7 +125,6 @@ export default {
       goodsDetail: {},
       otherList: [],
       show_image: "",
-      checked:false
     };
   },
   components: {
@@ -161,6 +162,8 @@ export default {
         this.goodsDetail = data.data;
         this.otherList = data.other;
         this.show_image = data.data.album[0];
+        this.checkList = data.data.product.default_spes_desc;
+        this.id = data.data.product.id;
       }
 
       // 添加最近浏览商品
@@ -176,6 +179,7 @@ export default {
       this.$store.dispatch('goods/addCollect', {method:'user.goodscollection', goods_id: this.goodsDetail.id, token: this.$store.state.app.token})
         .then(({status, data}) => {
           this.$message({
+            type: "warning",
             message: data.msg,
           });
           this.getPageData();
@@ -184,6 +188,24 @@ export default {
           console.log(err);
           this.$message.error(`添加收藏${err}`);
         });
+    },
+    // 选择规格
+    checkboxChange: function(item) {
+      console.log(item);
+      if(item.product_id){
+        // 添加最近浏览商品
+        mainRequest({id: item.product_id, method: 'goods.getproductinfo'})
+          .then(res => {
+            console.log('选择规格',res);
+            this.checkList = {};
+            this.$nextTick(() => {
+              this.id = res.data.data.id;
+              this.checkList = res.data.data.default_spes_desc;
+            })
+          })
+          .catch(err => {
+          })
+      }
     },
     // 加入购物车
     async addShopCar(id, num) {
@@ -334,6 +356,4 @@ export default {
   .calculate /deep/ .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){border: 1px solid #DCDFE6 !important;}
   .calculate /deep/ .el-input-number__decrease:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){border: 1px solid #DCDFE6 !important;}
 
-  .case{display: inline-block;margin: 0 0 0 30px;}
-  .case /deep/ .el-checkbox{color: #999;}
 </style>
