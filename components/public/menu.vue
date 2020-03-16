@@ -289,17 +289,9 @@ export default {
     // 搜索
     search: async function () {
       console.log(this.value);
-      this.$router.push({name: 'categorylist', query: {search_name: this.value, name: this.value}});
-      // let data = {
-      //   page: 1,
-      //   limit: 10,
-      //   where: `{"search_name": "${this.value}"}`,
-      //   method: "goods.getlist"
-      // }
-      // await this.$store.dispatch("goods/getSearchList", data)
-      // if(!this.value){
-      //   this.$store.commit("goods/SET_SEARCH", {});
-      // }
+      if(this.value){
+        this.$router.push({name: 'categorylist', query: {search_name: this.value, name: this.value}});
+      }
     },
     // 前往结账
     toPayOrderCenter: async function () {

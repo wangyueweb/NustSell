@@ -27,7 +27,7 @@
           <el-table-column
             align="right">
             <template slot-scope="scope">
-              <span>{{dayjs(scope.row.ctime).format('YYYY-MM-DD HH:mm:ss')}}</span>
+              <span>{{dayjs.unix(scope.row.ctime).format('YYYY-MM-DD HH:mm:ss')}}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -46,6 +46,7 @@
 <script>
 import { mainRequest } from "@/services/api"
 import { mapState } from 'vuex';
+import { getSellInfo } from "@/services/api";
 export default {
   name: "Notice",
   layout: function(context){
@@ -75,6 +76,26 @@ export default {
         method: 'notice.noticeList'
       }
     };
+  },
+  head () {
+    return {
+      title: this.basicInfo.shop_name,
+      meta: [
+        { name: 'description', content: this.basicInfo.recommend_keys},
+        { name: 'keywords', content: this.basicInfo.shop_desc }
+      ]
+    }
+  },
+  async asyncData () {
+    try{
+      // 获取商城基本信息
+      const basicInfo = await getSellInfo();
+      return {
+        basicInfo: basicInfo.data
+      }
+    }catch(e){
+      
+    }
   },
 
   components: {},

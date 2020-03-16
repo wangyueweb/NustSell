@@ -4,6 +4,7 @@ import { getCookie } from "@/utils/utils"
 import Cookie from 'js-cookie'
 const state = () => ({
   allCategories: [],
+  brand: [],
   collect: {},
   browsing: {},
   goodsDetail: {},
@@ -13,6 +14,9 @@ const state = () => ({
 const mutations = {
   SET_ALLCATEGORIES: (state, payload) => {
     state.allCategories = payload;
+  },
+  SET_BRAND: (state, payload) => {
+    state.brand = payload;
   },
   SET_COLLECT: (state, payload) => {
     state.collect = payload;
@@ -39,9 +43,10 @@ const actions = {
   getAllCategories({ commit }, formData) {
     getCategories(formData)
       .then(res => {
-        const {data, status, msg} = res.data;
+        const {data, status, msg, brand} = res.data;
         if(status){
           commit('SET_ALLCATEGORIES', data);
+          commit('SET_BRAND', brand);
         }
       })
   },

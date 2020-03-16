@@ -38,7 +38,7 @@
             label="操作"
             align="center">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="addShopCar(scope.row.id)" v-if="scope.row.stock > 0">移入购物车</el-button>
+              <div class="buy-btn" @click.stop="addShopCar(scope.row.id)" v-if="scope.row.goods.stock > 0">加入购物车</div>
               <div class="cant-btn" v-else>库存不足</div>
               <div class="cancel-collect" @click="cancelCollect(scope.row.goods_id)">取消收藏</div>
             </template>
@@ -47,7 +47,7 @@
     </div>
     <div style="margin-top: 20px; display:flex; justify-content: space-between;">
       <div>
-        <span @click="cancelAllCollect(selectList)">取消收藏</span>
+        <el-button size="mini" type="text" @click="cancelAllCollect(selectList)">取消收藏</el-button>
         <el-button size="mini">共享收藏</el-button>
       </div>
 
@@ -65,6 +65,7 @@
 
 <script>
 import { mapState } from "vuex";
+import { getSellInfo } from "@/services/api";
 export default {
   name: "Collect",
   layout: function(context){
@@ -74,6 +75,26 @@ export default {
     return {
       currentPage: 1,
       selectList: []
+    }
+  },
+  head () {
+    return {
+      title: this.basicInfo.shop_name,
+      meta: [
+        { name: 'description', content: this.basicInfo.recommend_keys},
+        { name: 'keywords', content: this.basicInfo.shop_desc }
+      ]
+    }
+  },
+  async asyncData () {
+    try{
+      // 获取商城基本信息
+      const basicInfo = await getSellInfo();
+      return {
+        basicInfo: basicInfo.data
+      }
+    }catch(e){
+      
     }
   },
 
@@ -198,6 +219,16 @@ export default {
     .cancel-collect{
       @cursor-pointer();
     }
+    .buy-btn{
+      width: 120px;
+      height: 34px;
+      line-height: 34px;
+      text-align: center;
+      background: @theme-black;
+      color: @theme-white;
+      margin:auto;
+      @cursor-pointer();
+    }
     .cant-btn{
       width: 120px;
       height: 34px;
@@ -205,6 +236,7 @@ export default {
       text-align: center;
       background: @theme-lightgray;
       color: @theme-white;
+      margin:auto;
       cursor: not-allowed;
     }
   }

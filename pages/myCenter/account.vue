@@ -103,8 +103,9 @@
 </template>
 
 <script>
-import CardTitle from '@/components/public/cardTitle'
+import CardTitle from '@/components/public/cardTitle';
 import { mapState } from 'vuex';
+import { getSellInfo } from "@/services/api";
 export default {
   name: 'Account',
   layout: function(context){
@@ -112,11 +113,6 @@ export default {
   },
   data () {
     return {
-      accountOption: {
-        name: "Johnny Wang",
-        phone: "09054624544",
-        email: "dwan.designer@gmail.com"
-      },
       selected: 0,
       dialogVisible: false,
       
@@ -124,6 +120,26 @@ export default {
       editPhone:'',
       editEmail:'',
     };
+  },
+  head () {
+    return {
+      title: this.basicInfo.shop_name,
+      meta: [
+        { name: 'description', content: this.basicInfo.recommend_keys},
+        { name: 'keywords', content: this.basicInfo.shop_desc }
+      ]
+    }
+  },
+  async asyncData () {
+    try{
+      // 获取商城基本信息
+      const basicInfo = await getSellInfo();
+      return {
+        basicInfo: basicInfo.data
+      }
+    }catch(e){
+      
+    }
   },
 
   components: {

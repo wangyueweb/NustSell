@@ -38,7 +38,7 @@
             label="下单时间">
             <template slot-scope="scope">
               <div>
-                {{dayjs(scope.row.ctime).format('YYYY-MM-DD HH:mm:ss')}}
+                {{dayjs.unix(scope.row.ctime).format('YYYY-MM-DD HH:mm:ss') || ''}}
               </div>
             </template>
           </el-table-column>
@@ -62,9 +62,7 @@
             label="操作"
             >
             <template slot-scope="scope">
-              <div @click.stop="handle(scope.row)">
-                {{scope.row.status | statusHandle}}
-              </div>
+              <el-button type="text" @click.stop="handle(scope.row)">{{scope.row.status | statusHandle}}</el-button>
             </template>
           </el-table-column>
       </el-table>
@@ -86,6 +84,7 @@
 
 <script>
 import { mapState } from "vuex"
+import { getSellInfo } from "@/services/api";
 export default {
   name: "Order",
   layout: function(context){
@@ -117,6 +116,26 @@ export default {
         label: '待收货'
       }],
     };
+  },
+  head () {
+    return {
+      title: this.basicInfo.shop_name,
+      meta: [
+        { name: 'description', content: this.basicInfo.recommend_keys},
+        { name: 'keywords', content: this.basicInfo.shop_desc }
+      ]
+    }
+  },
+  async asyncData () {
+    try{
+      // 获取商城基本信息
+      const basicInfo = await getSellInfo();
+      return {
+        basicInfo: basicInfo.data
+      }
+    }catch(e){
+      
+    }
   },
   filters: {
     statusFilter: function (status) {
@@ -154,7 +173,7 @@ export default {
   computed: {
     ...mapState({
       orderList: state => state.order.orderList.list,
-      page: state => state.order.orderList.page
+      page: state => state.order.orderList.page,
     })
   },
 

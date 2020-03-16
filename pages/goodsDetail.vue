@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { getCategories } from "@/services/api";
+import { getCategories, getSellInfo } from "@/services/api";
 import GoodsScroll from "~/components/public/GoodsScroll";
 import { mainRequest } from "@/services/api";
 import { mapState } from "vuex";
@@ -126,6 +126,26 @@ export default {
       otherList: [],
       show_image: "",
     };
+  },
+  head () {
+    return {
+      title: this.basicInfo.shop_name,
+      meta: [
+        { name: 'description', content: this.basicInfo.recommend_keys},
+        { name: 'keywords', content: this.basicInfo.shop_desc }
+      ]
+    }
+  },
+  async asyncData () {
+    try{
+      // 获取商城基本信息
+      const basicInfo = await getSellInfo();
+      return {
+        basicInfo: basicInfo.data
+      }
+    }catch(e){
+      
+    }
   },
   components: {
     GoodsScroll

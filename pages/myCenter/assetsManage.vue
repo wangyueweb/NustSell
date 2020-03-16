@@ -6,7 +6,7 @@
     </div>
 
     <div class="main">
-      <div class="grade">您目前的账号余额 <span>P728.00</span></div>
+      <div class="grade">您目前的账号余额 <span>P{{authUser.balance || 0}}</span></div>
       <div class="tips">
         立即充值，获取积分，享受10%的购物优惠。
         <el-button type="primary" size="mini" @click="pay" style="margin-left:15px;padding: 7px 26px;font-size: 14px;">立即充值</el-button>
@@ -79,7 +79,9 @@
 </template>
 
 <script>
-import CardTitle from "@/components/public/cardTitle"
+import CardTitle from "@/components/public/cardTitle";
+import { mapState } from 'vuex';
+import { getSellInfo } from "@/services/api";
 export default {
   name: "assetsManage",
   layout: function(context){
@@ -117,12 +119,36 @@ export default {
       ],
     };
   },
+  head () {
+    return {
+      title: this.basicInfo.shop_name,
+      meta: [
+        { name: 'description', content: this.basicInfo.recommend_keys},
+        { name: 'keywords', content: this.basicInfo.shop_desc }
+      ]
+    }
+  },
+  async asyncData () {
+    try{
+      // 获取商城基本信息
+      const basicInfo = await getSellInfo();
+      return {
+        basicInfo: basicInfo.data
+      }
+    }catch(e){
+      
+    }
+  },
 
   components: {
     CardTitle
   },
 
-  computed: {},
+  computed: {
+    ...mapState({
+      authUser: state => state.app.authUser
+    }),
+  },
 
   created(){},
 

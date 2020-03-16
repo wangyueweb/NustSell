@@ -150,6 +150,7 @@
 </template>
 
 <script>
+import { getSellInfo } from "@/services/api";
 export default {
   name: "Collect",
   layout: function(context){
@@ -164,6 +165,26 @@ export default {
         repwd: "", // 新密码
         newpwd: "" // 重复密码
       }
+    }
+  },
+  head () {
+    return {
+      title: this.basicInfo.shop_name,
+      meta: [
+        { name: 'description', content: this.basicInfo.recommend_keys},
+        { name: 'keywords', content: this.basicInfo.shop_desc }
+      ]
+    }
+  },
+  async asyncData () {
+    try{
+      // 获取商城基本信息
+      const basicInfo = await getSellInfo();
+      return {
+        basicInfo: basicInfo.data
+      }
+    }catch(e){
+      
     }
   },
 

@@ -170,7 +170,7 @@
             
             <div class="current" v-if="currentShow">
                 <span class="current-span1">您目前的帐号余额：</span>
-                <span class="current-span2">P728.00</span>
+                <span class="current-span2">P{{authUser.balance || 0}}</span>
                 <span class="current-span3">立即充值</span>
             </div>
 
@@ -269,6 +269,7 @@ import CardTitle from "@/components/public/cardTitle";
 import AddAddress from "@/components/public/addAddress1";
 import EditAddress from "@/components/public/editAddress";
 import { mapState } from "vuex";
+import { getSellInfo } from "@/services/api";
 export default {
   name: "OrderCenter",
   layout: function(context){
@@ -325,6 +326,26 @@ export default {
       }
     };
   },
+  head () {
+    return {
+      title: this.basicInfo.shop_name,
+      meta: [
+        { name: 'description', content: this.basicInfo.recommend_keys},
+        { name: 'keywords', content: this.basicInfo.shop_desc }
+      ]
+    }
+  },
+  async asyncData () {
+    try{
+      // 获取商城基本信息
+      const basicInfo = await getSellInfo();
+      return {
+        basicInfo: basicInfo.data
+      }
+    }catch(e){
+      
+    }
+  },
 
   components: {
     CardTitle,
@@ -336,7 +357,8 @@ export default {
     ...mapState({
       payShopCarList: state => state.order.payShopCar.list.filter(item => (item.is_select === true)),
       addressList: state => state.user.addressList,
-      amount: state => state.order.amount
+      amount: state => state.order.amount,
+      authUser: state => state.app.authUser
     })
   },
 
