@@ -70,15 +70,6 @@ export default {
       newList: []
     };
   },
-  head () {
-    return {
-      title: this.basicInfo.shop_name,
-      meta: [
-        { name: 'description', content: this.basicInfo.recommend_keys},
-        { name: 'keywords', content: this.basicInfo.shop_desc }
-      ]
-    }
-  },
   components: {
     Category,
     Swiper,
@@ -88,6 +79,15 @@ export default {
     ...mapState({
       isFixed: state => state.app.isFixed,
     })
+  },
+  head () {
+    return {
+      title: this.basicInfo.shop_name,
+      meta: [
+        { name: 'description', content: this.basicInfo.recommend_keys},
+        { name: 'keywords', content: this.basicInfo.shop_desc }
+      ]
+    }
   },
   async asyncData () {
     try{

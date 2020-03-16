@@ -3,7 +3,7 @@
   <div class="detail">
     <div class="title">
       {{detail.title || ''}}
-      <div class="time">{{dayjs(detail.ctime).format('YYYY-MM-DD HH:mm:ss') || ''}}</div>
+      <div class="time">{{dayjs.unix(detail.ctime).format('YYYY-MM-DD HH:mm:ss') || ''}}</div>
     </div>
     <div class="content">
       尊敬的客户：<br/>
@@ -14,12 +14,13 @@
     </div>
     <div class="footer">
       王子易购<br/>
-      {{detail.ctime || ''}}
+      {{dayjs.unix(detail.ctime).format('YYYY-MM-DD HH:mm:ss') || ''}}
     </div>
   </div>
 </template>
 
 <script>
+import { getSellInfo } from "@/services/api";
 import { mainRequest } from "@/services/api"
 export default {
   name: "noticeDetail",
@@ -31,6 +32,26 @@ export default {
     return {
       detail: {}
     };
+  },
+  head () {
+    return {
+      title: this.basicInfo.shop_name,
+      meta: [
+        { name: 'description', content: this.basicInfo.recommend_keys},
+        { name: 'keywords', content: this.basicInfo.shop_desc }
+      ]
+    }
+  },
+  async asyncData () {
+    try{
+      // 获取商城基本信息
+      const basicInfo = await getSellInfo();
+      return {
+        basicInfo: basicInfo.data
+      }
+    }catch(e){
+      
+    }
   },
 
   fetch ({ app: { context: ctx, router: { currentRoute: cur } }, redirect}) {

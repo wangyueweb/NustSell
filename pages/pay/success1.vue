@@ -7,7 +7,7 @@
       </div>
       <div class="content-wrapper">
         <div class="describe">微信扫码二维码付款</div>
-        <div class="time">下单时间：{{dayjs($store.state.order.order.payment_time).format('YYYY-MM-DD HH:mm:ss')}}</div>
+        <div class="time">下单时间：{{dayjs($store.state.order.order.receiving_time).format('YYYY-MM-DD HH:mm:ss')}}</div>
         <div class="number">
             <span id="key">订单号：{{$store.state.order.order.order_id}}</span>
             <span title="复制" type="copy" class="copy"  data-clipboard-target="#key" @click="copy" >
@@ -38,7 +38,8 @@
 </template>
 
 <script>
-  import Clipboard from 'clipboard'
+import Clipboard from 'clipboard'
+import { getSellInfo } from "@/services/api";
   
 export default {
   name: 'Success1',
@@ -46,6 +47,26 @@ export default {
   data () {
     return {
       success: 1
+    }
+  },
+  head () {
+    return {
+      title: this.basicInfo.shop_name,
+      meta: [
+        { name: 'description', content: this.basicInfo.recommend_keys},
+        { name: 'keywords', content: this.basicInfo.shop_desc }
+      ]
+    }
+  },
+  async asyncData () {
+    try{
+      // 获取商城基本信息
+      const basicInfo = await getSellInfo();
+      return {
+        basicInfo: basicInfo.data
+      }
+    }catch(e){
+      
     }
   },
 

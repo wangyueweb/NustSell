@@ -19,7 +19,7 @@
               <!-- <div class="hot">_膨化.零嘴（20）</div> -->
               <div class="common" :style="$route.query.name == itemI.name ? 'color:#F65151':''" v-for="(itemI, indexI) in categoryList" :key="indexI" @click="$router.push({name: 'categorylist', query: itemI})">{{itemI.name}}</div>
               <div>
-                <span class="other" v-for="(itemJ, indexJ) in other" :key="indexJ">{{itemJ}}</span>
+                <span class="other" v-for="(itemJ, indexJ) in brand" :key="indexJ" @click="$router.push({name: 'categorylist', query: {...itemJ}})">{{itemJ.name}}</span>
               </div>
             </div>
           </div>
@@ -82,7 +82,7 @@
           <el-row :gutter="10">
             <el-col :span="small ? 6 : 24" v-for="(item, index) in goodsOptions.list" :key="index" :class="small ? 'big-good-wrapper' : 'small-good-wrapper'">
               <div class="grid-content productList">
-                <div class="sign">特惠</div>
+                <div class="sign" v-if="item.is_preferential === 2">特惠</div>
                 <nuxt-link :to="{name: 'goodsDetail', query: {id: item.id}}">
                   <div class="goodpic-wrapper">
                     <el-image
@@ -159,22 +159,12 @@
 
 <script>
 import CardTitle from '~/components/public/cardTitle';
-import {getCategories} from "~/services/api";
+import { getCategories, getSellInfo } from "@/services/api";
 import { mapState } from "vuex";
 export default {
   name: 'categoryList',
   data(){
     return {
-      other: [
-        "卫龙",
-        "好丽友",
-        "达利园",
-        "盼盼",
-        "康师傅",
-        "百草味",
-        "农夫山泉",
-        "自然派",
-      ],
       small: true,
       value: 1, 
       sort: "", // 排序
@@ -183,12 +173,33 @@ export default {
       currentPage: 1,
     }
   },
+  head () {
+    return {
+      title: this.basicInfo.shop_name,
+      meta: [
+        { name: 'description', content: this.basicInfo.recommend_keys},
+        { name: 'keywords', content: this.basicInfo.shop_desc }
+      ]
+    }
+  },
+  async asyncData () {
+    try{
+      // 获取商城基本信息
+      const basicInfo = await getSellInfo();
+      return {
+        basicInfo: basicInfo.data
+      }
+    }catch(e){
+      
+    }
+  },
   components: {
     CardTitle
   },
   computed: {
     ...mapState({
-      browsing: state => state.goods.browsing
+      browsing: state => state.goods.browsing,
+      brand: state => state.goods.brand
     }),
     categoryList: {
       get: function () {
@@ -217,7 +228,7 @@ export default {
       if(this.$route.query.firstId){
         this.formData = {
           page: 1,
-          limit: this.small ? 12 : 3,
+          limit: this.small ? 12 : 6,
           where: `{"cat_id": ${this.$route.query.firstId}}`,
           method: "goods.getlist",
         }
@@ -225,7 +236,7 @@ export default {
       else if(this.$route.query.search_name) {
         this.formData= {
           page: 1,
-          limit: this.small ? 12 : 3,
+          limit: this.small ? 12 : 6,
           where: `{"search_name": "${this.$route.query.search_name}"}`,
           method: "goods.getlist"
         }
@@ -234,7 +245,7 @@ export default {
       else{
         this.formData = {
           page: 1,
-          limit: this.small ? 12 : 3,
+          limit: this.small ? 12 : 6,
           where: `{"cat_id": ${this.$route.query.id}}`,
           method: "goods.getlist",
         }
@@ -301,7 +312,7 @@ export default {
         if(this.$route.query.firstId){
           this.formData = {
             page: 1,
-            limit: this.small ? 12 : 3,
+            limit: this.small ? 12 : 6,
             order: "buy_count desc",
             where: `{"cat_id": ${this.$route.query.firstId}}`,
             method: "goods.getlist",
@@ -310,7 +321,7 @@ export default {
         else if(this.$route.query.search_name) {
           this.formData= {
             page: 1,
-            limit: this.small ? 12 : 3,
+            limit: this.small ? 12 : 6,
             order: "buy_count desc",
             where: `{"search_name": "${this.$route.query.search_name}"}`,
             method: "goods.getlist"
@@ -320,7 +331,7 @@ export default {
         else{
           this.formData = {
             page: 1,
-            limit: this.small ? 12 : 3,
+            limit: this.small ? 12 : 6,
             order: "buy_count desc",
             where: `{"cat_id": ${this.$route.query.id}}`,
             method: "goods.getlist",
@@ -335,7 +346,7 @@ export default {
         if(this.$route.query.firstId){
           this.formData = {
             page: 1,
-            limit: this.small ? 12 : 3,
+            limit: this.small ? 12 : 6,
             order: "price asc",
             where: `{"cat_id": ${this.$route.query.firstId}}`,
             method: "goods.getlist",
@@ -344,7 +355,7 @@ export default {
         else if(this.$route.query.search_name) {
           this.formData= {
             page: 1,
-            limit: this.small ? 12 : 3,
+            limit: this.small ? 12 : 6,
             order: "price asc",
             where: `{"search_name": "${this.$route.query.search_name}"}`,
             method: "goods.getlist"
@@ -354,7 +365,7 @@ export default {
         else{
           this.formData = {
             page: 1,
-            limit: this.small ? 12 : 3,
+            limit: this.small ? 12 : 6,
             order: "price asc",
             where: `{"cat_id": ${this.$route.query.id}}`,
             method: "goods.getlist",
@@ -503,6 +514,7 @@ export default {
         .main{
           flex: 1;
           padding-left: 40px;
+          padding-right: 40px;
           .top{
             display: flex;
             justify-content: space-between;
