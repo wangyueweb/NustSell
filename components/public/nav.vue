@@ -163,12 +163,8 @@
 <script>
   import { mainRequest } from "@/services/api"
   import Cookie from 'js-cookie'
-  // import Vue from "vue"
-  import SlideVerify from 'vue-monoplasty-slide-verify'
   import { mapState } from "vuex"
-  // if (process.client) {
-  //   Vue.use(SlideVerify);
-  // }
+ 
   export default {
     name: 'Nav',
     components: {

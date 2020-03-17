@@ -22,7 +22,7 @@
                 placeholder="请输入内容"
               ></el-autocomplete>
               
-              <div class="discount">( ￥ 21.79 )</div>
+              <div class="discount">( ￥ {{authUser.balance || 0}} )</div>
             </div>
             <div class="item">
               <div class="alias">支 付 方 式</div> 
@@ -47,7 +47,9 @@
     </div>
 
     <CardTitle :textLine='true' :titleLine='true' name='充值记录' style="margin-top:26px;"/>
-    <div class="table">
+
+    暂无数据
+    <!-- <div class="table">
       <el-table
         :data="tableData"
         style="width: 100%"
@@ -73,7 +75,7 @@
             align="center">
           </el-table-column>
       </el-table>
-    </div>
+    </div> -->
 
   </div>
 </template>
