@@ -231,6 +231,17 @@
         this.getUserInfo();
         this.getCollect();
       }
+
+      (function(d, w, c) {
+          var s = d.createElement('script');
+          w[c] = w[c] || function() {
+              (w[c].z = w[c].z || []).push(arguments);
+          };
+          s.async = true;
+          s.src = 'https://pubres.aihecong.com/hecong.js';
+          if (d.head) d.head.appendChild(s);
+      })(document, window, '_AIHECONG');
+      _AIHECONG('ini',{ entId : 21096 });
     },
     created(){
       this.$store.dispatch('user/getNotice', {page: 1,pageSize: 3,orderType: 'desc',method: 'notice.noticeList'});

@@ -32,10 +32,11 @@ const actions = {
     if(req && req.headers != undefined){
       let cookieArr = req.headers.cookie;
       //获取cookie然后拆成键值对
+      console.log(cookieArr)
       if(cookieArr){
         const token = getCookie('token', cookieArr);
         // 检查是否登录
-        if(token){
+        if(token && typeof token === 'string'){
           commit('SET_TOKEN', token);
         }
       }
@@ -48,7 +49,7 @@ const actions = {
       try {
         const { data, status } = await mainRequest(userInfo);
           console.log('登录', status, data);
-          if(status === 200 && data && data.status){
+          if(status === 200 && data){
             // 是否自动登录
             if(auto > 0){
               Cookie.set('token', data.data, {expires: 7});

@@ -376,7 +376,7 @@ export default {
       left: 0;
       width: 100%;
       background: @theme-white;
-      z-index: 100000;
+      z-index: 100;
       border-bottom: 4px solid @theme-black;
     }
   }
