@@ -95,6 +95,28 @@ const actions = {
           console.log(err);
         })
     })
+  },
+
+  // 重置密码
+  async editpwd ({}, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          let {status, data} = res;
+          console.log('重置密码', res);
+          console.log(data.msg);
+          this._vm.$message({
+            message: data.msg,
+            type: data.status ? 'success' : 'warning'
+          });
+          if(data.status){
+            resolve();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
   }
 }
 export default { namespaced: true, state, mutations, actions }

@@ -19,7 +19,7 @@
               <!-- <div class="hot">_膨化.零嘴（20）</div> -->
               <div class="common" :style="$route.query.name == itemI.name ? 'color:#F65151':''" v-for="(itemI, indexI) in categoryList" :key="indexI" @click="$router.push({name: 'categorylist', query: itemI})">{{itemI.name}}</div>
               <div>
-                <span class="other" v-for="(itemJ, indexJ) in brand" :key="indexJ" @click="$router.push({name: 'categorylist', query: {...itemJ}})">{{itemJ.name}}</span>
+                <span class="other" v-for="(itemJ, indexJ) in brand" :key="indexJ" @click="$router.push({name: 'categorylist', query: {...itemJ,'brand': true}})">{{itemJ.name}}</span>
               </div>
             </div>
           </div>
@@ -240,7 +240,14 @@ export default {
           where: `{"search_name": "${this.$route.query.search_name}"}`,
           method: "goods.getlist"
         }
-        this.getGoodsList();
+      }
+      else if(this.$route.query.brand) {
+        this.formData= {
+          page: 1,
+          limit: this.small ? 12 : 6,
+          where: `{"brand_id": "${this.$route.query.id}"}`,
+          method: "goods.getlist"
+        }
       }
       else{
         this.formData = {
@@ -259,8 +266,9 @@ export default {
     // 获取商品列表
     getGoodsList: async function () {
       await this.$store.dispatch('goods/getGoodsList', this.formData)
-        .then(({status, data}) => {
-          console.log(data);
+        .then(res => {
+          console.log('获取商品列表', res);
+          let {status, data} = res;
           if(status === 200 && data && data.data){
             this.goodsOptions = data.data;
           }
@@ -326,7 +334,14 @@ export default {
             where: `{"search_name": "${this.$route.query.search_name}"}`,
             method: "goods.getlist"
           }
-          this.getGoodsList();
+        }
+        else if(this.$route.query.brand) {
+          this.formData= {
+            page: 1,
+            limit: this.small ? 12 : 6,
+            where: `{"brand_id": "${this.$route.query.id}"}`,
+            method: "goods.getlist"
+          }
         }
         else{
           this.formData = {
@@ -360,7 +375,14 @@ export default {
             where: `{"search_name": "${this.$route.query.search_name}"}`,
             method: "goods.getlist"
           }
-          this.getGoodsList();
+        }
+        else if(this.$route.query.brand) {
+          this.formData= {
+            page: 1,
+            limit: this.small ? 12 : 6,
+            where: `{"brand_id": "${this.$route.query.id}"}`,
+            method: "goods.getlist"
+          }
         }
         else{
           this.formData = {

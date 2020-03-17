@@ -38,19 +38,19 @@
                   <div class="item">
                     <div class="alias">原 密 码</div> 
                     <div class="address">
-                      <el-input v-model="formData.oldpwd" style="width: 200px;"></el-input>
+                      <el-input v-model="formData.pwd" style="width: 200px;"></el-input>
                     </div>
                   </div>
                   <div class="item">
                     <div class="alias">新 密 码</div> 
                     <div class="address">
-                      <el-input v-model="formData.repwd" style="width: 200px;"></el-input>
+                      <el-input v-model="formData.newpwd" style="width: 200px;"></el-input>
                     </div>
                   </div>
                   <div class="item">
                     <div class="alias">确认密码</div> 
                     <div class="address">
-                      <el-input v-model="formData.newpwd" style="width: 200px;"></el-input>
+                      <el-input v-model="formData.repwd" style="width: 200px;"></el-input>
                     </div>
                   </div>
                   <span slot="footer" class="dialog-footer item">
@@ -161,9 +161,11 @@ export default {
       dialogVisible: false,
       bindemailShow: false,
       formData: {
-        oldpwd: "", // 旧密码
-        repwd: "", // 新密码
-        newpwd: "" // 重复密码
+        pwd: "", // 旧密码
+        newpwd: "", // 新密码
+        repwd: "", // 重复密码
+        method: "user.editpwd",
+        token: this.$store.state.app.token,
       }
     }
   },
@@ -199,7 +201,29 @@ export default {
   methods: {
     // 修改密码
     resetPwd: function () {
-      
+      this.$confirm('确认重置密码?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        .then(async () => {
+          await this.$store.dispatch("user/editpwd", this.formData);
+
+          let data = {
+            token: this.$store.state.app.token,
+            method:'user.logout'
+          }
+
+          this.$store.dispatch("app/logout", data)
+            .then(res => {
+              this.$message(res);
+              this.$router.push({name: 'index'});
+            })
+            .catch(err => {
+              this.$message.error(err);
+            })
+        })
+        .catch(err => {})
     },
   }
 };
@@ -318,7 +342,7 @@ export default {
   }
 }
 
-.amend{position: absolute;width: 875px;border: 1px solid #000;top: 35px;left: -644px;background: #fff;z-index: 100;}
+.amend{position: absolute;width: 875px;border: 1px solid #000;top: 35px;left: -644px;background: #fff;z-index: 99;}
 .amend .amend-name{font-size: 16px;padding: 10px 0 10px 28px;font-weight: 600;}
 .amend .dialog-footer{margin: 35px 0 45px 0 !important;}
 .amend .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
