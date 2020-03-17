@@ -72,7 +72,7 @@
       </div>
 
       <div v-if="selected === 0">
-        <div class="name-wrapper" style="line-height: 50px;">可用积分 : <span class="name">100积分</span></div>
+        <div class="name-wrapper" style="line-height: 50px;">可用积分 : <span class="name">0积分</span></div>
         <div class="name-wrapper" style="line-height: 50px;margin-top: -12px;">积分兑换活动进行中，您现在可使用积分购买商品。</div>
 
         <div class="card">
@@ -86,16 +86,16 @@
 
 
       <div v-if="selected === 1">
-        <div class="table">
+        <!-- <div class="table">
           <div class="table-title">品名 百草味金枕头泰国风味 冻干榴莲共30g</div>
-        </div>
+        </div> -->
         <div class="img-list">
-          <el-image
+          <!-- <el-image
             class="img"
             src="https://b2c.jihainet.com/static/uploads/9f/c9/54/5bcd2b69d8e2d.jpg"
             fit="fill"
           >
-          </el-image>
+          </el-image> -->
         </div>
       </div>
     </div>
