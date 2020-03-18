@@ -435,7 +435,7 @@ export default {
     // align-items: center;
   }
   
-  .menu-type span{border-bottom: 2px solid #fff;}
+  // .menu-type span{border-bottom: 2px solid #fff;}
   .toolsboz /deep/ .el-input__inner:focus{border: 1px solid #DCDFE6 !important;}
   .toolsboz /deep/ .el-input__inner:hover{border: 1px solid #DCDFE6 !important;}
   .toolsboz /deep/ .el-input-number__increase:hover:not(.is-disabled)~.el-input .el-input__inner:not(.is-disabled){border: 1px solid #DCDFE6 !important;}

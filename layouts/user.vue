@@ -30,6 +30,7 @@
       </el-row>
     </div>
     <Footer />
+    <el-backtop :bottom="100" :right="30"></el-backtop>
   </div>
 </template>
 
