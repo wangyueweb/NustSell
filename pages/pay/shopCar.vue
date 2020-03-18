@@ -57,8 +57,8 @@
               align="center"
               label="操作">
               <template slot-scope="scope">
-                <div @click="addCollect(scope.row.products.goods_id)">移入收藏夹</div>
-                <div @click="delShopCar(scope.row.id)">删除</div>
+                <div class="shape" @click="addCollect(scope.row.products.goods_id)">移入收藏夹</div>
+                <div class="shape" @click="delShopCar(scope.row.id)">删除</div>
               </template>
             </el-table-column>
           </el-table>
@@ -418,4 +418,6 @@ export default {
 .myfavorite:after{content: '';position: absolute;bottom: 0;left: 50%;width: 70px;height: 3px;background: #000;transform: translateX(-50%);}
 .aggregate{border-bottom: 1px solid #EAEAEA;font-size: 18px;padding: 0 0 5px 0;}
 .continue{cursor:pointer;}
+.shape{cursor:pointer;}
+
 </style>
