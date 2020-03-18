@@ -51,18 +51,26 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="状态">
+            label="付款状态">
             <template slot-scope="scope">
               <div>
-                {{scope.row.status | statusFilter}}
+                {{scope.row.pay_status | pay_statusFilter}}
               </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="发货状态">
+            <template slot-scope="scope">
+              <div>
+                {{[scope.row.confirm,scope.row.ship_status] | confirmFilter}}
+                </div>
             </template>
           </el-table-column>
           <el-table-column
             label="操作"
             >
             <template slot-scope="scope">
-              <el-button type="text" @click.stop="handle(scope.row)">{{scope.row.status | statusHandle}}</el-button>
+              <el-button type="text" @click.stop="handle(scope.row)">{{scope.row | statusHandle}}</el-button>
             </template>
           </el-table-column>
       </el-table>
@@ -138,32 +146,39 @@ export default {
     }
   },
   filters: {
-    statusFilter: function (status) {
+    pay_statusFilter: function (status) {
       switch (status) {
         case 1:
           return '待付款';
         case 2:
-          return '已确认 待发货';
-        case 3:
-          return '已确认 已发货';
-        case 4:
-          return '已完成';
+          return '已付款';
         default:
           return ''
       }
     },
-    statusHandle: function (status) {
-      switch (status) {
-        case 1:
-          return '取消订单';
-        case 2:
-          return '已确认';
-        case 3:
-          return '确认收货';
-        case 4:
-          return '已完成';
-        default:
-          return ''
+    confirmFilter: function (status) {
+      if(status[0] === 1){
+        if(status[1] === 1){
+          return '待发货';
+        }else if(status[1] === 3){
+          return '已发货';
+        }
+      }else{
+        return '已收货';
+      }
+    },
+    statusHandle: function (item) {
+      console.log(item.pay_status, item.ship_status, item.confirm);
+      if(item.pay_status === 1 && item.ship_status === 1){
+        return '取消订单';
+      }
+
+      if(item.pay_status === 2 && item.ship_status === 3 && item.confirm === 1){
+        return '确认收货';
+      }
+
+      if(item.pay_status === 2 && item.ship_status === 3 && item.confirm === 2){
+        return '已完成';
       }
     }
   },
@@ -189,12 +204,13 @@ export default {
     },
     // 表格操作
     handle: function (item) {
-      if(item.status === 1){
+      console.log(item.pay_status, item.ship_status, item.confirm === 1);
+      if(item.pay_status === 1 && item.ship_status === 1){
         console.log('取消订单');
         this.orderCancel(item.order_id);
       }
 
-      if(item.status === 3){
+      if(item.pay_status === 2 && item.ship_status === 3 && item.confirm === 1){
         console.log('确认收货');
         this.orderConfirm(item.order_id);
       }
@@ -215,6 +231,7 @@ export default {
     },
     selectChange: function(){
       console.log(this.formData);
+      this.$set(this.formData, "page", 1);
       this.$store.dispatch("order/getOrderList", this.formData);
     },
     paginationChange: function(e) {

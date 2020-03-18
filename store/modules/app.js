@@ -50,18 +50,19 @@ const actions = {
         const { data, status } = await mainRequest(userInfo);
           console.log('登录', status, data);
           if(status === 200 && data){
-            // 是否自动登录
-            if(auto > 0){
-              Cookie.set('token', data.data, {expires: 7});
-            }else{
-              Cookie.set('token', data.data);
-            }
-
             this._vm.$message({
               type: (status === 200 && data && data.status) ? 'success' : 'error',
               message: data.msg
             })
-            resolve();
+            if(data.status){
+              // 是否自动登录
+              if(auto > 0){
+                Cookie.set('token', data.data, {expires: 7});
+              }else{
+                Cookie.set('token', data.data);
+              }
+              resolve();
+            }
           }
       } catch (error) {
         if (error.response && error.response.status === 401) {
