@@ -6,7 +6,7 @@
     </div>
 
     <div class="main">
-      <div class="grade">您目前的账号余额 <span>P{{authUser.balance || 0}}</span></div>
+      <div class="grade">您目前的账号余额 <span>P{{authUser ? authUser.balance : 0}}</span></div>
       <div class="tips">
         立即充值，获取积分，享受10%的购物优惠。
         <el-button type="primary" size="mini" @click="pay" style="margin-left:15px;padding: 7px 26px;font-size: 14px;">立即充值</el-button>
@@ -22,7 +22,7 @@
                 placeholder="请输入内容"
               ></el-autocomplete>
               
-              <div class="discount">( ￥ {{authUser.balance || 0}} )</div>
+              <div class="discount">( ￥ {{authUser ? authUser.balance : 0}} )</div>
             </div>
             <div class="item">
               <div class="alias">支 付 方 式</div> 
@@ -48,34 +48,45 @@
 
     <CardTitle :textLine='true' :titleLine='true' name='充值记录' style="margin-top:26px;"/>
 
-    暂无数据
-    <!-- <div class="table">
+    <div v-if="balance.data.length === 0">暂无数据</div>
+    <div class="table" v-else>
       <el-table
-        :data="tableData"
+        :data="balance.data"
         style="width: 100%"
         >
           <el-table-column
-            prop="id"
+            prop="type"
             label="类型"
             align="center">
           </el-table-column>
           <el-table-column
-            prop="time"
+            prop="ctime"
             label="时间"
             align="center">
           </el-table-column>
           <el-table-column
-            prop="count"
+            prop="money"
             label="金额"
             align="center">
           </el-table-column>
           <el-table-column
-            prop="state"
+            prop="memo"
             label="状态"
             align="center">
           </el-table-column>
       </el-table>
-    </div> -->
+    </div>
+
+    <el-pagination
+      v-if="balance.data.length > 0"
+      @current-change="paginationChange"
+      :page-count="balance.total"
+      :current-page="formData.page"
+      background
+      layout="prev, pager, next"
+      style="text-align: right;margin-top:10px;"
+    >
+    </el-pagination>
 
   </div>
 </template>
@@ -99,26 +110,13 @@ export default {
         pay_method: "",
         remark: ""
       },
-      tableData: [
-        {
-          time: '2019-10-1 19:00:00',
-          count: 'P1000(￥140）',
-          id: '微信充值',
-          state: '充值成功',
-        },
-        {
-          time: '2019-10-1 19:00:00',
-          count: 'P1000(￥140）',
-          id: '支付宝充值',
-          state: '等待支付',
-        },
-        {
-          time: '2019-10-1 19:00:00',
-          count: 'P1000(￥140）',
-          id: '缺货退款',
-          state: '退款成功',
-        },
-      ],
+
+      formData: {
+        method: "user.balancelist",
+        token: this.$store.state.app.token,
+        page: 1,
+        limit: 10,
+      }
     };
   },
   head () {
@@ -148,11 +146,14 @@ export default {
 
   computed: {
     ...mapState({
-      authUser: state => state.app.authUser
+      authUser: state => state.app.authUser,
+      balance: state => state.user.balance
     }),
   },
 
-  created(){},
+  created(){
+    this.getBalance();
+  },
 
   mounted(){
       this.restaurants = this.loadAll();
@@ -187,6 +188,16 @@ export default {
         { "value": "25"},
       ];
     },
+
+    getBalance: function(){
+      this.$store.dispatch("user/getBalance", this.formData);
+    },
+    // 分页变化
+    paginationChange: function (e) {
+      console.log(e);
+      this.$set(this.formData, 'page', e);
+      this.getBalance();
+    }
   }
 }
 </script>

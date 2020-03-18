@@ -4,6 +4,10 @@ import Cookie from 'js-cookie'
 const state = () => ({
   noticeList: [],
   addressList: [],
+  balance: {
+    data: [],
+    total: 0
+  }
 })
 
 const mutations = {
@@ -12,6 +16,9 @@ const mutations = {
   },
   SET_ADDRESS: (state, payload) => {
     state.addressList = payload;
+  },
+  SET_BALANCE: (state, payload) => {
+    state.balance = payload;
   }
 }
 
@@ -110,6 +117,24 @@ const actions = {
             type: data.status ? 'success' : 'warning'
           });
           if(data.status){
+            resolve();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
+  },
+
+  // 流水记录
+  async getBalance ({commit}, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          let {status, data} = res;
+          console.log('流水记录', res);
+          if(data.status){
+            commit("SET_BALANCE", data);
             resolve();
           }
         })

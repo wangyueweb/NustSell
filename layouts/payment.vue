@@ -17,6 +17,7 @@
       </div>
     </div>
     <nuxt />
+    <el-backtop :bottom="100" :right="30"></el-backtop>
   </div>
 </template>
 
