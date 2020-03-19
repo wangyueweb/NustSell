@@ -8,10 +8,10 @@
       </div>
     </div>
     
-    <div class="arrow" v-if="!customArrow">
+    <!-- <div class="arrow" v-if="!customArrow">
       <div class="swiper-button-prev"></div>
       <div class="swiper-button-next"></div>
-    </div>
+    </div> -->
     
     <slot name="arrow" v-if="customArrow"></slot>
 

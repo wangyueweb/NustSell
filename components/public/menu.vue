@@ -1,7 +1,7 @@
 <template>
-	<div class="menu" id="menu">
+	<div class="menu" id="menu" >
     <!--  :class="{menu_fixed : isFixed}" -->
-    <div :class="{menu_fixed : isFixed}" v-if="allCategories.length > 0">
+    <div v-if="allCategories.length > 0" :class="{menu_fixed : isFixed}">
       <el-row class="content" style="display: flex;align-items: center;flex-wrap: wrap;justify-content:space-between">
         <el-col :span="3" v-if="isFixed">
           <div class="logo" style="height:76px;justify-content: left;">
@@ -18,8 +18,8 @@
           </div>
         </el-col>
         <el-col :span="15">
-          <el-row>
-            <el-col :span="4" v-for="(item, index) in allCategories" :key="index" class="menu-type">
+          <el-row type="flex">
+            <el-col v-for="(item, index) in allCategories" :key="index" class="menu-type">
               <el-popover
                 placement="bottom"
                 trigger="hover"
@@ -229,8 +229,8 @@ export default {
   methods: {
     // 滚动监听 滚动触发的效果写在这里
     handleScroll () {
-      const scrollTop = document.documentElement.scrollTop ;
-      if (scrollTop >= this.offsetTop + 140) {
+      const scrollTop = window.pageYOffset;
+      if (scrollTop >= this.$el.offsetHeight * 2) {
         // this.isFixed = true;
         this.$store.commit('app/setFixed', true);
       } else {
@@ -335,9 +335,9 @@ export default {
   .basket{background: #fff;border: 1px solid #404040;box-shadow:none;border-radius: 0;}
   .menu{
     @1200-min();
-    // position: sticky;
-    // top: 0;
-    // z-index: 99999;
+    position: sticky;
+    top: 0;
+    z-index: 99999;
     background: @theme-white;
     .content{
       @1200();
@@ -375,15 +375,26 @@ export default {
     }
     // isfixed === true
     .menu_fixed {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
+      // position: fixed;
+      // top: 0;
+      // left: 0;
+      // width: 100%;
       background: @theme-white;
       z-index: 100;
       border-bottom: 4px solid @theme-black;
     }
   }
+  @-webkit-keyframes fadeIn {
+0% {
+opacity: 0; /*初始状态 透明度为0*/
+}
+50% {
+opacity: 0; /*中间状态 透明度为0*/
+}
+100% {
+opacity: 1; /*结尾状态 透明度为1*/
+}
+}
   .link{
     color: #000;
     @cursor-pointer();

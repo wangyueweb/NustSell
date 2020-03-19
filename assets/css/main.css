@@ -11,7 +11,7 @@ html {
 *,
 *:before,
 *:after,
-*:focus{
+*:focus {
   outline: none;
 }
 body {
@@ -43,7 +43,7 @@ a {
   background: none;
 }
 .nick {
-  margin-top: 184px;
+  padding-top: 320px;
 }
 .search .el-input__inner {
   border-top: none;
@@ -127,9 +127,19 @@ a {
 .el-button {
   border-radius: 0;
 }
-
-.swiper-button-prev:hover{opacity: 0.6 !important;}
-.swiper-button-next:hover{opacity: 0.6 !important;}
-.navpop{position: absolute;top: 0;left: 50%;transform: translateX(-50%);box-shadow: none;}
-
-.el-dialog{margin: 0;}
+.swiper-button-prev:hover {
+  opacity: 0.6 !important;
+}
+.swiper-button-next:hover {
+  opacity: 0.6 !important;
+}
+.navpop {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: none;
+}
+.el-dialog {
+  margin: 0;
+}

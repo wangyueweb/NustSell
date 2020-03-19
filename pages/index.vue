@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <!-- 轮播 -->
-
-    <div :class="{nick : isFixed}" class="carousel">
+<!-- :class="{nick : isFixed}" -->
+    <div class="carousel">
       <Swiper :imgs="adverlist.map(item => item.img)" :options="bannerOption" ref="swiperTop" style="height:500px" :customArrow="true">
         <div slot="arrow" class="arrow-wrapper">
           <div class="swiper-button-prev"></div>
@@ -158,7 +158,7 @@ export default {
   width: 100%;
 }
 .carousel{
-  @1200-min();
+  // @1200-min();
   position: relative;
   height: 500px;
 }
