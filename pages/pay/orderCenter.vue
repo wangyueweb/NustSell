@@ -162,9 +162,9 @@
             
             <el-radio-group class="radiogroup" v-model="receipt_type" @change="histTypeUpdate">
               <el-radio :label="1" border>货到付款</el-radio>
-              <el-radio :label="2" border>微信</el-radio>
+              <el-radio :label="2" border>余额付款</el-radio>
               <el-radio :label="3" border>支付宝</el-radio>
-              <el-radio :label="4" border>余额付款</el-radio>
+              <el-radio :label="4" border>微信</el-radio>
             </el-radio-group>
             <div class="line"></div>
             
@@ -520,7 +520,7 @@ export default {
       }
     },
     histTypeUpdate: function(histType) {
-        if(histType == 3){
+        if(histType == 2){
             this.currentShow = true
         }else{
             this.currentShow = false
