@@ -134,7 +134,7 @@ export default {
   @centered()
 }
 
-.newbox{position: absolute;width: 100%;border: 1px solid #000;top: 48px;left: 0;background: #fff;z-index: 100;}
+.newbox{position: absolute;width: 100%;border: 1px solid #000;top: 48px;left: 0;background: #fff;z-index: 98;}
 .newbox .newbox-name{font-size: 16px;padding: 10px 0 10px 28px;}
 .newbox .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
 .newbox .el-radio{margin: 0;min-width: 120px;}

@@ -323,6 +323,10 @@ export default {
           code:'',
           password:'',
           deal:'',
+      },
+      usershipData: {
+        method:'user.getusership',
+        token: this.$store.state.app.token
       }
     };
   },
@@ -387,11 +391,8 @@ export default {
           }
         });
 
-      const formData = {
-        method:'user.getusership',token: this.$store.state.app.token
-      }
       // 获取获取收货地址
-      this.$store.dispatch('user/getAddress', formData);
+      this.$store.dispatch('user/getAddress', this.usershipData);
     },
     // 收货人员选取
     checkboxChange: function(e){
@@ -401,28 +402,41 @@ export default {
     },
     // 提交购物车
     shopCarSubmit: async function(){
-      let data = {
-        cart_ids: this.$route.query.ids,
-        memo: this.memo, // 留言备注
-        receipt_type: this.receipt_type, // 支付方式 （目前默认为1，线下支付）
-        uship_id: this.checkList[0], // 收货地址ID
-        receiving_time: this.dayjs(this.receiving_time).format('YYYY-MM-DD HH:mm:ss'), // 收货时间
-        method: "order.create",
-        token: this.$store.state.app.token
-      }
+      if(this.checkList.length > 0){
+        let data = {
+          cart_ids: this.$route.query.ids,
+          memo: this.memo, // 留言备注
+          receipt_type: this.receipt_type, // 支付方式 （目前默认为1，线下支付）
+          uship_id: this.checkList[0], // 收货地址ID
+          receiving_time: this.dayjs(this.receiving_time).format('YYYY-MM-DD HH:mm:ss'), // 收货时间
+          method: "order.create",
+          token: this.$store.state.app.token
+        }
 
-      console.log(data);
-
-      await this.$store.dispatch("order/shopCarSubmit", data)
-        .then(() => {
-          console.log('提交成功');
-          this.$router.push({name: 'pay-success1'});
+        console.log(data);
+        this.$confirm('确认提交?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        .then(async () => {
+          await this.$store.dispatch("order/shopCarSubmit", data)
+          .then(() => {
+            console.log('提交成功');
+            this.$router.push({name: 'pay-success1'});
+          })
+          .catch(err => {
+            console.log('提交失败');
+          })
         })
         .catch(err => {
-          console.log('提交失败');
         })
-
-      
+      }else{
+        this.$message({
+          message: "请选择收件人信息",
+          type: "error"
+        })
+      }
     },
     // 删除地址
     deleteAddress: function (item) {
@@ -432,17 +446,22 @@ export default {
         id:item.id
       }
       this.$confirm('删除地址, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
-        .then(async () => {
-          await this.$store.dispatch("user/deleteAddress", formData);
-          location.reload();
-        })
-        .catch(err => {
-          location.reload();
-        })
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+      .then(async () => {
+        await this.$store.dispatch("user/deleteAddress", formData);
+
+        console.log(item.id, this.checkList[0])
+        if(item.id === this.checkList[0]){
+          this.checkList = [];
+        }
+        this.$store.dispatch('user/getAddress', this.usershipData);
+      })
+      .catch(err => {
+        this.$store.dispatch('user/getAddress', this.usershipData);
+      })
     },
     // 修改地址
     openEditAddress: function (item) {
@@ -452,7 +471,8 @@ export default {
     },
 
     editSuccess: function () {
-      location.reload()
+      this.$store.dispatch('user/getAddress', this.usershipData);
+      this.dialogVisible = false;
     },
 
 
@@ -615,7 +635,7 @@ export default {
 
 .d-ib{display: inline-block;}
 .primary-box{position: relative;}
-.addsite{border: 1px solid #000;position: absolute;top: 36px;left: -34px;width: 797px;background: #fff;z-index: 99;padding: 0 10px;}
+.addsite{border: 1px solid #000;position: absolute;top: 36px;left: -34px;width: 797px;background: #fff;z-index: 98;padding: 0 10px;}
 .addsite .addsite-name{padding: 6px 0 20px 5px;}
 .addsite .alias{width: 125px;margin: 0 6px 0 0;text-align: right;}
 .addsite .item{margin: 0 0 10px 0;}
