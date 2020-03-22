@@ -271,8 +271,12 @@ export default {
 .recharge{position: absolute;width: 881px;border: 1px solid #000;top: 27px;left: -16px;background: #fff;z-index: 100;color: #000;}
 .recharge .recharge-name{font-size: 16px;padding: 10px 0 15px 28px;font-weight: 600;}
 .recharge .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
-.dialog-footer{margin: 25px 0 30px 0;}
-.table /deep/ .el-table th{background: #F2F2F2;font-weight: 100;}
 .recharge /deep/ .el-input__inner{width: 150px;height: 38px;line-height: 38px;}
 .recharge /deep/ .el-radio{text-align: center;height: 36px;padding: 10px 55px 0 55px;margin: 0;border-radius: 0;}
+
+.dialog-footer{margin: 25px 0 30px 0;display: flex;
+    align-items: center;
+    justify-content: center;}
+.table /deep/ .el-table th{background: #F2F2F2;font-weight: 100;}
+
 </style>
