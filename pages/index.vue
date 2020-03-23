@@ -149,7 +149,7 @@ export default {
 @import '../assets/css/theme.less';
 .swiper-button-prev{width: 32px;height: 55px;background-image: url(../assets/img/arrow-left3.png) !important;background-size: 40px 40px !important;}
 .swiper-button-next{width: 32px;height: 55px;background-image: url(../assets/img/arrow-right3.png) !important;background-size: 40px 40px !important;}
-.gallery-thumbs{width: 50%;height: 80px !important;box-sizing: border-box;padding: 10px 0;bottom: 20px;left: 43%;position: absolute;}
+.gallery-thumbs{width: auto;height: 80px !important;padding: 10px 0;bottom: 20px;left: 50%;transform: translateX(-50%);position: absolute;z-index: 1000;}
 .gallery-thumbs /deep/ .swiper-slide {width: 130px;height: auto;opacity: 0.4;}
 .gallery-thumbs /deep/ .swiper-slide-active {opacity: 1;}
 .gallery-thumbs /deep/ .swiper-wrapper{transform: translate3d(0px, 0px, 0px) !important;}

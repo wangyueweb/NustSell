@@ -526,7 +526,7 @@
       }
 
       .nav-right {
-        width: 307px;
+        width: 333px;
         text-align: right;
         position: relative;
         span {

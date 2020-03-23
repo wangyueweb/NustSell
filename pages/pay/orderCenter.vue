@@ -171,7 +171,41 @@
             <div class="current" v-if="currentShow">
                 <span class="current-span1">您目前的帐号余额：</span>
                 <span class="current-span2">P{{authUser.balance || 0}}</span>
-                <span class="current-span3">立即充值</span>
+                <span class="current-span3" @click="pay">立即充值</span>
+                
+                <div class="recharge" v-if="gjdialog">
+                    <div class="close" @click="pay">X</div>
+                    <div class="recharge-name">账户充值</div>
+                  <div>
+                    <div class="item">
+                      <div class="alias">充 值 金 额</div> 
+                      <el-autocomplete
+                        v-model="payData.value"
+                        :fetch-suggestions="querySearch"
+                        placeholder="请输入内容"
+                      ></el-autocomplete>
+                      
+                      <div class="discount">( ￥ {{authUser ? authUser.balance : 0}} )</div>
+                    </div>
+                    <div class="item">
+                      <div class="alias">支 付 方 式</div> 
+                      <el-radio-group v-model="payData.pay_method" @change="radioChange">
+                        <el-radio :label="1" border>微信</el-radio>
+                        <el-radio :label="2" border>支付宝</el-radio>
+                      </el-radio-group>
+                    </div>
+                    <div class="item">
+                      <div class="alias"> 备 注</div> 
+                      <div class="address">
+                        <el-input v-model="payData.remark" placeholder="亲，如果您有什么特别嘱咐，请备注给我们哟～～" type="textarea" :rows="3"></el-input>
+                      </div>
+                    </div>
+                  </div>
+                  <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" style="font-size: 16px;padding: 8px 48px;">确认</el-button>
+                    <el-button @click="gjdialog = false" style="font-size: 16px;padding: 8px 48px;">取消</el-button>
+                  </span>
+                </div>
             </div>
 
             <div class="line" v-if="currentShow"></div>
@@ -277,13 +311,20 @@ export default {
   },
   data () {
     return {
+      gjdialog: false,
+      payData: {
+        value: "",
+        pay_method: "",
+        remark: ""
+      },
+      
       checkList: [], // 选取收货人员
       receiving_time: new Date(), // 收货时间
       receipt_type: 1, // 收款方式
       memo: "", // 备注
       dialogVisible: "", // 控制显示编辑地址弹框
       editOption: "", // 编辑地址对象数据
-
+      
       
         expireTimeOption: {
             disabledDate(date) {
@@ -373,6 +414,9 @@ export default {
   mounted(){},
 
   methods: {
+      pay: function(){
+        this.gjdialog = !this.gjdialog;
+      },
     getPageData: async function(){
       let data = {
         ids: this.$route.query.ids,
@@ -558,9 +602,9 @@ export default {
 
 <style lang='less' scoped>
 @import "../../assets/css/theme.less";
-.current{margin: 0 0 0 0;font-size: 15px;color: #000;}
+.current{margin: 0 0 0 0;font-size: 15px;color: #000;position: relative;}
 .current .current-span2{font-weight: 600;}
-.current .current-span3{display: inline-block;color: #fff;background: #000;font-size: 16px;width: 120px;height: 33px;line-height: 33px;margin: 0 0 0 20px;text-align: center;}
+.current .current-span3{display: inline-block;color: #fff;background: #000;font-size: 16px;width: 120px;height: 33px;line-height: 33px;margin: 0 0 0 20px;text-align: center;cursor:pointer}
 .footer{
   background: @theme-white;
   .content{
@@ -653,4 +697,42 @@ export default {
 .hint{position: absolute;top: 8px;left: 5px;font-size: 16px;color: #999;}
 .address{position: relative;}
 
+.recharge{position: absolute;width: 794px;border: 1px solid #000;top: 33px;left: -34px;background: #fff;z-index: 100;color: #000;}
+.recharge .recharge-name{font-size: 16px;padding: 10px 0 15px 28px;font-weight: 600;}
+.recharge .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
+.recharge /deep/ .el-input__inner{width: 150px;height: 38px;line-height: 38px;}
+.recharge /deep/ .el-radio{text-align: center;height: 36px;padding: 10px 55px 0 55px;margin: 0;border-radius: 0;}
+.recharge{
+    .item{
+        display: flex;
+        margin: 10px 0 15px 0;
+        .alias{
+          font-size: 15px;
+          width: 8em;
+          text-align: right;
+          margin: 8px 10px 0 0;
+        }
+        .discount{
+          font-size: 14px;
+          color: @theme-gray;
+          display: flex;
+          align-items: flex-end;
+          margin-left: 8px;
+        }
+        .address{
+          width: 570px;
+        }
+        .name{
+          width: 200px;
+          font-weight: 600;
+        }
+        .mobile{
+          display: flex;
+          width: 200px;
+        }
+      }
+}
+.dialog-footer{margin: 25px 0 30px 0;display: flex;
+    align-items: center;
+    justify-content: center;}
 </style>

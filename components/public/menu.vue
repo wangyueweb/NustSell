@@ -326,7 +326,7 @@ export default {
 <style lang="less" scoped>
   @import "../../assets/css/theme.less";
   .san{position: relative;top: -4px;left: 0;justify-content: flex-end}
-  .second{background: #fff;padding: 0 0 0 55px;min-height: 250px;width: 1200px;text-align: left;border: 1px solid #000000;box-shadow:none;}
+  .second{background: #fff;padding: 0 0 0 55px;min-height: 250px;width: 1150px;text-align: left;border: 1px solid #000000;box-shadow:none;}
   .secondList{display: inline-block;text-align: center;}
   .secondimg{width: 100px;height: auto;margin: 50px 40px 0 40px;}
   .secondname{font-size: 18px;margin: 10px 0 35px 0;font-weight: 600;}
