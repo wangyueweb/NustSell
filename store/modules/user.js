@@ -41,7 +41,7 @@ const actions = {
   async getAddress ({ commit }, formData ) {
     try{
       let {status, data} = await mainRequest(formData);
-      console.log('获取收货地址',status,data);
+      console.log('获取收货地址',await mainRequest(formData));
       if(status === 200 && data && data.status){
         commit('SET_ADDRESS', data.data);
       }

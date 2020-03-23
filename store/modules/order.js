@@ -259,13 +259,12 @@ const actions = {
           console.log('取消订单',res);
           let {data, status} = res;
           if(status === 200 && data){
+            this._vm.$message({
+              type: data.status ? "success" : "error",
+              message: data.msg,
+            });
             if(data.status){
               resolve();
-            }else{
-              this._vm.$message({
-                type: 'error',
-                message: data.msg
-              })
             }
           }
         })
@@ -283,13 +282,12 @@ const actions = {
           console.log('确认收货',res);
           let {data, status} = res;
           if(status === 200 && data){
+            this._vm.$message({
+              type: data.status ? "success" : "error",
+              message: data.msg,
+            });
             if(data.status){
               resolve();
-            }else{
-              this._vm.$message({
-                type: 'error',
-                message: data.msg
-              })
             }
           }
         })

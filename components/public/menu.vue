@@ -337,7 +337,7 @@ export default {
     @1200-min();
     position: sticky;
     top: 0;
-    z-index: 2000;
+    z-index: 100;
     background: @theme-white;
     .content{
       @1200();
@@ -353,7 +353,7 @@ export default {
         margin: 10px 0 0 0;
         font-weight: 600;
         font-size: 22px;
-        color: @theme-black;
+        color: @theme-black; 
         // line-height: 140px;
         height: 40px;
         display: flex;
@@ -380,7 +380,6 @@ export default {
       // left: 0;
       // width: 100%;
       background: @theme-white;
-      z-index: 100;
       border-bottom: 4px solid @theme-black;
     }
   }
