@@ -326,13 +326,13 @@ export default {
 <style lang="less" scoped>
   @import "../../assets/css/theme.less";
   .san{position: relative;top: -4px;left: 0;justify-content: flex-end}
-  .second{background: #fff;padding: 0 0 0 55px;min-height: 250px;width: 1143px;text-align: left;border: 1px solid #000000;box-shadow:none;}
+  .second{background: #fff;padding: 0 0 0 55px;min-height: 250px;width: 1143px;text-align: left;box-shadow:none;}
   .secondList{display: inline-block;text-align: center;}
   .secondimg{width: 100px;height: auto;margin: 50px 40px 0 40px;}
   .secondname{font-size: 18px;margin: 10px 0 35px 0;font-weight: 600;}
   .link:hover{color: #F65151;}
   .activemi{opacity: 0.5;top: 50px;}
-  .basket{background: #fff;border: 1px solid #404040;box-shadow:none;border-radius: 0;}
+  .basket{background: #fff;box-shadow:none;border-radius: 0;}
   .menu{
     @1200-min();
     position: sticky;
