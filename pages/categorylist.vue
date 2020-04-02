@@ -92,15 +92,17 @@
                   </div>
                 </nuxt-link>
                 <div class="main">
-                  <div class="top">
-                    <div class="describe">
-                      {{item.name}}
+                  <el-tooltip :content="item.name" placement="top">
+                    <div class="top">
+                      <div class="describe">
+                        {{item.name}}
+                      </div>
+                      <div class="price">
+                        P {{item.price}}
+                        <div class="discount">P {{item.mktprice}}</div>
+                      </div>
                     </div>
-                    <div class="price">
-                      P {{item.price}}
-                      <div class="discount">P {{item.mktprice}}</div>
-                    </div>
-                  </div>
+                  </el-tooltip>
 
                   <el-row type="flex" justify="space-between" align="middle" class="tool">
                     <el-col class="collect" :span="!small ? 6 : 24">
@@ -498,6 +500,7 @@ export default {
         .describe{
           line-height: 17px;
           font-size: 14px;
+          @text-ellipsis();
         }
         .price{
           font-size: 20px;
