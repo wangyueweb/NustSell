@@ -99,7 +99,9 @@
                       </div>
                       <div class="price">
                         P {{item.price}}
-                        <div class="discount">P {{item.mktprice}}</div>
+                        <div class="discount" v-if="item.is_preferential !== 1">
+                          P {{item.mktprice}}
+                        </div>
                       </div>
                     </div>
                   </el-tooltip>
@@ -507,6 +509,7 @@ export default {
           font-family: Tahoma;
           margin-bottom: 20px;
           line-height: 24px;
+          
         }
         .collect{
           @cursor-pointer();
