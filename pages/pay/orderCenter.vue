@@ -258,7 +258,8 @@
 
     <el-dialog
       title="由于您未登录下单，填入以下信息将会自动注册账号"
-      :visible.sync="no_login">
+      :visible.sync="no_login"
+      class="zhdialog">
 
       <el-form :model="registerForm" :rules="registerRules" ref="registerForm" class="registerForm">
         <el-form-item prop="mobile" label="+63" label-width="50px">
@@ -605,6 +606,8 @@ export default {
 .current{margin: 0 0 0 0;font-size: 15px;color: #000;position: relative;}
 .current .current-span2{font-weight: 600;}
 .current .current-span3{display: inline-block;color: #fff;background: #000;font-size: 16px;width: 120px;height: 33px;line-height: 33px;margin: 0 0 0 20px;text-align: center;cursor:pointer}
+
+
 .footer{
   background: @theme-white;
   .content{
@@ -735,4 +738,6 @@ export default {
 .dialog-footer{margin: 25px 0 30px 0;display: flex;
     align-items: center;
     justify-content: center;}
+    
+.zhdialog /deep/ .el-dialog{margin: 100px auto 0 !important;}
 </style>
