@@ -47,7 +47,7 @@
     </div>
 
     <el-dialog :visible.sync="dialogFormVisible" class="dialog" width="384px" top="40px" :append-to-body="false" custom-class="dialog">
-      <div v-if="stepActive !== 'verify' && stepActive !== 'find'">
+      <div v-if="stepActive !== 'find'">
         <span :class="stepActive === 'register' ? 'active' : ''" class="login-title" @click="doRegister">注册</span>
         <span :class="stepActive === 'login' ? 'active' : ''" class="login-title" @click="dologin">登录</span>
       </div>
@@ -75,7 +75,7 @@
             <el-checkbox-group v-model="autoLogin">
               <el-checkbox label="自动登录" class="autoLogin"></el-checkbox>
             </el-checkbox-group>
-            <div class="find-password" @click="stepActive = 'find'">找回密码</div>
+            <div class="find-password" @click="dofind">找回密码</div>
           </div>
         </el-form>
         
@@ -84,34 +84,33 @@
 
       <div v-if="stepActive === 'find'" style="margin-top:22px;">
         
-        <el-form :model="registerForm" :rules="registerRules" ref="registerForm" class="registerForm">
+        <el-form :model="findForm" :rules="findRules" ref="findForm" class="registerForm">
           <el-form-item prop="mobile" label-width="0" class="hintbox">
-            <el-input class="hintinput" v-model="registerForm.mobile" placeholder="请输入在菲手机号"></el-input>
+            <el-input class="hintinput" v-model="findForm.mobile" placeholder="请输入在菲手机号"></el-input>
             <div class="hint">+63  |</div>
           </el-form-item>
 
           <el-form-item prop="code" label-width="0">
             <el-row :gutter="10">
               <el-col :span="16">
-                <el-input v-model="registerForm.code" autocomplete="off" placeholder="请输入短信验证码" maxlength="6"></el-input>
+                <el-input v-model="findForm.ver_code" autocomplete="off" placeholder="请输入短信验证码" maxlength="6"></el-input>
               </el-col>
               <el-col :span="8">
-                <el-button type="primary" class="large-btn" @click="sendMsg" :disabled="statusMsg ? true : false" v-text="statusMsg ? statusMsg : '获取验证码'"></el-button>
+                <el-button type="primary" class="large-btn" @click="sendMsg('findForm')" :disabled="statusMsg ? true : false" v-text="statusMsg ? statusMsg : '获取验证码'"></el-button>
               </el-col>
             </el-row>
           </el-form-item>
             
-
           <el-form-item prop="password" label-width="0">
-            <el-input type="password" v-model="registerForm.password" autocomplete="off" placeholder="请输入密码"></el-input>
+            <el-input type="password" v-model="findForm.newpass" autocomplete="off" placeholder="请输入密码"></el-input>
           </el-form-item>
 
         </el-form>
         
-        <el-button type="danger" class="large-btn" @click="login">确认</el-button>
+        <el-button type="danger" class="large-btn"  @click="find">确认</el-button>
       </div>
 
-      <div v-if="stepActive === 'verify'">
+      <div v-if="verify">
         <slide-verify :l="42"
           :r="10"
           :w="300"
@@ -136,7 +135,7 @@
                 <el-input v-model="registerForm.code" autocomplete="off" placeholder="请输入短信验证码" maxlength="6"></el-input>
               </el-col>
               <el-col :span="8">
-                <el-button type="primary" class="large-btn" @click="sendMsg" :disabled="statusMsg ? true : false" v-text="statusMsg ? statusMsg : '获取验证码'"></el-button>
+                <el-button type="primary" class="large-btn" @click="sendMsg('registerForm')" :disabled="statusMsg ? true : false" v-text="statusMsg ? statusMsg : '获取验证码'"></el-button>
               </el-col>
             </el-row>
           </el-form-item>
@@ -173,10 +172,19 @@
       return {
         dialogFormVisible: false,
         stepActive: "",
+        stepCacel: "",
+        verify: false,
         registerForm: {
           mobile: '',
           password: '',
           code: '',
+        },
+        findForm: {
+          mobile: '',
+          newpass: '',
+          code: 'veri',
+          ver_code: '',
+          method:'user.retrievepassword'
         },
         statusMsg: '',
         agree:[],
@@ -188,6 +196,17 @@
             required: true, type: 'string', message: '请输入密码', trigger: ['blur', 'change']
           }],
           code: [{
+            required: true, type: 'string', message: '请输入短信验证码', trigger: ['blur', 'change']
+          }]
+        },
+        findRules:{
+          mobile: [{
+            required: true, type: 'string', message: '请输入在菲手机号', trigger: ['blur', 'change']
+          }],
+          newpass: [{
+            required: true, type: 'string', message: '请输入密码', trigger: ['blur', 'change']
+          }],
+          ver_code: [{
             required: true, type: 'string', message: '请输入短信验证码', trigger: ['blur', 'change']
           }]
         },
@@ -257,16 +276,15 @@
     },
     methods: {
       // 发送短信验证码
-      sendMsg: function () {
-        console.log('sendMsg');
-        
+      sendMsg: function (el) {
+        console.log('sendMsg', el);
         let mobilePass;
 
         if ( this.timerid ){
           return false;
         }
 
-        this.$refs['registerForm'].validateField('mobile', (valid) => {
+        this.$refs[`${el}`].validateField('mobile', (valid) => {
           console.log(valid);
           mobilePass = valid;
         })
@@ -277,7 +295,10 @@
           return false;
         }
 
-        this.stepActive = 'verify'; // 拼图验证
+        this.stepCacel = this.stepActive; // 缓存
+        this.stepActive = '';
+
+        this.verify = true; // 拼图验证
       },
       // 注册弹框
       doRegister: function() {
@@ -303,17 +324,17 @@
         console.log(text);
         if(text === 'success'){
           this.getVerifyCode();
-          this.stepActive = 'register';
         }
       },
       // 获取验证码
       getVerifyCode: function () {
         const self = this;
         let data = {
-          mobile: this.registerForm.mobile,
-          code: 'reg',
+          mobile: this.stepCacel === 'register' ? this.registerForm.mobile : this.stepCacel === 'find' ? this.findForm.mobile : '',
+          code: this.stepCacel === 'register' ? 'reg' : this.stepCacel === 'find' ? 'veri' : '',
           method: 'user.sms'
         }
+
         mainRequest(data)
           .then(({ status, data }) => {
             console.log(status,data);
@@ -329,6 +350,14 @@
                     self.statusMsg = '';
                   }
                 },1000)
+                this.verify = false;
+                this.stepActive = this.stepCacel;
+                this.stepCacel = '';
+              }else{
+                this.dialogFormVisible = false;
+                this.verify = false;
+                this.stepCacel = '';
+                this.stepActive = '';
               }
               this.$message({
                 message: data.msg,
@@ -404,6 +433,17 @@
         })
         
       },
+      // 找回密码
+      dofind: function() {
+        this.clearValue();
+        this.dialogFormVisible = true;
+        this.stepActive = 'find';
+      },
+      find: async function() {
+        console.log('找回密码', this.findForm);
+        await this.$store.dispatch('user/findpwd', this.findForm);
+        this.stepActive = 'login';
+      },
       // 清空form表单数据
       clearValue: function () {
         this.loginError = false;
@@ -415,6 +455,10 @@
         // 登录数据
         this.$set(this.loginForm, "mobile", "");
         this.$set(this.loginForm, "password", "");
+        // 找回密码数据
+        this.$set(this.findForm, "mobile", "");
+        this.$set(this.findForm, "newpass", "");
+        this.$set(this.findForm, "ver_code", "");
       },
       // 获取登录用户信息
       getUserInfo: async function () {

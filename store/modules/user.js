@@ -125,6 +125,28 @@ const actions = {
         })
     })
   },
+  
+  // 找回密码
+  async findpwd ({}, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          let {status, data} = res;
+          console.log('找回密码', res);
+          console.log(data.msg);
+          this._vm.$message({
+            message: data.msg,
+            type: data.status ? 'success' : 'warning'
+          });
+          if(data.status){
+            resolve();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
+  },
 
   // 流水记录
   async getBalance ({commit}, formData) {

@@ -415,9 +415,9 @@ export default {
   mounted(){},
 
   methods: {
-      pay: function(){
-        this.gjdialog = !this.gjdialog;
-      },
+    pay: function(){
+      this.gjdialog = !this.gjdialog;
+    },
     getPageData: async function(){
       let data = {
         ids: this.$route.query.ids,

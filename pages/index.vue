@@ -3,13 +3,13 @@
     <!-- 轮播 -->
 <!-- :class="{nick : isFixed}" -->
     <div class="carousel">
-      <Swiper :imgs="adverlist.map(item => item.img)" :options="bannerOption" ref="swiperTop" style="height:500px" :customArrow="true">
+      <Swiper :list="adverlist" :options="bannerOption" :isRoute="true" ref="swiperTop" style="height:500px" :customArrow="true">
         <div slot="arrow" class="arrow-wrapper">
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
         </div>
       </Swiper>
-      <Swiper class="gallery-thumbs" :imgs="adverlist.map(item => item.img)" :options="swiperOptionThumbs" ref="swiperThumbs" :customArrow="true">
+      <Swiper class="gallery-thumbs" :list="adverlist" :options="swiperOptionThumbs" ref="swiperThumbs" :customArrow="true">
       </Swiper>
     </div>
     

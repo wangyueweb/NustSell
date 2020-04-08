@@ -38,7 +38,7 @@
             label="操作"
             align="center">
             <template slot-scope="scope">
-              <div class="buy-btn" @click.stop="addShopCar(scope.row.id)" v-if="scope.row.goods.stock > 0">加入购物车</div>
+              <div class="buy-btn" @click.stop="addShopCar(scope.row.goods.product_id)" v-if="scope.row.goods.stock > 0">加入购物车</div>
               <div class="cant-btn" v-else>库存不足</div>
               <div class="cancel-collect" @click="cancelCollect(scope.row.goods_id)">取消收藏</div>
             </template>
