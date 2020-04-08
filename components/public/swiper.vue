@@ -2,8 +2,8 @@
 <template>
   <div v-swiper:mySwiper="options">
     <div class="swiper-wrapper">
-      <div class="swiper-slide" v-for="(item,index) in imgs" :key="index">
-        <el-image :src="item"></el-image>
+      <div class="swiper-slide" v-for="(item,index) in list" :key="index">
+        <el-image :src="item.img" @click="toURL(item.val)"></el-image>
         <slot name="detail"></slot>
       </div>
     </div>
@@ -29,11 +29,15 @@ export default {
         return {};
       }
     },
-    imgs: {
+    list: {
       type: Array,
       default: function(){
         return [];
       }
+    },
+    isRoute: {
+      type: Boolean,
+      default: false
     },
     customArrow: {
       type: Boolean,
@@ -53,7 +57,13 @@ export default {
 
   mounted(){},
 
-  methods: {}
+  methods: {
+    toURL: function(id){
+      if(this.isRoute){
+        this.$router.push({name: 'goodsDetail', query: {id: id}});
+      }
+    }
+  }
 }
 </script>
 

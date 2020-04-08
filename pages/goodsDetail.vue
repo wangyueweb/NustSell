@@ -3,7 +3,7 @@
     <!-- 面包屑 -->
     <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ name: 'categorylist' }">零食</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'categorylist' }">{{goodsDetail.cat_name || ''}}</el-breadcrumb-item>
       <el-breadcrumb-item>{{goodsDetail.name || ''}}</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 内容 -->

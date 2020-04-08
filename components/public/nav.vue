@@ -442,6 +442,7 @@
       find: async function() {
         console.log('找回密码', this.findForm);
         await this.$store.dispatch('user/findpwd', this.findForm);
+        this.stepActive = 'login';
       },
       // 清空form表单数据
       clearValue: function () {

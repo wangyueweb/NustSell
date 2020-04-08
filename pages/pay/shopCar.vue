@@ -91,11 +91,11 @@
           <div class="calculate-wrapper">
             <div class="calculate">
               <span>小计</span>
-              <span>{{(amount.goods_amount - amount.order_pmt) || 0 }}P</span>
+              <span>{{(shopCar.goods_amount - shopCar.order_pmt) || 0 }}P</span>
             </div>
             <div class="calculate">
               <span>首单优惠</span>
-              <span>{{amount.order_pmt || 0}} P</span>
+              <span>{{shopCar.order_pmt || 0}} P</span>
             </div>
             <div class="calculate">
               <span>运费</span>
@@ -105,7 +105,7 @@
           <div class="total">
             <div class="calculate">
               <span>订单总额</span>
-              <span class="hot">{{amount.goods_amount || 0}} P</span>
+              <span class="hot">{{shopCar.goods_amount || 0}} P</span>
             </div>
           </div>
           <el-button type="danger" class="large-btn" style="margin-top:20px;font-size: 15px;" @click="toPayOrderCenter">前往结账</el-button>
@@ -170,7 +170,7 @@ export default {
       await this.$store.dispatch('order/handleShopCarNumber', {method:'cart.setnums', token: this.$store.state.app.token, id: item.id, nums: nums})
         .then(() => {
           this.getShopCar();
-          this.getAmount();
+          // this.getAmount();
         })
         .catch(err => {
           this.$message.error(err);
@@ -214,29 +214,7 @@ export default {
       this.selectList = val;
       // this.getAmount();
     },
-    // 获取订单总额
-    getAmount: function () {
-      let ids;
-
-      if(this.selectList.length > 0) {
-        if(this.selectList.length === 1){
-          ids = this.selectList[0].id.toString();
-        }else{
-          ids = this.selectList.map(item => item.id).join(',');
-        }
-
-        let data = {
-          ids: ids,
-          display: 'all',
-          method: 'cart.getlist',
-          token: this.$store.state.app.token
-        }
-        console.log(data);
-        this.$store.dispatch('order/Amount', data);
-      }else{
-        this.$store.commit("order/SET_AMOUNT", {});
-      }
-    },
+   
     // 添加收藏
     addCollect: function (id) {
       console.log(id);
@@ -301,12 +279,14 @@ export default {
   computed: {
     ...mapState({
       collectList: state => state.goods.collect.list,
-      amount: state => state.order.amount
+      // amount: state => state.order.amount
+      shopCar: state => state.order.shopCar
     })
   },
   watch: {
     selectList: function(newval,oldval){
-      this.getAmount();
+      // this.getAmount();
+      this.getShopCar();
     }
   }
 }
