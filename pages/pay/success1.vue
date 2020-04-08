@@ -46,7 +46,7 @@ export default {
   layout: context => 'payment',
   data () {
     return {
-      success: 1
+      success: 2
     }
   },
   head () {
@@ -77,7 +77,11 @@ export default {
 
   created () {},
 
-  mounted () {},
+  mounted () {
+    if(JSON.stringify(this.$store.state.order.order) === '{}'){
+      this.$router.push({path: '/'});
+    }
+  },
 
   methods: {
       copy(){

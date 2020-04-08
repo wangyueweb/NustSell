@@ -221,6 +221,7 @@ export default {
             this.$nextTick(() => {
               this.id = res.data.data.id;
               this.checkList = res.data.data.default_spes_desc;
+              this.$set(this.goodsDetail, 'price', res.data.data.price);
             })
           })
           .catch(err => {

@@ -4,6 +4,7 @@ import Qs from "qs"
 const state = () => ({
   carNumber: 0,
   shopCar: [],
+  amount: {},
   payShopCar: {
     list: []
   },
@@ -18,6 +19,9 @@ const mutations = {
   },
   SET_SHOPCAR: (state, payload) => {
     state.shopCar = payload;
+  },
+  SET_AMOUNT: (state, payload) => {	
+    state.amount = payload;	
   },
   SET_PAYSHOPCAR: (state, payload) => {
     state.payShopCar = payload;
@@ -132,6 +136,20 @@ const actions = {
     })
   },
 
+  Amount({commit}, formData){	
+    mainRequest(formData)	
+      .then(res => {	
+        console.log('购物车选择商品后价格计算',res);	
+        let {data, status} = res;	
+        if(status === 200 && data){	
+          commit('SET_AMOUNT', data.data);	
+        }	
+      })	
+      .catch(err => {	
+        console.log(err);	
+      })	
+  },
+
   // 前往结账 获取购物车列表
   payShopCar({commit}, formData){
     return new Promise((resolve, reject) => {
@@ -142,6 +160,30 @@ const actions = {
           if(status === 200 && data){
             if(data.status){
               commit('SET_PAYSHOPCAR', data.data);
+              resolve();
+            }else{
+              this._vm.$message({
+                type: 'error',
+                message: data.msg
+              })
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
+  },
+
+  // 余额付款
+  userPay({}, formData){
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          console.log('余额付款',res);
+          let {data, status} = res;
+          if(status === 200 && data){
+            if(data.status){
               resolve();
             }else{
               this._vm.$message({
