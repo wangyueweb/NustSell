@@ -24,24 +24,17 @@
                   <div class="item">
                     <div class="alias">用户名</div> 
                     <div class="address">
-                      <el-input v-model="editName" style="width: 160px;"></el-input>
+                      <el-input v-model="formData.nickname" style="width: 160px;"></el-input>
                     </div>
                   </div>
                   <div class="item">
-                    <div class="alias">电话</div> 
-                    <div class="address phonebox">
-                      <el-input v-model="editPhone" style="width: 245px;"></el-input>
-                      <div class="phoneline">+63 |</div>
-                    </div>
-                  </div>
-                  <div class="item">
-                    <div class="alias">邮箱地址</div> 
+                    <div class="alias">邮箱地址</div>
                     <div class="address">
-                      <el-input v-model="editEmail" style="width: 245px;"></el-input>
+                      <el-input v-model="formData.email" style="width: 245px;"></el-input>
                     </div>
                   </div>
                   <span slot="footer" class="dialog-footer item">
-                    <el-button type="primary" style="width:130px;font-size: 15px;padding: 9px 0;">保存</el-button>
+                    <el-button type="primary" style="width:130px;font-size: 15px;padding: 9px 0;" @click="save">保存</el-button>
                     <el-button @click="dialogVisible = false" style="width:130px;font-size: 15px;padding: 9px 0;">取消</el-button>
                   </span>
                 </div>
@@ -115,10 +108,12 @@ export default {
     return {
       selected: 0,
       dialogVisible: false,
-      
-      editName:'',
-      editPhone:'',
-      editEmail:'',
+      formData: {
+        nickname: "", // 昵称
+        email: "", // 邮箱
+        token: this.$store.state.app.token,
+        method: "user.editinfo"
+      }
     };
   },
   head () {
@@ -194,12 +189,11 @@ export default {
         method:'user.info'
       }
       this.$store.dispatch("app/getUserInfo", data)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          this.$message.error(err);
-        })
+    },
+    save: async function(){
+      await this.$store.dispatch("user/editinfo", this.formData);
+      this.dialogVisible = false;
+      this.getUserInfo();
     }
   }
 }
@@ -290,8 +284,6 @@ export default {
 .amend .amend-name{font-size: 16px;padding: 10px 0 10px 28px;font-weight: 600;}
 .amend .dialog-footer{margin: 35px 0 45px 0 !important;}
 .amend .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
-.phoneline{position: absolute;color: #999;top: 7px;left: 6px;font-size: 17px;}
-.phonebox /deep/ .el-input__inner{text-indent: 30px;}
 
 
 </style>

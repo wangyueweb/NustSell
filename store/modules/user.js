@@ -164,6 +164,27 @@ const actions = {
           console.log(err);
         })
     })
+  },
+
+  // 修改个人资料
+  async editinfo ({commit}, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          let {status, data} = res;
+          console.log('修改个人资料', res);
+          this._vm.$message({
+            message: data.msg,
+            type: data.status ? 'success' : 'warning'
+          });
+          if(data.status){
+            resolve();
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
   }
 }
 export default { namespaced: true, state, mutations, actions }
