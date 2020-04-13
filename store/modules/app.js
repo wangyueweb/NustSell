@@ -103,6 +103,7 @@ const actions = {
     return new Promise(async (resolve, reject) => {
       try{
         let {status, data} = await mainRequest(formData);
+        console.log('获取用户基本信息', status, data);
         if(status === 200 && data && data.status){
           commit('SET_USER', data.data);
           resolve();

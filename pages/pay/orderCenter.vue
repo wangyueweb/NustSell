@@ -179,13 +179,15 @@
                   <div>
                     <div class="item">
                       <div class="alias">充 值 金 额</div> 
-                      <el-autocomplete
+                      <el-input
+                        style="width: auto"
                         v-model="payData.value"
-                        :fetch-suggestions="querySearch"
-                        placeholder="请输入内容"
-                      ></el-autocomplete>
+                        @input="$store.dispatch('order/getHuilv')"
+                        placeholder="请输入充值金额"
+                        type="number"
+                      ></el-input>
                       
-                      <div class="discount">( ￥ {{authUser ? authUser.balance : 0}} )</div>
+                      <div class="discount">( ￥ {{payData.value ? (payData.value * huilv).toFixed(2) : 0}} )</div>
                     </div>
                     <div class="item">
                       <div class="alias">支 付 方 式</div> 
@@ -243,7 +245,7 @@
               </el-col>
               <el-col>
                 <div>还需支付</div>
-                <div class="count">P{{payShopCar.goods_amount || 0}}</div>
+                <div class="count">P{{payShopCar.goods_amount - payShopCar.order_pmt || 0}}</div>
               </el-col>
               <el-col>
                 <div>
@@ -405,7 +407,8 @@ export default {
       payShopCar: state => state.order.payShopCar,
       addressList: state => state.user.addressList,
       authUser: state => state.app.authUser,
-      order: state => state.order.order
+      order: state => state.order.order,
+      huilv: state => state.order.huilv
     })
   },
 
@@ -490,38 +493,48 @@ export default {
       // 余额付款
       if(this.receipt_type === 2){
         if(this.checkList.length > 0){
-          let data = {
-            cart_ids: this.$route.query.ids,
-            memo: this.memo, // 留言备注
-            receipt_type: 1, // 支付方式 （目前默认为1，线下支付）
-            uship_id: this.checkList[0], // 收货地址ID
-            receiving_time: this.dayjs(this.receiving_time).format('YYYY-MM-DD HH:mm:ss'), // 收货时间
-            method: "order.create",
-            token: this.$store.state.app.token
-          }
+          console.log("应付款", this.payShopCar.goods_amount - this.payShopCar.order_pmt);
+          console.log("余额", this.authUser.balance);
 
-          console.log(data);
-          this.$confirm('确认提交?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          })
-          .then(async () => {
-            await this.$store.dispatch("order/shopCarSubmit", data);
-            console.log('购物车提交成功,余额支付');
-            let params = {
-              ids: this.order.order_id,
-              payment_code: 'balancepay',
-              payment_type:1,
-              token: this.$store.state.app.token,
-              method: 'user.pay'
+          if((this.payShopCar.goods_amount - this.payShopCar.order_pmt) < this.authUser.balance){
+            let data = {
+              cart_ids: this.$route.query.ids,
+              memo: this.memo, // 留言备注
+              receipt_type: 1, // 支付方式 （目前默认为1，线下支付）
+              uship_id: this.checkList[0], // 收货地址ID
+              receiving_time: this.dayjs(this.receiving_time).format('YYYY-MM-DD HH:mm:ss'), // 收货时间
+              method: "order.create",
+              token: this.$store.state.app.token
             }
 
-            await this.$store.dispatch("order/userPay", params);
-            this.$router.push({name: 'pay-success1'});
-          })
-          .catch(err => {
-          })
+            console.log(data);
+            this.$confirm('确认提交?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            })
+            .then(async () => {
+              await this.$store.dispatch("order/shopCarSubmit", data);
+              console.log('购物车提交成功,余额支付');
+              let params = {
+                ids: this.order.order_id,
+                payment_code: 'balancepay',
+                payment_type:1,
+                token: this.$store.state.app.token,
+                method: 'user.pay'
+              }
+
+              await this.$store.dispatch("order/userPay", params);
+              this.$router.push({name: 'pay-success1'});
+            })
+            .catch(err => {
+            })
+          }else{
+            this.$message({
+              message: "余额不足，请充值",
+              type: "error"
+            })
+          }
         }else{
           this.$message({
             message: "请选择收件人信息",
@@ -529,7 +542,6 @@ export default {
           })
         }
       }
-      
     },
     // 删除地址
     deleteAddress: function (item) {

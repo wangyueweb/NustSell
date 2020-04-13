@@ -10,7 +10,8 @@ const state = () => ({
   },
   order: {},
   orderList: [],
-  orderDetail: {}
+  orderDetail: {},
+  huilv: "1" // 汇率
 })
 
 const mutations = {
@@ -34,6 +35,9 @@ const mutations = {
   },
   SET_ORDERDETAIL: (state, payload) => {
     state.orderDetail = payload;
+  },
+  SET_HUILV: (state, payload) => {
+    state.huilv = payload;
   }
 }
 
@@ -136,6 +140,7 @@ const actions = {
     })
   },
 
+  // 购物车选择商品后价格计算
   Amount({commit}, formData){	
     mainRequest(formData)	
       .then(res => {	
@@ -151,7 +156,7 @@ const actions = {
   },
 
   // 前往结账 获取购物车列表
-  payShopCar({commit}, formData){
+  payShopCar ({commit}, formData) {
     return new Promise((resolve, reject) => {
       mainRequest(formData)
         .then(res => {
@@ -166,6 +171,27 @@ const actions = {
                 type: 'error',
                 message: data.msg
               })
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
+  },
+
+  // 获取当日汇率接口
+  getHuilv ({commit}) {
+    const formData = {method: "notice.getHuilv"};
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          console.log('获取当日汇率接口',res);
+          let {data, status} = res;
+          if(status === 200 && data){
+            if(data.status){
+              console.log(data.data.sho_hl)
+              commit('SET_HUILV', data.data.sho_hl);
             }
           }
         })
