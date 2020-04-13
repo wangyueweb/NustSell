@@ -183,15 +183,56 @@ const actions = {
   // 获取当日汇率接口
   getHuilv ({commit}) {
     const formData = {method: "notice.getHuilv"};
+    mainRequest(formData)
+      .then(res => {
+        console.log('获取当日汇率接口',res);
+        let {data, status} = res;
+        if(status === 200 && data){
+          if(data.status){
+            console.log(data.data.sho_hl)
+            commit('SET_HUILV', data.data.sho_hl);
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  },
+
+  // 充值提交
+  recharge ({commit}, formData) {
     return new Promise((resolve, reject) => {
       mainRequest(formData)
         .then(res => {
-          console.log('获取当日汇率接口',res);
+          console.log('充值提交',res);
+          let {data, status} = res;
+          if(status === 200 && data){
+            this._vm.$message({
+              type: data.status ? "success" : "error",
+              message: data.msg,
+            });
+            if(data.status){
+              resolve(data.data);
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
+  },
+
+  // 充值提交成功获取微信/支付宝收款码接口
+  getRechargeCode ({commit}, formData) {
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(res => {
+          console.log('充值提交成功获取微信/支付宝收款码接口',res);
           let {data, status} = res;
           if(status === 200 && data){
             if(data.status){
-              console.log(data.data.sho_hl)
-              commit('SET_HUILV', data.data.sho_hl);
+              console.log(data.data)
+              resolve(data.data);
             }
           }
         })
