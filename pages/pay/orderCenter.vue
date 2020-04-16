@@ -174,37 +174,38 @@
                 <span class="current-span3" @click="pay">立即充值</span>
                 
                 <div class="recharge" v-if="gjdialog">
-                    <div class="close" @click="pay">X</div>
-                    <div class="recharge-name">账户充值</div>
-                  <div>
-                    <div class="item">
-                      <div class="alias">充 值 金 额</div> 
+                  <div class="close" @click="pay">X</div>
+                  <div class="recharge-name">账户充值</div>
+
+                  <el-form :model="rechargeForm" :rules="rechargeRules" ref="rechargeForm">
+                    <el-form-item prop="money" label="充值金额" label-width="108px" class="item">
                       <el-input
                         style="width: auto"
-                        v-model="payData.value"
+                        v-model="rechargeForm.money"
                         @input="$store.dispatch('order/getHuilv')"
-                        placeholder="请输入充值金额"
+                        placeholder="0.00"
                         type="number"
                       ></el-input>
-                      
-                      <div class="discount">( ￥ {{payData.value ? (payData.value * huilv).toFixed(2) : 0}} )</div>
-                    </div>
-                    <div class="item">
-                      <div class="alias">支 付 方 式</div> 
-                      <el-radio-group v-model="payData.pay_method" @change="radioChange">
+                      <div class="discount">( ￥ {{rechargeForm.money ? (rechargeForm.money * huilv).toFixed(2) : 0}} )</div>
+                    </el-form-item>
+
+                    <el-form-item prop="type" label="支付方式" label-width="108px" class="item">
+                      <el-radio-group v-model="rechargeForm.type">
                         <el-radio :label="1" border>微信</el-radio>
                         <el-radio :label="2" border>支付宝</el-radio>
                       </el-radio-group>
-                    </div>
-                    <div class="item">
-                      <div class="alias"> 备 注</div> 
+                    </el-form-item>
+
+                    <el-form-item prop="remark" label="备注" label-width="108px" class="item">
                       <div class="address">
-                        <el-input v-model="payData.remark" placeholder="亲，如果您有什么特别嘱咐，请备注给我们哟～～" type="textarea" :rows="3"></el-input>
+                        <el-input v-model="rechargeForm.remark" placeholder="亲，如果您有什么特别嘱咐，请备注给我们哟～～" type="textarea" :rows="3"></el-input>
                       </div>
-                    </div>
-                  </div>
+                    </el-form-item>
+
+                  </el-form>
+
                   <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" style="font-size: 16px;padding: 8px 48px;">确认</el-button>
+                    <el-button type="primary" style="font-size: 16px;padding: 8px 48px;" @click="recharge">确认</el-button>
                     <el-button @click="gjdialog = false" style="font-size: 16px;padding: 8px 48px;">取消</el-button>
                   </span>
                 </div>
@@ -315,10 +316,12 @@ export default {
   data () {
     return {
       gjdialog: false,
-      payData: {
-        value: "",
-        pay_method: "",
-        remark: ""
+      rechargeForm: {
+        money: "",
+        type: 1,
+        remark: "",
+        token: this.$store.state.app.token,
+        method: "user.payChongzhi"
       },
       
       checkList: [], // 选取收货人员
@@ -350,6 +353,11 @@ export default {
         }],
         code: [{
           required: true, type: 'string', message: '请输入短信验证码', trigger: ['blur', 'change']
+        }]
+      },
+      rechargeRules: {
+        money: [{
+          required: true, type: 'string', message: '请输入充值金额', trigger: ['blur', 'change']
         }]
       },
       registerForm: {
@@ -448,6 +456,19 @@ export default {
       console.log(e);
       this.checkList = [];
       this.checkList.push(e.id);
+    },
+
+    // 充值金额
+    recharge: function(){
+      this.$refs['rechargeForm'].validate((valid) => {
+        console.log(valid);
+        if(valid){
+          this.$store.dispatch('order/recharge', this.rechargeForm)
+            .then(res => {
+              this.$router.push({name: "pay-success2", query: {id: res.number}});
+            });
+        }
+      })
     },
     // 提交购物车
     shopCarSubmit: async function(){
@@ -765,6 +786,7 @@ export default {
 .recharge .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
 .recharge /deep/ .el-input__inner{width: 150px;height: 38px;line-height: 38px;}
 .recharge /deep/ .el-radio{text-align: center;height: 36px;padding: 10px 55px 0 55px;margin: 0;border-radius: 0;}
+.recharge /deep/ .el-form-item__content{margin-left: 0!important;}
 .recharge{
     .item{
         display: flex;
@@ -778,7 +800,7 @@ export default {
         .discount{
           font-size: 14px;
           color: @theme-gray;
-          display: flex;
+          display: inline-block;
           align-items: flex-end;
           margin-left: 8px;
         }
