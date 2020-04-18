@@ -28,7 +28,7 @@
                 offset="-1"
                 popper-class="navpop"
                 >
-                  <div class="second" type="flex" justify="center" align="middle">
+                  <div class="second" type="flex" justify="center" align="middle" v-if="item.child.length != 0">
                     <div class="secondList" v-for="(itemJ, indexJ) in item.child" :key="indexJ" type="flex" justify="center" align="middle">
                       <div class="link" @click="$router.push({name: 'categorylist', query: {...itemJ}})" style="font-size:18px">
                         <img class="secondimg" :src="itemJ.image_url"></img>
@@ -326,7 +326,7 @@ export default {
 <style lang="less" scoped>
   @import "../../assets/css/theme.less";
   .san{position: relative;top: -4px;left: 0;justify-content: flex-end}
-  .second{background: #fff;padding: 0 0 0 55px;min-height: 250px;width: 1143px;text-align: left;box-shadow:none;}
+  .second{background: #fff;padding: 0 0 0 55px;min-height: 250px;width: 1143px;text-align: left;box-shadow:none;border: 1px solid #404040;}
   .secondList{display: inline-block;text-align: center;}
   .secondimg{width: 100px;height: auto;margin: 50px 40px 0 40px;}
   .secondname{font-size: 18px;margin: 10px 0 35px 0;font-weight: 600;}
@@ -360,7 +360,9 @@ export default {
         align-items: center;
         span{
           display: inline-block;
-          height: 41px;
+          height: 37px;
+          margin: 0 0 4px 0;
+          border-bottom: 5px solid #fff;
           &:hover{
             border-bottom: 5px solid @theme-black;
           }

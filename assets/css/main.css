@@ -112,7 +112,9 @@ a {
   font-size: 16px;
 }
 .el-popover {
+  min-width: 0px;
   padding: 0;
+  border: none;
 }
 .menu-popover {
   width: 100%;
