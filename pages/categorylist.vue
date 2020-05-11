@@ -229,6 +229,7 @@ export default {
   },
   methods:{
     async getPageData(){
+      // 一级跳转
       if(this.$route.query.firstId){
         this.formData = {
           page: 1,
@@ -237,6 +238,7 @@ export default {
           method: "goods.getlist",
         }
       }
+      // 搜索跳转
       else if(this.$route.query.search_name) {
         this.formData= {
           page: 1,
@@ -245,6 +247,7 @@ export default {
           method: "goods.getlist"
         }
       }
+      // 侧边栏跳转
       else if(this.$route.query.brand) {
         this.formData= {
           page: 1,
@@ -253,6 +256,7 @@ export default {
           method: "goods.getlist"
         }
       }
+      // 二级跳转
       else{
         this.formData = {
           page: 1,
