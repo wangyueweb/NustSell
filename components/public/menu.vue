@@ -30,12 +30,14 @@
                 >
                   <div class="second" type="flex" justify="center" align="middle" v-if="item.child.length != 0">
                     <div class="secondList" v-for="(itemJ, indexJ) in item.child" :key="indexJ" type="flex" justify="center" align="middle">
+                      <!-- 点击二级跳转 -->
                       <div class="link" @click="$router.push({name: 'categorylist', query: {...itemJ}})" style="font-size:18px">
                         <img class="secondimg" :src="itemJ.image_url"></img>
                         <div class="secondname">{{itemJ.name}}</div>
                       </div>
                     </div>
                   </div>
+                  <!-- 点击一级跳转 -->
                 <div slot="reference" @click="$router.push({name: 'categorylist', query: {...item, firstId: item.id, firstName: item.name}})">{{item.name}}</div>
               </el-popover>
             </el-col>

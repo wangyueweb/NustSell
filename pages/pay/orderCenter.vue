@@ -332,11 +332,11 @@ export default {
       editOption: "", // 编辑地址对象数据
       
       
-        expireTimeOption: {
-            disabledDate(date) {
-                    return date.getTime() <= Date.now();
-            }
-        },
+      expireTimeOption: {
+        disabledDate(date) {
+          return date.getTime() <= Date.now() - 8.64e7;
+        }
+      },
       addsiteShow: false,
       value1: '',
       currentShow: false,
