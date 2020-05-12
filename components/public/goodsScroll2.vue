@@ -12,7 +12,7 @@
           <div class="detail">
             <div class="describe">{{item.goods.name}}</div>
             <div class="price" style="margin-top: 5px;">P {{item.goods.price}}</div>
-            <div class="buy-btn" @click.stop="addShopCar(item.product.id, 1)" style="margin-top: 30px;">
+            <div class="buy-btn" @click.stop="addShopCar(item, 1)" style="margin-top: 30px;">
               加入购物车
             </div>
           </div>
@@ -49,7 +49,7 @@ export default {
     customArrow: {
       type: Boolean,
       default: null
-    }
+    },
   },
   data () {
     return {
@@ -66,9 +66,22 @@ export default {
 
   methods: {
     // 加入购物车
-    async addShopCar(id, num) {
+    async addShopCar(item, num) {
+      let id;
+      if(item.hasOwnProperty('product')){
+        id = item.product.id;
+      }else if(item.hasOwnProperty('goods')){
+        id = item.goods.product_id;
+      }else{
+        this.$message({
+          message: '商品id不存在',
+          type: 'error'
+        })
+        return
+      }
       await this.$store.dispatch('order/addShopCar', {method:'cart.add', product_id: id, nums:num, token: this.$store.state.app.token})
       this.$store.dispatch('order/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token});
+      this.$emit('addCarSuccess');
     }
   }
 }

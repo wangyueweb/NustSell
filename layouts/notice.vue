@@ -10,12 +10,12 @@
           <nuxt-link to="/myCenter">用户中心</nuxt-link>
         </el-breadcrumb-item>
         <el-breadcrumb-item>
-          {{thirdPageName}}
+          <nuxt-link :to="thirdPageUrl">{{thirdPageName}}</nuxt-link>
         </el-breadcrumb-item>
         <el-breadcrumb-item v-if="$route.params.title">{{$route.params.title}}</el-breadcrumb-item>
       </el-breadcrumb>
       
-        <nuxt />
+      <nuxt />
     </div>
     <Footer />
     <el-backtop :bottom="100" :right="30"></el-backtop>
@@ -77,12 +77,13 @@ export default {
           name: 'myCenter-notice'
         },
         {
-          label: '网站公告',
+          label: '站内公告',
           icon: 'icon-gonggao',
           name: 'myCenter-notice-id'
         },
       ],
-      thirdPageName: ''
+      thirdPageName: '',
+      thirdPageUrl: ''
     }
   },
   computed: {
@@ -94,6 +95,10 @@ export default {
         for(let i in this.alias){
           if(this.alias[i].name === this.$route.name){
             this.thirdPageName = this.alias[i].label;
+
+            if(this.$route.name === 'myCenter-notice-id'){
+              this.thirdPageUrl = '/myCenter/notice';
+            }
             return;
           }
         }

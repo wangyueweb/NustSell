@@ -31,9 +31,9 @@
             </template>
           </el-table-column>
         </el-table>
-        <div style="margin-top: 20px">
+        <!-- <div style="margin-top: 20px">
           <span>删除</span>
-        </div>
+        </div> -->
       </div>
         
       <div v-if="selected === 1">
