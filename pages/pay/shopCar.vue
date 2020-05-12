@@ -81,7 +81,7 @@
               我的收藏
           </div>
 
-          <GoodsScroll :list="collectList" imgKey="url" :options="swiperOption" :customArrow="false"></GoodsScroll>
+          <GoodsScroll :list="collectList" imgKey="url" :options="swiperOption" :customArrow="false" @addCarSuccess="getPageData"></GoodsScroll>
 
         </div>
       </el-col>
@@ -165,6 +165,13 @@ export default {
     }
   },
   methods: {
+    async getPageData(){
+      await this.$store.dispatch('order/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token});
+      this.list = JSON.parse(JSON.stringify(this.$store.state.order.shopCar.list));
+      this.setSelect();
+      this.getAmount();
+    },
+
     async numberChange(item, nums) {
       console.log(item, nums);
       await this.$store.dispatch('order/handleShopCarNumber', {method:'cart.setnums', token: this.$store.state.app.token, id: item.id, nums: nums})
@@ -289,10 +296,7 @@ export default {
     }
   },
   async created(){
-    // this.getShopCar();
-    await this.$store.dispatch('order/getShopCar', {method:'cart.getlist', token: this.$store.state.app.token});
-    this.list = JSON.parse(JSON.stringify(this.$store.state.order.shopCar.list));
-    this.setSelect();
+    this.getPageData();
   },
   computed: {
     ...mapState({
