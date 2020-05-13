@@ -33,7 +33,7 @@
       </el-col>
       <el-col :span="9">
         <div class="describe">
-          {{goodsDetail.brief || ''}}
+          {{goodsDetail.name || ''}}
         </div>
         <div class="hot" v-if="goodsDetail.is_recommend === 2">
           {{goodsDetail.is_recommend === 2 ? '热销' : ''}}

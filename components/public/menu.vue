@@ -80,7 +80,7 @@
                     trigger="focus"
                     v-model="visible"
                   >
-                    <div class="content basket" style="width:382px;height: 100%;padding:11px 25px 25px;box-sizing:border-box;">
+                    <div class="content basket" style="width:382px;height: 100%;padding:11px 25px 0 25px;box-sizing:border-box;">
                       <div v-if="carNumber > 0">
                         <div @click="visible = !visible" style="text-align:right;">
                           <div class="rotate">
@@ -334,7 +334,7 @@ export default {
   .secondname{font-size: 18px;margin: 10px 0 35px 0;font-weight: 600;}
   .link:hover{color: #F65151;}
   .activemi{opacity: 0.5;top: 50px;}
-  .basket{background: #fff;box-shadow:none;border-radius: 0;}
+  .basket{background: #fff;box-shadow:none;border-radius: 0;padding-bottom: 0;}
   .menu{
     @1200-min();
     position: sticky;
@@ -361,12 +361,14 @@ export default {
         display: flex;
         align-items: center;
         span{
-          display: inline-block;
-          height: 37px;
-          margin: 0 0 4px 0;
-          border-bottom: 5px solid #fff;
-          &:hover{
-            border-bottom: 5px solid @theme-black;
+          div{
+            display: inline-block;
+            height: 37px;
+            margin: 0 0 4px 0;
+            border-bottom: 5px solid #fff;
+            &:hover{
+              border-bottom: 5px solid @theme-black;
+            }
           }
         }
       }
@@ -444,7 +446,7 @@ opacity: 1; /*结尾状态 透明度为1*/
     }
   }
   .footer-btn{
-    height: 90px;
+    height: 70px;
     text-align: center;
     line-height: 55px;
     color: @theme-lightgray;

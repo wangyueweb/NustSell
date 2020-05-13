@@ -141,6 +141,7 @@ a {
   left: 50%;
   transform: translateX(-50%);
   box-shadow: none;
+  margin-top: 0 !important;
 }
 .el-dialog {
   margin: 0;

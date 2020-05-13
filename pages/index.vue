@@ -182,7 +182,7 @@ export default {
   
 }
 .title{
-  font-size: 28px;
+  font-size: 22px;
   color: @theme-black;
   font-weight: 700;
   text-align: center;
