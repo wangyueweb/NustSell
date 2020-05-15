@@ -179,12 +179,16 @@
 
                   <el-form :model="rechargeForm" :rules="rechargeRules" ref="rechargeForm">
                     <el-form-item prop="money" label="充值金额" label-width="108px" class="item">
+                      
+
                       <el-input
                         style="width: auto"
                         v-model="rechargeForm.money"
                         @input="$store.dispatch('order/getHuilv')"
                         placeholder="0.00"
                         type="number"
+                        :step="20"
+                        :min="0"
                       ></el-input>
                       <div class="discount">( ￥ {{rechargeForm.money ? (rechargeForm.money * huilv).toFixed(2) : 0}} )</div>
                     </el-form-item>
@@ -314,6 +318,16 @@ export default {
     return 'payment'
   },
   data () {
+    var validatorMoney = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入充值金额'));
+      } else {
+        if (this.rechargeForm.money <= 0) {
+          callback(new Error('充值金额必须大于0'));
+        }
+        callback();
+      }
+    };
     return {
       gjdialog: false,
       rechargeForm: {
@@ -358,7 +372,7 @@ export default {
       rechargeRules: {
         money: [{
           required: true, type: 'string', message: '请输入充值金额', trigger: ['blur', 'change']
-        }]
+        }, {validator: validatorMoney}]
       },
       registerForm: {
         mobile: '',
@@ -784,7 +798,7 @@ export default {
 .recharge{position: absolute;width: 794px;border: 1px solid #000;top: 33px;left: -34px;background: #fff;z-index: 100;color: #000;}
 .recharge .recharge-name{font-size: 16px;padding: 10px 0 15px 28px;font-weight: 600;}
 .recharge .close{cursor: pointer;position: absolute;top: 0;right: 5px;display: inline-block;padding: 10px;font-size: 20px;}
-.recharge /deep/ .el-input__inner{width: 150px;height: 38px;line-height: 38px;}
+.recharge /deep/ .el-input__inner{width: 150px;height: 38px;line-height: 38px;padding-right: 0;}
 .recharge /deep/ .el-radio{text-align: center;height: 36px;padding: 10px 55px 0 55px;margin: 0;border-radius: 0;}
 .recharge /deep/ .el-form-item__content{margin-left: 0!important;}
 .recharge{
