@@ -67,12 +67,7 @@ class HttpRequest {
             message: `请求错误 ${status}: ${url}`,
           })
         }
-        // Create new promise to handle exponential backoff
-        const backoff = new Promise(function(resolve) {
-          setTimeout(function() {
-            resolve();
-          }, config.retryDelay || 1);
-        });
+
         return { config, data, status };
       }, 
       error => {

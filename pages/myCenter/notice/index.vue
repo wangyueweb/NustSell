@@ -5,8 +5,8 @@
     <div class="detail">
       <div class="tab">
         <div class="line1">
-          <span :class="{ selected: selected === 0 }" @click="selected = 0">系统提醒</span>
-          <span :class="{ selected: selected === 1 }" @click="selected = 1">促销活动公告</span>
+          <span :class="{ selected: selected === 0 }" @click="tabChange(0)">系统提醒</span>
+          <span :class="{ selected: selected === 1 }" @click="tabChange(1)">促销活动公告</span>
         </div>
         <div class="line2"></div>
       </div>
@@ -16,11 +16,12 @@
         :data="tableData"
         style="width: 100%"
         @row-click="toId"
+        :show-header="false"
         >
-          <el-table-column
+          <!-- <el-table-column
             type="selection"
             width="55">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             prop="title">
           </el-table-column>
@@ -37,7 +38,26 @@
       </div>
         
       <div v-if="selected === 1">
-        促销活动公告
+        <el-table
+        :data="tableData"
+        style="width: 100%"
+        @row-click="toId"
+        :show-header="false"
+        >
+          <!-- <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column> -->
+          <el-table-column
+            prop="title">
+          </el-table-column>
+          <el-table-column
+            align="right">
+            <template slot-scope="scope">
+              <span>{{dayjs.unix(scope.row.ctime).format('YYYY-MM-DD HH:mm:ss')}}</span>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
     </div>
   </div>
@@ -113,6 +133,19 @@ export default {
   mounted(){},
 
   methods: {
+    tabChange(type){
+      this.selected = type;
+      if(type === 1){
+        let data = {
+          type: 2,
+          page: 1,
+          pageSize: 10,
+          orderType: 'desc',
+          method: 'notice.noticeList'
+        };
+        this.$store.dispatch('user/getNotice', data);
+      }
+    },
     toId: function (e) {
       console.log(e);
       this.$router.push({name: 'myCenter-notice-id', params: e});
