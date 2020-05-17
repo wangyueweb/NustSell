@@ -10,7 +10,7 @@
       {{$route.query.name}}
     </div>
     <!-- 详情 -->
-    <div class="main">
+    <div class="main gj-main">
       <el-row :gutter="10">
         <el-col :span="5">
           <div class="grid-content">
@@ -426,6 +426,7 @@ export default {
     color: @theme-black;
     font-weight: 700;
   }
+  .gj-main{padding: 0 0 100px 0;}
   .main{
     .grid-content{
       padding: 20px;
