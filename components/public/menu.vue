@@ -136,7 +136,7 @@
                               <i class="iconfont icon-guanbi" style="font-size:20px;"></i>
                             </div>
                           </div>
-                          <div>购物车没有商品</div>
+                          <div class="gj-no">购物车没有商品</div>
                       </div>
                       
                     </div>
@@ -446,7 +446,7 @@ opacity: 1; /*结尾状态 透明度为1*/
     }
   }
   .footer-btn{
-    height: 70px;
+    height: 100%;
     text-align: center;
     line-height: 55px;
     color: @theme-lightgray;
@@ -467,4 +467,5 @@ opacity: 1; /*结尾状态 透明度为1*/
   .swiper-wrapper{width: 100px;}
   .shopp{display: inline-block;width: 20px;}
   .distance{margin: 0 0 0 150px;}
+  .gj-no{padding: 0 0 40px 0;}
 </style>
