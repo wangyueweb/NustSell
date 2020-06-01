@@ -54,7 +54,6 @@
             </div>
           </div>
         </div>
-        
         <div class="buy-btn" @click="addShopCar(id, num)">加入购物车</div>
 
         <div class="collect" @click="addCollect">
@@ -212,7 +211,7 @@ export default {
     // 选择规格
     checkboxChange: function(item) {
       console.log(item);
-      if(item.product_id){
+      if(item.hasOwnProperty('product_id')){
         // 添加最近浏览商品
         mainRequest({id: item.product_id, method: 'goods.getproductinfo'})
           .then(res => {

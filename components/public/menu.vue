@@ -58,18 +58,6 @@
                   <!-- @input="search" -->
                   <i slot="suffix" class="el-input__icon el-icon-search" @click="search"></i>
                 </el-input>
-                
-                <!-- <div v-if="showSearch">123</div> -->
-                <el-popover
-                  
-                  v-model="showSearch"
-                >
-                  <div class="content" style="width:225px;height: 100%;padding:11px 25px 25px;box-sizing:border-box;">
-                    123
-                  </div>
-                </el-popover>
-
-
             </el-col>
             <el-col :span="3" style="margin: 0 2px 0 20px;">
               <div class="shop-car">
@@ -77,7 +65,7 @@
                   <el-popover
                     :visible-arrow="false"
                     placement="bottom-end"
-                    trigger="focus"
+                    trigger="manual"
                     v-model="visible"
                   >
                     <div class="content basket" style="width:382px;height: 100%;padding:11px 25px 0 25px;box-sizing:border-box;">
@@ -185,16 +173,6 @@ export default {
       amount: state => state.order.shopCar.goods_amount,
       shopCarList: state => state.order.shopCar.list || [],
     }),
-    showSearch: {
-      get: function(){
-        if(this.$store.state.goods.search && this.$store.state.goods.search.data && this.$store.state.goods.search.data.list){
-          return true;
-        }
-
-        return false;
-      },
-      set: function(val){}
-    },
     hasToken: {
       get: function(){
         return this.$store.state.app.token ? true : false;

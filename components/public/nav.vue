@@ -259,12 +259,12 @@
       _AIHECONG('ini',{ entId : 21096 });
     },
     created(){
-      this.$store.dispatch('user/getNotice', {page: 1,pageSize: 3,orderType: 'desc',method: 'notice.noticeList'});
+      this.$store.dispatch('user/getNotice', {page: 1,pageSize: 3,orderType: 'desc',method: 'notice.noticeList', token:this.$store.state.app.token} );
     },
     computed: {
       ...mapState({
         authUser: state => state.app.authUser,
-        noticeList: state => state.user.noticeList,
+        noticeList: state => state.user.noticeList.data,
         collectCount: state => state.goods.collect.count || 0
       }),
       hasToken: {

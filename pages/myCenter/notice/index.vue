@@ -11,17 +11,18 @@
         <div class="line2"></div>
       </div>
 
-      <div v-if="selected === 0">
+      <div>
         <el-table
-        :data="tableData"
-        style="width: 100%"
-        @row-click="toId"
-        :show-header="false"
+          :data="tableData"
+          style="width: 100%"
+          @row-click="toId"
+          :show-header="false"
+          @selection-change="handleSelectionChange"
         >
-          <!-- <el-table-column
+          <el-table-column
             type="selection"
             width="55">
-          </el-table-column> -->
+          </el-table-column>
           <el-table-column
             prop="title">
           </el-table-column>
@@ -32,33 +33,20 @@
             </template>
           </el-table-column>
         </el-table>
-        <!-- <div style="margin-top: 20px">
+        <div style="margin-top: 20px;cursor: pointer;" @click="deleteNoticeList(selectList)">
           <span>删除</span>
-        </div> -->
+        </div>
       </div>
-        
-      <div v-if="selected === 1">
-        <el-table
-        :data="tableData"
-        style="width: 100%"
-        @row-click="toId"
-        :show-header="false"
-        >
-          <!-- <el-table-column
-            type="selection"
-            width="55">
-          </el-table-column> -->
-          <el-table-column
-            prop="title">
-          </el-table-column>
-          <el-table-column
-            align="right">
-            <template slot-scope="scope">
-              <span>{{dayjs.unix(scope.row.ctime).format('YYYY-MM-DD HH:mm:ss')}}</span>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
+
+      <el-pagination
+        :page-count="currentPage"
+        :current-page="1"
+        @current-change="paginationChange"
+        background
+        layout="prev, pager, next"
+        style="text-align: right;margin-top:10px;"
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -75,26 +63,7 @@ export default {
   data () {
     return {
       selected: 0,
-      // tableData: [
-      //   {
-      //     msg: "欢迎您加入“王子易购“ 网，快速下单，立马送达。马尼拉最实惠的商品......",
-      //     time: '2016-05-03',
-      //   },
-      //   {
-      //     msg: "恭喜您注册成功，您的账号为“09054624544‘’",
-      //     time: '2016-05-03',
-      //   },
-      //   {
-      //     msg: "国庆期间，全场优惠惠赠",
-      //     time: '2016-05-03',
-      //   }
-      // ],
-      formData: {
-        page: 1,
-        pageSize: 10,
-        orderType: 'desc',
-        method: 'notice.noticeList'
-      }
+      selectList: []
     };
   },
   head () {
@@ -122,34 +91,151 @@ export default {
 
   computed: {
     ...mapState({
-      tableData: state => state.user.noticeList
+      tableData: state => state.user.noticeList.data,
+      currentPage: state => Math.ceil(state.user.noticeList.coent/5)
     })
   },
 
   created(){
-    this.$store.dispatch('user/getNotice', this.formData);
   },
 
-  mounted(){},
+  mounted(){
+    this.getPageData();
+  },
 
   methods: {
-    tabChange(type){
-      this.selected = type;
-      if(type === 1){
-        let data = {
+    getPageData(){
+      let data;
+      if(this.selected === 0){
+        data = {
+          page: 1,
+          pageSize: 5,
+          orderType: 'desc',
+          method: 'notice.noticeList',
+          token:this.$store.state.app.token
+        }
+      }
+      if(this.selected === 1){
+        data = {
           type: 2,
           page: 1,
-          pageSize: 10,
+          pageSize: 5,
           orderType: 'desc',
-          method: 'notice.noticeList'
+          method: 'notice.noticeList',
+          token:this.$store.state.app.token
         };
-        this.$store.dispatch('user/getNotice', data);
       }
+      this.getNoticeList(data);
+      // this.$store.dispatch('user/getNotice', {page: 1,pageSize: 3,orderType: 'desc',method: 'notice.noticeList', token:this.$store.state.app.token} );
+    },
+    tabChange(type){
+      this.selected = type;
+      let data;
+      if(type === 0){
+        data = {
+          page: 1,
+          pageSize: 5,
+          orderType: 'desc',
+          method: 'notice.noticeList',
+          token:this.$store.state.app.token
+        }
+      }
+      if(type === 1){
+        data = {
+          type: 2,
+          page: 1,
+          pageSize: 5,
+          orderType: 'desc',
+          method: 'notice.noticeList',
+          token:this.$store.state.app.token
+        };
+      }
+
+      this.$store.dispatch('user/getNotice', data);
+    },
+    getNoticeList(data){
+      this.$store.dispatch('user/getNotice', data);
     },
     toId: function (e) {
       console.log(e);
       this.$router.push({name: 'myCenter-notice-id', params: e});
-    }
+    },
+    // 分页变化
+    paginationChange: function (e) {
+      let data;
+      if(this.selected === 0){
+        data = {
+          page: e,
+          pageSize: 5,
+          orderType: 'desc',
+          method: 'notice.noticeList',
+          token:this.$store.state.app.token
+        }
+      }
+      if(this.selected === 1){
+        data = {
+          type: 2,
+          page: e,
+          pageSize: 5,
+          orderType: 'desc',
+          method: 'notice.noticeList',
+          token:this.$store.state.app.token
+        };
+      }
+
+      this.getNoticeList(data);
+    },
+    handleSelectionChange(val) {
+      this.selectList = val;
+    },
+    // 批量删除公告
+    deleteNoticeList: function(list) {
+      if (list.length === 0) {
+        this.$message.error('请勾选至少一条');
+        return;
+      }else if(list.length === 1){
+        this.$confirm('删除此条公告, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        .then(() => {
+          const id = list[0]['id'];
+          let data = {
+            method: 'notice.noticadel',
+            id:id,
+            token:this.$store.state.app.token
+          }
+          this.$store.dispatch('user/deleteNotice', data)
+            .then(() => {
+              this.getPageData();
+            });
+        })
+        .catch(err => {})
+      }else{
+        this.$confirm('批量删除公告, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        .then(() => {
+          const idList = list.map(item => item.id);
+          console.log(idList);
+          let data = {
+            method: 'notice.noticadelall',
+            id:idList.join(','),
+            token:this.$store.state.app.token
+          }
+
+          this.$store.dispatch('user/deleteNoticeList', data)
+            .then(() => {
+              this.getPageData();
+            });
+
+        })
+        .catch(err => {})
+      }
+    },
   }
 }
 </script>

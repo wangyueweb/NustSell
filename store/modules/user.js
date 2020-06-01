@@ -2,7 +2,10 @@ import { mainRequest } from "@/services/api"
 import { getCookie } from "@/utils/utils"
 import Cookie from 'js-cookie'
 const state = () => ({
-  noticeList: [],
+  noticeList: {
+    data: [],
+    coent: 0
+  },
   addressList: [],
   balance: {
     data: [],
@@ -25,16 +28,51 @@ const mutations = {
 const actions = {
   // 获取公告列表
   async getNotice ({ commit }, formData ) {
+    
     try{
       let {status, data} = await mainRequest(formData);
-      console.log('获取公告列表',data);
+      console.log('获取公告列表',await mainRequest(formData));
       if(status === 200 && data && data.status){
-        commit('SET_NOTICE', data.data);
+        commit('SET_NOTICE', data);
       }
     }
     catch(error){
       console.log(`getNotice + ${error}`);
     }
+  },
+
+  // 公告单个删除
+  async deleteNotice({}, formData){
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(({status, data}) => {
+          this._vm.$message({
+            message: data.msg,
+            type: data.status ? 'success' : 'warning'
+          });
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
+  },
+
+  // 公告批量删除
+  async deleteNoticeList({}, formData){
+    return new Promise((resolve, reject) => {
+      mainRequest(formData)
+        .then(({status, data}) => {
+          this._vm.$message({
+            message: data.msg,
+            type: data.status ? 'success' : 'warning'
+          });
+          resolve();
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    })
   },
 
   // 获取收货地址
