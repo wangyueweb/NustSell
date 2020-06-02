@@ -76,7 +76,7 @@
             <span class="continue" @click="$router.push({name: 'index'})">继续购物</span> <span class="clear" @click="delShopCar(list.map(item => item.id).join(','))">清空购物车</span>
           </div>
         </div>
-        <div class="grid-content Swipergj" style="margin-top: 10px;padding-bottom:100px;">
+        <div class="grid-content Swipergj" style="margin-top: 10px;margin-bottom:50px;">
           <div class="myfavorite">
               我的收藏
           </div>

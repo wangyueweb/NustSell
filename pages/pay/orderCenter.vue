@@ -230,7 +230,7 @@
       </el-row>
     </div>
     
-    <el-footer height="80px" class="footer">
+    <el-footer class="footer" style="position: fixed;width: 100%;height: 80px;left: 0;bottom: 0;">
       <div class="content">
         <el-row>
           <el-col :span="10">&nbsp;</el-col>
@@ -716,7 +716,7 @@ export default {
   }
 }
 .main-wrapper{
-  margin-bottom: 150px;
+  margin-bottom: 130px;
 }
 .grid-content{
   background: @theme-white;
